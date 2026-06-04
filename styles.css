@@ -183,6 +183,11 @@ a { color: inherit; text-decoration: none; transition: color .3s var(--ease); }
 .content a { color: var(--gold); border-bottom: 1px solid var(--line); }
 .content a:hover { color: var(--gold-soft); }
 .content strong { color: var(--text); }
+/* Buttons placed inside content must keep their own colours, not the link style */
+.content a.btn { border-bottom: none; }
+.content a.btn-gold { color: #15120a; }
+.content a.btn-gold:hover { color: #15120a; }
+.content a.btn-ghost { color: var(--gold-soft); }
 
 /* ---------- About specifics ---------- */
 .about-meta { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin: 40px 0; }
