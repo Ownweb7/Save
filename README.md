@@ -34,5 +34,5 @@ was previously configured for Vite. `cleanUrls` is enabled, so pages are reachab
 Just push to GitHub and Vercel redeploys automatically.
 
 ## Customise
-- Replace the contact email `support@odnandsons.com` (in `contact.html`, `privacy-policy.html`, `terms-and-conditions.html`) with your real address.
+- Contact email is `allcreatormind@gmail.com` (set in `contact.html`, `privacy-policy.html`, `terms-and-conditions.html`).
 - Colours and fonts live at the top of `styles.css` (CSS variables under `:root`).
