@@ -234,7 +234,7 @@ a { color: inherit; text-decoration: none; transition: color .3s var(--ease); }
 /* ---------- Responsive ---------- */
 @media (max-width: 880px) {
   .grid-3 { grid-template-columns: 1fr; }
-  .about-meta { grid-template-columns: 1fr; }
+  .about-meta { grid-template-columns: repeat(2, 1fr); }
   .nav-links {
     position: fixed; inset: 76px 0 auto 0; flex-direction: column; gap: 0;
     background: var(--bg-soft); border-bottom: 1px solid var(--line);
@@ -243,4 +243,57 @@ a { color: inherit; text-decoration: none; transition: color .3s var(--ease); }
   .nav-links.open { max-height: 360px; }
   .nav-links a { padding: 18px 28px; width: 100%; border-bottom: 1px solid var(--line); }
   .menu-btn { display: block; }
+
+  .hero { padding: 90px 0 70px; }
+  .section { padding: 60px 0; }
+  .section-head { margin-bottom: 40px; }
+
+  .cta { padding: 54px 28px; }
+  .page-hero { padding: 60px 0 30px; }
+
+  .footer-grid { flex-direction: column; gap: 32px; }
+  .footer-brand { max-width: 100%; }
+  .footer-bottom { flex-direction: column; align-items: center; text-align: center; gap: 8px; }
+
+  .contact-card { padding: 40px 24px; }
+}
+
+@media (max-width: 540px) {
+  .wrap { padding: 0 18px; }
+
+  .hero { padding: 70px 0 56px; }
+  .hero h1 { font-size: clamp(2rem, 10vw, 2.8rem); margin-bottom: 18px; }
+  .hero p { font-size: 1rem; margin-bottom: 28px; }
+  .hero-actions { flex-direction: column; align-items: center; gap: 12px; }
+  .hero-actions .btn { width: 100%; max-width: 320px; justify-content: center; }
+
+  .eyebrow { font-size: .68rem; letter-spacing: 3px; padding: 6px 14px; }
+
+  .section { padding: 48px 0; }
+  .section-head h2 { font-size: clamp(1.6rem, 7vw, 2.2rem); }
+
+  .card { padding: 28px 22px; }
+  .card h3 { font-size: 1.18rem; }
+
+  .cta { padding: 40px 20px; border-radius: 18px; }
+  .cta h2 { font-size: clamp(1.6rem, 7vw, 2.2rem); }
+
+  .page-hero { padding: 48px 0 24px; }
+  .page-hero h1 { font-size: clamp(1.8rem, 8vw, 2.6rem); }
+
+  .content { padding: 40px 0 30px; }
+  .content h2 { font-size: 1.25rem; margin: 32px 0 12px; }
+
+  .about-meta { grid-template-columns: 1fr; gap: 14px; }
+  .meta-item { padding: 22px 14px; }
+  .meta-item .num { font-size: 1.6rem; }
+
+  .contact-card { padding: 32px 18px; }
+  .contact-card .email { font-size: 1.15rem; }
+
+  .site-footer { padding: 44px 0 28px; }
+  .footer-grid { gap: 24px; }
+  .footer-col h4 { margin-bottom: 12px; }
+
+  .btn { padding: 13px 24px; font-size: .78rem; }
 }
