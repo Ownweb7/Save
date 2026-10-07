@@ -32,12 +32,12 @@ try:
         page.mouse.move(150, 250)
         assert page.evaluate("document.documentElement.style.getPropertyValue('--pointer-x')") == '150px'
         # The hero responds to a pointer without taking over native scrolling.
-        stage = page.locator('.creator-stage')
+        stage = page.locator('.app-stage')
         bounds = stage.bounding_box()
         page.mouse.move(bounds['x'] + bounds['width'] * .85, bounds['y'] + bounds['height'] * .65)
-        page.wait_for_function("parseFloat(document.querySelector('.creator-stage').style.getPropertyValue('--stage-turn')) > .5")
+        page.wait_for_function("parseFloat(document.querySelector('.app-stage').style.getPropertyValue('--stage-turn')) > .5")
         page.mouse.move(10, 10)
-        page.wait_for_function("Math.abs(parseFloat(document.querySelector('.creator-stage').style.getPropertyValue('--stage-turn'))) < .05")
+        page.wait_for_function("Math.abs(parseFloat(document.querySelector('.app-stage').style.getPropertyValue('--stage-turn'))) < .05")
         assert page.locator('.studio-hero').evaluate('e => e.offsetHeight') < 700
         assert page.locator('.studio-process').evaluate('e => e.offsetHeight') < 700
         for selector in ['.lab-copy', '.philosophy-grid > div:first-child']:
@@ -58,8 +58,10 @@ try:
         page.keyboard.press('End')
         page.wait_for_function('window.nativeScrollEnded && scrollY + innerHeight >= document.documentElement.scrollHeight - 3')
         assert page.locator('.footer-bottom').is_visible()
+        page.evaluate("window.nativeScrollEnded = false; addEventListener('scrollend', () => { window.nativeScrollEnded = true; }, {once:true})")
         page.keyboard.press('Home')
-        page.wait_for_function('scrollY < 2')
+        page.wait_for_function('window.nativeScrollEnded && scrollY < 2')
+        page.mouse.move(720, 750)
         page.mouse.wheel(0, 400)
         page.wait_for_function('scrollY > 100')
         page.evaluate("scrollTo({top:0,behavior:'instant'})")
@@ -86,14 +88,42 @@ try:
         page.wait_for_function("document.documentElement.dataset.motion === 'off'")
         assert page.locator('#motion-toggle').is_disabled()
         assert page.locator('.marquee-track').evaluate('e => getComputedStyle(e).animationName') == 'none'
-        # Hero artwork is an accessible entry point to real app demos.
-        for app in ['save', 'glow']:
-            poster = page.locator(f'.creator-poster[data-try="{app}"]')
-            poster.focus()
+        # Every product preview leads to its actual catalog entry and working demo.
+        catalog = page.evaluate('window.ODN_APPS')
+        showcase_tabs = page.locator('.showcase-tabs')
+        assert showcase_tabs.get_attribute('role') == 'tablist'
+        assert showcase_tabs.get_by_role('tab').count() == 5
+        panel = page.locator('#showcase-panel')
+        assert panel.get_attribute('role') == 'tabpanel'
+        for app in catalog:
+            app_id = app['id']
+            tab = page.locator(f'#showcase-tab-{app_id}')
+            tab.click()
+            assert tab.get_attribute('aria-selected') == 'true'
+            assert tab.get_attribute('tabindex') == '0'
+            assert showcase_tabs.locator('[aria-selected="true"]').count() == 1
+            assert showcase_tabs.locator('[tabindex="0"]').count() == 1
+            assert panel.get_attribute('aria-labelledby') == f'showcase-tab-{app_id}'
+            assert page.locator('#showcase-name').inner_text() == app['name']
+            assert page.locator('#showcase-store').get_attribute('href') == app['url']
+            assert page.locator('#showcase-try').get_attribute('data-try') == app_id
+            assert page.locator('[data-preview]:visible').count() == 1
+            assert page.locator(f'[data-preview="{app_id}"]').is_visible()
+            page.locator('#showcase-try').focus()
             page.keyboard.press('Enter')
-            assert page.locator(f'#tab-{app}').get_attribute('aria-selected') == 'true'
-            page.wait_for_function(f"document.activeElement === document.querySelector('#tab-{app}')")
-        print('Reactive creator stage and canvas, pause/resume, session preference and reduced motion passed.', flush=True)
+            assert page.locator(f'#tab-{app_id}').get_attribute('aria-selected') == 'true'
+            page.wait_for_function(f"document.activeElement === document.querySelector('#tab-{app_id}')")
+        # Product selection works without a pointer, with one tab stop in the strip.
+        page.locator('#showcase-tab-save').focus()
+        for key, expected in [('ArrowRight', 'bond'), ('ArrowLeft', 'save'),
+                              ('ArrowLeft', 'clock'), ('Home', 'save'), ('End', 'clock')]:
+            page.keyboard.press(key)
+            selected = page.locator(f'#showcase-tab-{expected}')
+            assert selected.get_attribute('aria-selected') == 'true'
+            assert selected.evaluate('e => document.activeElement === e')
+            assert showcase_tabs.locator('[tabindex="0"]').count() == 1
+        print('All five product previews, catalog links, demo entry points and keyboard tabs passed.', flush=True)
+        print('Reactive app stage and canvas, pause/resume, session preference and reduced motion passed.', flush=True)
         for width in [1440, 768, 390, 320]:
             page.set_viewport_size({'width': width, 'height': 900})
             for path in root.glob('*.html'):
@@ -102,6 +132,19 @@ try:
                 assert not page.evaluate('document.documentElement.scrollWidth > innerWidth'), (path.name, width)
                 assert page.locator('main').count() == 1
                 assert page.locator('h1').count() == 1
+                if path.name == 'index.html':
+                    for app in catalog:
+                        page.locator(f'#showcase-tab-{app["id"]}').click()
+                        assert not page.evaluate('document.documentElement.scrollWidth > innerWidth'), (app['id'], width)
+                        preview = page.locator(f'[data-preview="{app["id"]}"]')
+                        assert preview.is_visible()
+                        # All sample content fits above the phone's home indicator.
+                        layout = preview.evaluate("""e => {
+                            const home = e.closest('.phone-screen').querySelector('.phone-home');
+                            return {sameParent: e.offsetParent === home.offsetParent,
+                                previewBottom: e.offsetTop + e.offsetHeight, homeTop: home.offsetTop};
+                        }""")
+                        assert layout['sameParent'] and layout['previewBottom'] <= layout['homeTop'], (app['id'], width, layout)
             print(f'All pages fit {width}px.', flush=True)
         page.set_viewport_size({'width': 390, 'height': 844})
         page.goto(base_url, wait_until='domcontentloaded')
@@ -111,7 +154,9 @@ try:
         assert page.locator('#playground').is_visible()
         no_js = browser.new_page(java_script_enabled=False)
         no_js.goto(base_url, wait_until='domcontentloaded')
-        assert no_js.get_by_role('heading', name='Ideas with a life of their own.').is_visible()
+        assert no_js.get_by_role('heading', name='Small apps. Better everyday.').is_visible()
+        assert no_js.locator('#showcase-name').inner_text() == 'Save+'
+        assert no_js.locator('#showcase-store').get_attribute('href') == catalog[0]['url']
         assert no_js.locator('.app-card').count() == 5
         assert no_js.locator('a[href="about.html"]').first.is_visible()
         assert not errors, errors

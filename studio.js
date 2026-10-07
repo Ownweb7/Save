@@ -5,7 +5,7 @@
   const finePointer = matchMedia('(hover:hover) and (pointer:fine)');
   const root = document.documentElement;
   const hero = document.querySelector('.studio-hero');
-  const creatorStage = document.querySelector('.creator-stage');
+  const appStage = document.querySelector('.app-stage');
   const stageMotion = {x:0, y:0, turn:0, targetX:0, targetY:0, targetTurn:0};
   let stageBounds = null;
   let manuallyPaused = false;
@@ -17,6 +17,87 @@
   let scrollPosition = scrollY;
   const pointer = {x: .76, y: .38, targetX: .76, targetY: .38};
   const activeAnimations = new Set();
+
+  // The hero introduces every app with a keyboard-accessible, user-controlled preview.
+  const showcaseTabs = [...document.querySelectorAll('.showcase-tabs [role="tab"]')];
+  const showcasePanel = document.querySelector('#showcase-panel');
+  const showcasePreviews = showcasePanel ? [...showcasePanel.querySelectorAll('[data-preview]')] : [];
+  let activeShowcase = appStage?.dataset.activeApp || 'save';
+  let showcaseAnimation = null;
+  function selectShowcase(id, focus = false, animate = true) {
+    const app = window.ODN_APPS?.find(item => item.id === id);
+    const selectedTab = showcaseTabs.find(tab => tab.dataset.showcase === id);
+    if (!app || !selectedTab || !showcasePanel || !appStage) return;
+    const changed = activeShowcase !== id;
+    activeShowcase = id;
+    showcaseTabs.forEach(tab => {
+      const selected = tab === selectedTab;
+      tab.setAttribute('aria-selected', String(selected));
+      tab.tabIndex = selected ? 0 : -1;
+    });
+    showcasePanel.setAttribute('aria-labelledby', selectedTab.id);
+    appStage.dataset.activeApp = id;
+    appStage.style.setProperty('--preview-accent', app.color);
+    const name = document.querySelector('#showcase-name');
+    const tag = document.querySelector('#showcase-tag');
+    const icon = document.querySelector('#showcase-icon');
+    const features = document.querySelector('#showcase-features');
+    const store = document.querySelector('#showcase-store');
+    const tryLink = document.querySelector('#showcase-try');
+    if (name) name.textContent = app.name;
+    if (tag) tag.textContent = app.tag;
+    if (icon) {
+      icon.src = `icons/${encodeURIComponent(app.icon)}`;
+      icon.alt = '';
+    }
+    if (features) features.replaceChildren(...app.features.map(feature => {
+      const item = document.createElement('li');
+      item.textContent = feature;
+      return item;
+    }));
+    if (store) {
+      store.href = app.url;
+      store.textContent = `${id === 'will' ? 'Find' : 'Get'} ${app.name} on Google Play`;
+    }
+    if (tryLink) {
+      tryLink.dataset.try = id;
+      tryLink.textContent = `Try ${app.name}`;
+    }
+    showcasePreviews.forEach(preview => { preview.hidden = preview.dataset.preview !== id; });
+    if (focus) selectedTab.focus();
+    if (showcaseAnimation) {
+      showcaseAnimation.cancel();
+      activeAnimations.delete(showcaseAnimation);
+      showcaseAnimation = null;
+    }
+    if (changed && animate && enabled && showcasePanel.animate) {
+      const animation = showcasePanel.animate([
+        {opacity: .35, transform: 'translateY(8px)'},
+        {opacity: 1, transform: 'translateY(0)'}
+      ], {duration: 280, easing: 'cubic-bezier(.16,1,.3,1)'});
+      showcaseAnimation = animation;
+      activeAnimations.add(animation);
+      animation.finished.then(() => {
+        activeAnimations.delete(animation);
+        if (showcaseAnimation === animation) showcaseAnimation = null;
+      }).catch(() => {});
+    }
+    sizeStage();
+    queueScroll();
+  }
+  showcaseTabs.forEach(tab => {
+    tab.addEventListener('click', () => selectShowcase(tab.dataset.showcase));
+    tab.addEventListener('keydown', event => {
+      let index = showcaseTabs.indexOf(tab);
+      if (event.key === 'ArrowRight') index = (index + 1) % showcaseTabs.length;
+      else if (event.key === 'ArrowLeft') index = (index + showcaseTabs.length - 1) % showcaseTabs.length;
+      else if (event.key === 'Home') index = 0;
+      else if (event.key === 'End') index = showcaseTabs.length - 1;
+      else return;
+      event.preventDefault();
+      selectShowcase(showcaseTabs[index].dataset.showcase, true);
+    });
+  });
 
   const toggle = document.createElement('button');
   toggle.type = 'button';
@@ -46,20 +127,20 @@
   }));
   const sin = Math.sin, cos = Math.cos, PI = Math.PI;
   function sizeStage() {
-    if (!creatorStage) return;
-    const rect = creatorStage.getBoundingClientRect();
+    if (!appStage) return;
+    const rect = appStage.getBoundingClientRect();
     stageBounds = {left:rect.left, top:rect.top + scrollY, width:rect.width, height:rect.height};
   }
   function updateStage(reset=false) {
-    if (!creatorStage) return;
+    if (!appStage) return;
     for (const key of ['x','y','turn']) {
       const targetKey = `target${key[0].toUpperCase()}${key.slice(1)}`;
       if (reset) stageMotion[key] = stageMotion[targetKey] = 0;
       else stageMotion[key] += (stageMotion[targetKey]-stageMotion[key])*.1;
     }
-    creatorStage.style.setProperty('--stage-x',`${stageMotion.x.toFixed(2)}px`);
-    creatorStage.style.setProperty('--stage-y',`${stageMotion.y.toFixed(2)}px`);
-    creatorStage.style.setProperty('--stage-turn',`${stageMotion.turn.toFixed(2)}deg`);
+    appStage.style.setProperty('--stage-x',`${stageMotion.x.toFixed(2)}px`);
+    appStage.style.setProperty('--stage-y',`${stageMotion.y.toFixed(2)}px`);
+    appStage.style.setProperty('--stage-turn',`${stageMotion.turn.toFixed(2)}deg`);
   }
   function project(u, v, scale, time, centerX, centerY) {
     const radius = 1 + .09 * sin(u * 3 + time * .3);
@@ -93,7 +174,7 @@
         x += (x - cursorX) / Math.max(1,distance) * force;
         y += (y - cursorY) / Math.max(1,distance) * force;
       }
-      ctx.fillStyle = distance < 130 && enabled ? '#ff583b44' : '#22231f16';
+      ctx.fillStyle = distance < 130 && enabled ? '#325cf544' : '#0d173016';
       ctx.beginPath(); ctx.arc(x,y,dot.radius,0,PI*2); ctx.fill();
     }
     if (!hero) return;
@@ -107,14 +188,14 @@
     ctx.save();
     ctx.globalAlpha = fade * (small ? .35 : .55);
     const glow = ctx.createRadialGradient(centerX,centerY,5,centerX,centerY,scale*1.55);
-    glow.addColorStop(0,'#ff583b0b'); glow.addColorStop(.55,'#c1b4e815'); glow.addColorStop(1,'#c1b4e800');
+    glow.addColorStop(0,'#325cf50b'); glow.addColorStop(.55,'#8bb7ff18'); glow.addColorStop(1,'#8bb7ff00');
     ctx.fillStyle = glow; ctx.fillRect(centerX-scale*1.6,centerY-scale*1.6,scale*3.2,scale*3.2);
     // Two families of continuous curves form a twisting, three-dimensional torus.
     for (let ring=0; ring<58; ring++) {
       const u = ring / 58 * PI * 2;
       const depth = project(u,0,scale,time,centerX,centerY)[2];
       const alpha = Math.max(.07, .38 - depth*.15);
-      ctx.strokeStyle = ring % 7 === 0 ? `rgba(34,35,31,${alpha*.6})` : `rgba(255,88,59,${alpha})`;
+      ctx.strokeStyle = ring % 7 === 0 ? `rgba(13,23,48,${alpha*.6})` : `rgba(50,92,245,${alpha})`;
       ctx.lineWidth = ring % 7 === 0 ? .8 : .55;
       ctx.beginPath();
       for (let step=0; step<=48; step++) {
@@ -124,7 +205,7 @@
       ctx.stroke();
     }
     for (let ring=0; ring<22; ring++) {
-      ctx.strokeStyle = ring % 5 === 0 ? '#c1b4e877' : '#ff583b44';
+      ctx.strokeStyle = ring % 5 === 0 ? '#8bb7ff77' : '#325cf544';
       ctx.lineWidth = .6; ctx.beginPath();
       for (let step=0; step<=100; step++) {
         const point = project(step/100*PI*2,ring/22*PI*2,scale,time,centerX,centerY);
@@ -148,7 +229,7 @@
     frame = requestAnimationFrame(loop);
   }
   function startLoop() {
-    if (!frame && enabled && !document.hidden && (ctx||creatorStage)) { lastTime=performance.now(); frame=requestAnimationFrame(loop); }
+    if (!frame && enabled && !document.hidden && (ctx||appStage)) { lastTime=performance.now(); frame=requestAnimationFrame(loop); }
   }
   function sizeScene() {
     width=innerWidth; height=innerHeight; heroHeight=hero?.offsetHeight || height;
@@ -287,14 +368,14 @@
     pointer.targetX=event.clientX/width; pointer.targetY=event.clientY/height;
     root.style.setProperty('--pointer-x',`${event.clientX}px`); root.style.setProperty('--pointer-y',`${event.clientY}px`);
   },{passive:true});
-  creatorStage?.addEventListener('pointermove',event=>{
+  appStage?.addEventListener('pointermove',event=>{
     if(!enabled||!finePointer.matches) return;
-    const rect=creatorStage.getBoundingClientRect();
+    const rect=appStage.getBoundingClientRect();
     const x=Math.max(-.5,Math.min(.5,(event.clientX-rect.left)/Math.max(1,rect.width)-.5));
     const y=Math.max(-.5,Math.min(.5,(event.clientY-rect.top)/Math.max(1,rect.height)-.5));
     stageMotion.targetX=x*24; stageMotion.targetY=y*20; stageMotion.targetTurn=x*4;
   },{passive:true});
-  creatorStage?.addEventListener('pointerleave',()=>{
+  appStage?.addEventListener('pointerleave',()=>{
     stageMotion.targetX=0; stageMotion.targetY=0; stageMotion.targetTurn=0;
   });
   finePointer.addEventListener('change',()=>{ if(!finePointer.matches) updateStage(true); });
@@ -333,5 +414,6 @@
     document.querySelectorAll('.collection-note,.principles article,.playground,.contact-form,.about-meta').forEach(element=>observer.observe(element));
   }
   sizeScene(); updateMotion();
+  selectShowcase(activeShowcase, false, false);
   document.querySelectorAll('.title-line,.hero-overline,.hero-bottom,.hero-baseline').forEach((element,index)=>animateIn(element,index*110));
 })();
