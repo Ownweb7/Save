@@ -1,86 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contact — ODN &amp; Sons</title>
-  <meta name="description" content="Get in touch with ODN & Sons. We respond to every message personally." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#151916">
+<title>Let’s talk — ODN &amp; Sons</title>
+<meta name="description" content="Questions, ideas or feedback about ODN & Sons apps? Get in touch with our team in Hisar, India.">
+<link rel="icon" href="icons/Website%20Icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
-<body>
-
-  <header class="site-header">
-    <div class="wrap nav">
-      <a href="index.html" class="brand">ODN <span class="amp">&amp;</span> Sons</a>
-      <nav class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="privacy-policies.html">Privacy</a>
-        <a href="terms-and-conditions.html">Terms</a>
-        <a href="contact.html" class="active">Contact</a>
-      </nav>
-      <button class="menu-btn" aria-label="Menu">&#9776;</button>
-    </div>
-  </header>
-
-  <section class="page-hero">
-    <div class="wrap">
-      <span class="eyebrow">Say Hello</span>
-      <h1>Contact Us</h1>
-      <p>We read and reply to every message personally</p>
-    </div>
-  </section>
-
-  <main class="content wrap" style="padding-top:50px;">
-    <div class="contact-card reveal">
-      <div class="divider-mark"></div>
-      <p style="color:var(--muted);">Whether it's a question, a suggestion or feedback about one of our apps, we'd love to hear from you. Drop us a line and we'll get back to you.</p>
-      <a class="email" href="mailto:support@allcreatormind.com">support@allcreatormind.com</a>
-      <p style="font-size:.8rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted-2);">Email is the best way to reach us</p>
-      <div style="margin-top:30px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
-        <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=support@allcreatormind.com"
-           target="_blank" rel="noopener" class="btn btn-gold">Send an Email</a>
-        <button type="button" class="btn btn-ghost" id="copyEmail" data-email="support@allcreatormind.com"
-                style="background:none;font-family:inherit;">Copy Address</button>
-      </div>
-    </div>
-
-    <div style="text-align:center;margin-top:50px;color:var(--muted-2);font-size:.9rem;line-height:1.7;">
-      <p><strong style="color:var(--gold-soft);">ODN &amp; Sons</strong> · Developer of Save+ on Google Play</p>
-      <p>Plot No. 4, Shushila Bhawan Road, Opp. Xen Office, Hisar &ndash; 125001, Haryana, India</p>
-      <p>Established 2022</p>
-    </div>
-  </main>
-
-  <footer class="site-footer">
-    <div class="wrap">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <a href="index.html" class="brand">ODN <span class="amp">&amp;</span> Sons</a>
-          <p>A boutique mobile app studio established in 2022, registered in Hisar, India. Crafting refined, user-friendly experiences.</p>
-        </div>
-        <div class="footer-col">
-          <h4>Company</h4>
-          <a href="index.html">Home</a>
-          <a href="about.html">About Us</a>
-          <a href="contact.html">Contact</a>
-        </div>
-        <div class="footer-col">
-          <h4>Legal</h4>
-          <a href="privacy-policies.html">Privacy Policy</a>
-          <a href="terms-and-conditions.html">Terms &amp; Conditions</a>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <span>&copy; <span id="year">2025</span> ODN &amp; Sons. All rights reserved. · <span class="site-version">v7.25</span></span>
-        <span>Established 2022 · Registered in Hisar, India</span>
-      </div>
-    </div>
-  </footer>
-
-  <script src="main.js"></script>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+<div class="wrap nav">
+<a href="index.html" class="brand" aria-label="ODN and Sons home">
+<span class="brand-mark" aria-hidden="true">o.</span>ODN <span class="amp">&amp;</span> Sons<span class="brand-studio">INDEPENDENT APP STUDIO</span>
+</a>
+<nav class="nav-links" id="navigation" aria-label="Main navigation">
+<a href="index.html">Home</a>
+<a href="index.html#apps">Our apps</a>
+<a href="about.html">Our story</a>
+<a href="privacy-policies.html">Privacy</a>
+<a href="contact.html" class="nav-contact" aria-current="page">Let’s talk <span aria-hidden="true">
+<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+<path d="M6 18 18 6M6 6h12v12"/>
+</svg>
+</span>
+</a>
+</nav>
+<button class="menu-btn" aria-label="Open navigation" aria-controls="navigation" aria-expanded="false">
+<span>
+</span>
+<span>
+</span>
+</button>
+</div>
+</header>
+<main id="main">
+<section class="page-hero wrap">
+<span class="eyebrow">GOOD CONVERSATIONS START HERE</span>
+<h1>Hello, <em>we’re listening.</em>
+</h1>
+<p>A question, an idea, or feedback about one of our apps.<br>We read and reply to every message personally.</p>
+</section>
+<section class="wrap contact-layout">
+<div class="contact-info">
+<span class="eyebrow">DROP US A LINE</span>
+<h2>Small studio.<br>
+<em>Personal support.</em>
+</h2>
+<a class="email" href="mailto:support@allcreatormind.com">support@allcreatormind.com</a>
+<button type="button" class="text-button" id="copyEmail" data-email="support@allcreatormind.com">Copy email address <span aria-hidden="true">⧉</span>
+</button>
+<div class="address">
+<span class="eyebrow">FROM HISAR, WITH CARE</span>
+<p>ODN &amp; Sons<br>Plot No. 4, Shushila Bhawan Road,<br>Opp. Xen Office, Hisar – 125001,<br>Haryana, India</p>
+<span>Independent since 2022.</span>
+</div>
+</div>
+<form id="contact-form" class="contact-form">
+<h2>What’s on your mind?</h2>
+<p>Write a note here, then send it with your email app.</p>
+<label for="contact-app">Which app is this about?</label>
+<select id="contact-app" name="app">
+<option>General enquiry</option>
+<option>Save+</option>
+<option>Bond Time</option>
+<option>Will Impulse</option>
+<option>GlowCalc</option>
+<option>LockClock Aurum</option>
+</select>
+<label for="contact-topic">How can we help?</label>
+<select id="contact-topic" name="topic">
+<option>Question</option>
+<option>Feedback</option>
+<option>Report an issue</option>
+<option>Privacy question</option>
+</select>
+<label for="contact-message">Your message</label>
+<textarea id="contact-message" name="message" rows="5" placeholder="Tell us a little about it…" required maxlength="4000">
+</textarea>
+<button type="submit" class="btn btn-gold">Continue to email <span aria-hidden="true">
+<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+<path d="M6 18 18 6M6 6h12v12"/>
+</svg>
+</span>
+</button>
+<p class="form-note" id="contact-status" role="status">Your message is not stored on this website.</p>
+<a id="gmail-link" class="text-button" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=support@allcreatormind.com" target="_blank" rel="noopener">Or compose in Gmail <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+<path d="M6 18 18 6M6 6h12v12"/>
+</svg>
+</a>
+</form>
+</section>
+<section class="wrap faq-section">
+<div>
+<span class="eyebrow">A LITTLE HELP</span>
+<h2>Before you say hello.</h2>
+</div>
+<div class="faqs">
+<details>
+<summary>Where can I download your apps?</summary>
+<p>Our apps are available on Google Play. Visit <a href="index.html#apps">the app collection</a> to find the store link for each one.</p>
+</details>
+<details>
+<summary>Where can I read an app’s privacy policy?</summary>
+<p>Each app has its own detailed policy, alongside our general privacy policy. Use the app selector on our <a href="privacy-policies.html">privacy page</a> to find the one you need.</p>
+</details>
+<details>
+<summary>What should I include when reporting an issue?</summary>
+<p>Tell us the app name, what happened, and what you expected. Your device model and Android version can help us understand the issue. Please don’t include sensitive personal information.</p>
+</details>
+</div>
+</section>
+</main>
+<footer class="site-footer">
+<div class="wrap">
+<div class="footer-grid">
+<div class="footer-brand">
+<a href="index.html" class="brand">
+<span class="brand-mark" aria-hidden="true">o.</span>ODN <span class="amp">&amp;</span> Sons</a>
+<p>Thoughtful apps.<br>A little better, every day.</p>
+<span class="eyebrow">MADE WITH CARE IN HISAR, INDIA</span>
+</div>
+<div class="footer-col">
+<h3>Explore</h3>
+<a href="index.html#apps">Our apps</a>
+<a href="about.html">Our story</a>
+<a href="contact.html">Get in touch</a>
+</div>
+<div class="footer-col">
+<h3>The details</h3>
+<a href="privacy-policies.html">Privacy policies</a>
+<a href="terms-and-conditions.html">Terms &amp; conditions</a>
+<a href="mailto:support@allcreatormind.com">Email support</a>
+</div>
+<div class="footer-note">
+<span class="small-star" aria-hidden="true">
+<svg class="star-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+<path d="M20 2v36M2 20h36M7 7l26 26M7 33 33 7"/>
+</svg>
+</span>
+<p>Small details.<br>Lasting difference.</p>
+<a href="#top">Back to top ↑</a>
+</div>
+</div>
+<div class="footer-bottom">
+<span>© <span id="year">2026</span> ODN &amp; Sons. All rights reserved.</span>
+<span>Independent since 2022.</span>
+</div>
+</div>
+</footer>
+<div id="toast" class="toast" role="status">
+</div>
+<script src="apps.js">
+</script>
+<script src="main.js">
+</script>
 </body>
 </html>
