@@ -25,7 +25,7 @@
     store.href = app.url;
     store.textContent = `${id === 'will' ? 'Find' : 'Get'} ${app.name} on Google Play`;
     const panel = $(`#demo-${id}`);
-    if (!reducedMotion.matches && panel.animate) panel.animate([
+    if (!reducedMotion.matches && document.documentElement.dataset.motion !== 'off' && panel.animate) panel.animate([
       {opacity: 0, transform: 'translateY(10px)'},
       {opacity: 1, transform: 'translateY(0)'}
     ], {duration: 260, easing: 'ease-out'});
@@ -49,7 +49,7 @@
     if (!trigger) return;
     document.querySelector('#app-dialog')?.close('demo');
     selectDemo(trigger.dataset.try, true);
-    playground.scrollIntoView({behavior: reducedMotion.matches ? 'instant' : 'smooth', block: 'start'});
+    playground.scrollIntoView({behavior: reducedMotion.matches || document.documentElement.dataset.motion === 'off' ? 'instant' : 'smooth', block: 'start'});
   });
 
   // Saving goal: integer rupees, an editable plan, and undoable additions.
@@ -90,7 +90,7 @@
     saved += amount;
     updateSavings();
     $('#demo-save-status').textContent = `${money(amount)} added. Every little step counts.`;
-    if (!reducedMotion.matches) $('#demo-saved').animate([{transform: 'scale(1.08)'}, {transform: 'scale(1)'}], {duration: 300});
+    if (!reducedMotion.matches && document.documentElement.dataset.motion !== 'off') $('#demo-saved').animate([{transform: 'scale(1.08)'}, {transform: 'scale(1)'}], {duration: 300});
   });
   $('#demo-undo').addEventListener('click', () => {
     if (!deposits.length) return;
@@ -250,7 +250,7 @@
       event.preventDefault();
       calcKey(key);
       const button = all('[data-calc]').find(item => item.dataset.calc === key);
-      if (button && !reducedMotion.matches) button.animate([{backgroundColor: '#c5a2ff55'}, {backgroundColor: '#ffffff08'}], {duration: 200});
+      if (button && !reducedMotion.matches && document.documentElement.dataset.motion !== 'off') button.animate([{backgroundColor: '#c5a2ff55'}, {backgroundColor: '#ffffff08'}], {duration: 200});
     }
   });
   all('[data-neon]').forEach(button => button.addEventListener('click', () => {

@@ -14,11 +14,11 @@ The official publisher website for ODN & Sons, an independent mobile app studio 
 
 Plain HTML, CSS and vanilla JavaScript. No build step or runtime dependencies.
 
-- Responsive charcoal-and-gold design across all pages.
+- Futuristic black-and-lime studio design across all pages, with oversized typography and a project portfolio.
 - Filterable app collection and keyboard-accessible app detail dialogs.
 - Five working browser demos: editable savings goals with deposits and undo; a focus countdown; an impulse-purchase pause and savings estimate; a keyboard-enabled calculator; and a stopwatch with laps.
 - Search by app name or feature, with category filters and a recoverable empty state.
-- Animated demo transitions, scroll reveals, hover depth, and a reading-progress indicator. All motion respects reduced-motion preferences.
+- Pointer-reactive wireframe canvas, a moving type strip, progressive text reveals, parallax artwork, hover depth, sticky sections, and page transitions in supported browsers. Motion respects system preferences and can be paused with a session-persistent control.
 - Demos use temporary in-memory state. Refreshing clears it. They do not reproduce native Android app blocking, make purchases, or save personal data.
 - Privacy-policy selector and section navigation. Existing policy text is preserved.
 - Contact composer that opens the visitor’s email client or Gmail. It does not send or store messages itself.
@@ -35,9 +35,11 @@ Plain HTML, CSS and vanilla JavaScript. No build step or runtime dependencies.
 | `*-privacy.html` | Individual app policies |
 | `terms-and-conditions.html` | Terms and conditions |
 | `apps.js` | App details used by interactive dialogs and policy navigation |
-| `main.js` | Shared interactions, search, and motion |
+| `main.js` | Shared interactions and app search |
 | `playground.js` | Five interactive browser demos |
-| `styles.css` | Shared design and responsive layouts |
+| `styles.css` | Base layouts and browser demo styles |
+| `studio.css` | Studio theme and responsive presentation |
+| `studio.js` | Canvas, scroll effects, and motion control |
 | `icons/` | Existing app artwork |
 
 ## Run locally
@@ -62,12 +64,15 @@ Fonts use Google Fonts with system fallbacks. No analytics, account system, or s
 
 ## Browser checks
 
-The regression check exercises all five demos, input validation, timer completion and pause/resume, calculator error recovery, app search, keyboard navigation, dialog focus, and mobile layouts.
+The regression checks cover all five demos, input validation, timer completion and pause/resume, calculator error recovery, app search, keyboard navigation, dialog focus, reactive canvas, motion preferences, no-JavaScript content, and responsive layouts on every page.
 
 With Python Playwright and Chromium available, run:
 
 ```sh
 python tests/browser_smoke.py
+python tests/studio_smoke.py
 ```
 
 If needed, install the test tools with `python -m pip install playwright` and `python -m playwright install chromium`. They are only for testing; the website has no runtime dependencies.
+
+The background caps pixel density and frame rate, pauses while the tab is hidden, and falls back to a still composition when motion is disabled. All content and navigation remain available without animations. The motion preference is stored only in session storage; app demo inputs are never persisted.
