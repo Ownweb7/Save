@@ -5,6 +5,9 @@
   const finePointer = matchMedia('(hover:hover) and (pointer:fine)');
   const root = document.documentElement;
   const hero = document.querySelector('.studio-hero');
+  const creatorStage = document.querySelector('.creator-stage');
+  const stageMotion = {x:0, y:0, turn:0, targetX:0, targetY:0, targetTurn:0};
+  let stageBounds = null;
   let manuallyPaused = false;
   try { manuallyPaused = sessionStorage.getItem('odn-motion-paused') === '1'; } catch { /* Preferences are optional. */ }
   let enabled = !reduced.matches && !manuallyPaused;
@@ -42,6 +45,22 @@
     radius: i % 5 === 0 ? 1.5 : .7
   }));
   const sin = Math.sin, cos = Math.cos, PI = Math.PI;
+  function sizeStage() {
+    if (!creatorStage) return;
+    const rect = creatorStage.getBoundingClientRect();
+    stageBounds = {left:rect.left, top:rect.top + scrollY, width:rect.width, height:rect.height};
+  }
+  function updateStage(reset=false) {
+    if (!creatorStage) return;
+    for (const key of ['x','y','turn']) {
+      const targetKey = `target${key[0].toUpperCase()}${key.slice(1)}`;
+      if (reset) stageMotion[key] = stageMotion[targetKey] = 0;
+      else stageMotion[key] += (stageMotion[targetKey]-stageMotion[key])*.1;
+    }
+    creatorStage.style.setProperty('--stage-x',`${stageMotion.x.toFixed(2)}px`);
+    creatorStage.style.setProperty('--stage-y',`${stageMotion.y.toFixed(2)}px`);
+    creatorStage.style.setProperty('--stage-turn',`${stageMotion.turn.toFixed(2)}deg`);
+  }
   function project(u, v, scale, time, centerX, centerY) {
     const radius = 1 + .09 * sin(u * 3 + time * .3);
     const tube = .32 + .055 * cos(u * 3 - time * .5);
@@ -74,28 +93,28 @@
         x += (x - cursorX) / Math.max(1,distance) * force;
         y += (y - cursorY) / Math.max(1,distance) * force;
       }
-      ctx.fillStyle = distance < 130 && enabled ? '#b4dba477' : '#839c7838';
+      ctx.fillStyle = distance < 130 && enabled ? '#ff583b44' : '#22231f16';
       ctx.beginPath(); ctx.arc(x,y,dot.radius,0,PI*2); ctx.fill();
     }
     if (!hero) return;
     const fade = Math.max(0, 1 - scrollPosition / (heroHeight * .9));
     if (fade <= 0) return;
     const small = width < 761;
-    const scale = small ? Math.min(width * .41,heroHeight * .4) : Math.min(width * .225,heroHeight * .47,310);
-    const centerX = width * (small ? .79 : .77);
-    const centerY = (small ? heroHeight * .36 + 60 : heroHeight * .46 + 70) - scrollPosition * .2;
+    const scale = stageBounds ? Math.min(stageBounds.width*.36,stageBounds.height*.48,245) : Math.min(width*.2,heroHeight*.4,260);
+    const centerX = stageBounds ? stageBounds.left + stageBounds.width*.64 : width*.78;
+    const centerY = stageBounds ? stageBounds.top + stageBounds.height*.48 - scrollPosition : heroHeight*.46 + 70 - scrollPosition*.2;
     const time = enabled ? sceneTime : 0;
     ctx.save();
-    ctx.globalAlpha = fade * (small ? .7 : 1);
+    ctx.globalAlpha = fade * (small ? .35 : .55);
     const glow = ctx.createRadialGradient(centerX,centerY,5,centerX,centerY,scale*1.55);
-    glow.addColorStop(0,'#8db95708'); glow.addColorStop(.55,'#c5ff7810'); glow.addColorStop(1,'#c5ff7800');
+    glow.addColorStop(0,'#ff583b0b'); glow.addColorStop(.55,'#c1b4e815'); glow.addColorStop(1,'#c1b4e800');
     ctx.fillStyle = glow; ctx.fillRect(centerX-scale*1.6,centerY-scale*1.6,scale*3.2,scale*3.2);
     // Two families of continuous curves form a twisting, three-dimensional torus.
     for (let ring=0; ring<58; ring++) {
       const u = ring / 58 * PI * 2;
       const depth = project(u,0,scale,time,centerX,centerY)[2];
       const alpha = Math.max(.07, .38 - depth*.15);
-      ctx.strokeStyle = ring % 7 === 0 ? `rgba(188,171,255,${alpha})` : `rgba(197,255,120,${alpha})`;
+      ctx.strokeStyle = ring % 7 === 0 ? `rgba(34,35,31,${alpha*.6})` : `rgba(255,88,59,${alpha})`;
       ctx.lineWidth = ring % 7 === 0 ? .8 : .55;
       ctx.beginPath();
       for (let step=0; step<=48; step++) {
@@ -105,7 +124,7 @@
       ctx.stroke();
     }
     for (let ring=0; ring<22; ring++) {
-      ctx.strokeStyle = ring % 5 === 0 ? '#d9ffb65c' : '#c5ff7836';
+      ctx.strokeStyle = ring % 5 === 0 ? '#c1b4e877' : '#ff583b44';
       ctx.lineWidth = .6; ctx.beginPath();
       for (let step=0; step<=100; step++) {
         const point = project(step/100*PI*2,ring/22*PI*2,scale,time,centerX,centerY);
@@ -117,21 +136,23 @@
   }
   function loop(timestamp) {
     frame = 0;
-    if (!enabled || document.hidden || !ctx) return;
+    if (!enabled || document.hidden) return;
     if (timestamp-lastTime >= 32) {
       sceneTime += Math.min((timestamp-lastTime)/1000,.05);
       lastTime = timestamp;
       pointer.x += (pointer.targetX-pointer.x)*.07;
       pointer.y += (pointer.targetY-pointer.y)*.07;
+      updateStage();
       drawScene();
     }
     frame = requestAnimationFrame(loop);
   }
   function startLoop() {
-    if (!frame && enabled && !document.hidden && ctx) { lastTime=performance.now(); frame=requestAnimationFrame(loop); }
+    if (!frame && enabled && !document.hidden && (ctx||creatorStage)) { lastTime=performance.now(); frame=requestAnimationFrame(loop); }
   }
   function sizeScene() {
     width=innerWidth; height=innerHeight; heroHeight=hero?.offsetHeight || height;
+    sizeStage();
     pixelRatio=Math.min(devicePixelRatio || 1,1.5);
     canvas.width=Math.round(width*pixelRatio); canvas.height=Math.round(height*pixelRatio);
     ctx?.setTransform(pixelRatio,0,0,pixelRatio,0,0);
@@ -250,6 +271,7 @@
       // Cancel short demo transitions too, keeping all controls immediately usable.
       document.querySelectorAll('.demo-panel,#demo-saved').forEach(element=>element.getAnimations().forEach(animation=>animation.cancel()));
       pointer.x=.76; pointer.y=.38;
+      updateStage(true);
       drawScene();
     } else startLoop();
     updateScroll();
@@ -265,6 +287,17 @@
     pointer.targetX=event.clientX/width; pointer.targetY=event.clientY/height;
     root.style.setProperty('--pointer-x',`${event.clientX}px`); root.style.setProperty('--pointer-y',`${event.clientY}px`);
   },{passive:true});
+  creatorStage?.addEventListener('pointermove',event=>{
+    if(!enabled||!finePointer.matches) return;
+    const rect=creatorStage.getBoundingClientRect();
+    const x=Math.max(-.5,Math.min(.5,(event.clientX-rect.left)/Math.max(1,rect.width)-.5));
+    const y=Math.max(-.5,Math.min(.5,(event.clientY-rect.top)/Math.max(1,rect.height)-.5));
+    stageMotion.targetX=x*24; stageMotion.targetY=y*20; stageMotion.targetTurn=x*4;
+  },{passive:true});
+  creatorStage?.addEventListener('pointerleave',()=>{
+    stageMotion.targetX=0; stageMotion.targetY=0; stageMotion.targetTurn=0;
+  });
+  finePointer.addEventListener('change',()=>{ if(!finePointer.matches) updateStage(true); });
   document.querySelectorAll('.app-art').forEach(card=>{
     card.addEventListener('pointermove',event=>{
       if(!enabled||!finePointer.matches) return;
@@ -285,6 +318,7 @@
   addEventListener('scroll',queueScroll,{passive:true});
   if('ResizeObserver' in window) new ResizeObserver(()=>{
     heroHeight=hero?.offsetHeight || height;
+    sizeStage();
     queueScroll();
   }).observe(document.querySelector('main'));
   addEventListener('resize',()=>{sizeScene();queueScroll();});

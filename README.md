@@ -14,11 +14,11 @@ The official publisher website for ODN & Sons, an independent mobile app studio 
 
 Plain HTML, CSS and vanilla JavaScript. No build step or runtime dependencies.
 
-- Futuristic black-and-lime studio design across all pages, with oversized typography and a project portfolio.
+- Creator studio design across all pages: warm ivory and ink with tomato and lilac accents, expressive typography, and individual project posters for the existing app collection.
 - Filterable app collection and keyboard-accessible app detail dialogs.
 - Five working browser demos: editable savings goals with deposits and undo; a focus countdown; an impulse-purchase pause and savings estimate; a keyboard-enabled calculator; and a stopwatch with laps.
 - Search by app name or feature, with category filters and a recoverable empty state.
-- A compact, continuous scrolling layout with a pointer-reactive wireframe canvas, moving type strip, rolling headings and project cards, rolling link labels, parallax artwork, and page transitions in supported browsers. Sections stay in normal document flow; wheel, touch and keyboard scrolling remain native. Motion respects system preferences and can be paused with a session-persistent control.
+- A compact, continuous scrolling layout with a pointer-reactive poster composition and canvas, moving type strip, rolling headings and project cards, rolling link labels, parallax artwork, and page transitions in supported browsers. Sections stay in normal document flow; wheel, touch and keyboard scrolling remain native. Motion respects system preferences and can be paused with a session-persistent control.
 - Demos use temporary in-memory state. Refreshing clears it. They do not reproduce native Android app blocking, make purchases, or save personal data.
 - Privacy-policy selector and section navigation. Existing policy text is preserved.
 - Contact composer that opens the visitor’s email client or Gmail. It does not send or store messages itself.
@@ -41,6 +41,7 @@ Plain HTML, CSS and vanilla JavaScript. No build step or runtime dependencies.
 | `studio.css` | Studio theme and responsive presentation |
 | `studio.js` | Canvas, scroll effects, and motion control |
 | `icons/` | Existing app artwork |
+| `fonts/` | Locally hosted WOFF2 typefaces and their licenses |
 
 ## Run locally
 
@@ -60,11 +61,11 @@ The existing `vercel.json` serves this folder as a static site with clean URLs. 
 
 When editing app information, keep the static homepage cards, `apps.js`, and About page aligned. Keep store URLs and app-specific privacy links current. Company support is `support@allcreatormind.com`; individual policy contact details remain as originally published.
 
-Fonts use Google Fonts with system fallbacks. No analytics, account system, or server-side message processing is added.
+Fonts are served locally as WOFF2 files with system fallbacks; their licenses are included in `fonts/`. No analytics, account system, or server-side message processing is added.
 
 ## Browser checks
 
-The regression checks cover all five demos, input validation, timer completion and pause/resume, calculator error recovery, app search, keyboard navigation, dialog focus, reactive canvas, motion preferences, no-JavaScript content, and responsive layouts on every page.
+The regression checks cover all five demos, input validation, timer completion and pause/resume, calculator error recovery, app search, keyboard navigation, dialog focus, reactive poster composition and canvas, motion preferences, no-JavaScript content, and responsive layouts on every page.
 
 With Python Playwright and Chromium available, run:
 

@@ -23,6 +23,7 @@ try:
         errors = []
         page.on('pageerror', lambda error: errors.append(str(error)))
         page.goto(base_url, wait_until='domcontentloaded')
+        page.evaluate('document.fonts.ready')
         page.wait_for_timeout(1500)
         assert page.locator('#motion-toggle').get_attribute('aria-pressed') == 'true'
         page.evaluate("window.beforeFrame = document.querySelector('canvas').toDataURL()")
@@ -30,6 +31,13 @@ try:
         assert page.evaluate("window.beforeFrame !== document.querySelector('canvas').toDataURL()")
         page.mouse.move(150, 250)
         assert page.evaluate("document.documentElement.style.getPropertyValue('--pointer-x')") == '150px'
+        # The hero responds to a pointer without taking over native scrolling.
+        stage = page.locator('.creator-stage')
+        bounds = stage.bounding_box()
+        page.mouse.move(bounds['x'] + bounds['width'] * .85, bounds['y'] + bounds['height'] * .65)
+        page.wait_for_function("parseFloat(document.querySelector('.creator-stage').style.getPropertyValue('--stage-turn')) > .5")
+        page.mouse.move(10, 10)
+        page.wait_for_function("Math.abs(parseFloat(document.querySelector('.creator-stage').style.getPropertyValue('--stage-turn'))) < .05")
         assert page.locator('.studio-hero').evaluate('e => e.offsetHeight') < 700
         assert page.locator('.studio-process').evaluate('e => e.offsetHeight') < 700
         for selector in ['.lab-copy', '.philosophy-grid > div:first-child']:
@@ -46,8 +54,9 @@ try:
         page.wait_for_function("parseFloat(document.querySelector('.app-card').style.getPropertyValue('--roll-angle')) === 0")
         # Native End/Home and wheel scrolling must remain available to the footer.
         page.evaluate('document.activeElement.blur()')
+        page.evaluate("window.nativeScrollEnded = false; addEventListener('scrollend', () => { window.nativeScrollEnded = true; }, {once:true})")
         page.keyboard.press('End')
-        page.wait_for_function('scrollY + innerHeight >= document.documentElement.scrollHeight - 3')
+        page.wait_for_function('window.nativeScrollEnded && scrollY + innerHeight >= document.documentElement.scrollHeight - 3')
         assert page.locator('.footer-bottom').is_visible()
         page.keyboard.press('Home')
         page.wait_for_function('scrollY < 2')
@@ -64,6 +73,11 @@ try:
         assert page.locator('.marquee-track').evaluate('e => getComputedStyle(e).animationName') == 'none'
         assert page.locator('.roll-word').first.evaluate('e => getComputedStyle(e).transform') == 'none'
         assert page.locator('.roll-card').first.evaluate('e => getComputedStyle(e).transform') == 'none'
+        assert stage.evaluate("e => parseFloat(e.style.getPropertyValue('--stage-turn'))") == 0
+        bounds = stage.bounding_box()
+        page.mouse.move(bounds['x'] + bounds['width'] * .85, bounds['y'] + bounds['height'] * .65)
+        page.wait_for_timeout(200)
+        assert stage.evaluate("e => parseFloat(e.style.getPropertyValue('--stage-turn'))") == 0
         page.reload(wait_until='domcontentloaded')
         assert page.locator('#motion-toggle').get_attribute('aria-pressed') == 'false'
         page.locator('#motion-toggle').click()
@@ -72,11 +86,19 @@ try:
         page.wait_for_function("document.documentElement.dataset.motion === 'off'")
         assert page.locator('#motion-toggle').is_disabled()
         assert page.locator('.marquee-track').evaluate('e => getComputedStyle(e).animationName') == 'none'
-        print('Reactive canvas, pause/resume, session preference and reduced motion passed.', flush=True)
+        # Hero artwork is an accessible entry point to real app demos.
+        for app in ['save', 'glow']:
+            poster = page.locator(f'.creator-poster[data-try="{app}"]')
+            poster.focus()
+            page.keyboard.press('Enter')
+            assert page.locator(f'#tab-{app}').get_attribute('aria-selected') == 'true'
+            page.wait_for_function(f"document.activeElement === document.querySelector('#tab-{app}')")
+        print('Reactive creator stage and canvas, pause/resume, session preference and reduced motion passed.', flush=True)
         for width in [1440, 768, 390, 320]:
             page.set_viewport_size({'width': width, 'height': 900})
             for path in root.glob('*.html'):
                 page.goto(f'{base_url}/{path.name}', wait_until='domcontentloaded')
+                page.evaluate('document.fonts.ready')
                 assert not page.evaluate('document.documentElement.scrollWidth > innerWidth'), (path.name, width)
                 assert page.locator('main').count() == 1
                 assert page.locator('h1').count() == 1
@@ -89,7 +111,7 @@ try:
         assert page.locator('#playground').is_visible()
         no_js = browser.new_page(java_script_enabled=False)
         no_js.goto(base_url, wait_until='domcontentloaded')
-        assert no_js.get_by_role('heading', name='Small apps. Big feeling.').is_visible()
+        assert no_js.get_by_role('heading', name='Ideas with a life of their own.').is_visible()
         assert no_js.locator('.app-card').count() == 5
         assert no_js.locator('a[href="about.html"]').first.is_visible()
         assert not errors, errors

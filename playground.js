@@ -47,6 +47,7 @@
   document.addEventListener('click', event => {
     const trigger = event.target.closest('[data-try]');
     if (!trigger) return;
+    event.preventDefault();
     document.querySelector('#app-dialog')?.close('demo');
     selectDemo(trigger.dataset.try, true);
     playground.scrollIntoView({behavior: reducedMotion.matches || document.documentElement.dataset.motion === 'off' ? 'instant' : 'smooth', block: 'start'});
