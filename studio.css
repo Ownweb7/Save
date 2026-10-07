@@ -213,6 +213,7 @@ em { font-style:normal; font-family:inherit; color:var(--gold); }
 .demo-button { border-radius:5px; }
 .focus-orbit { background:radial-gradient(closest-side,#0d182b 94%,transparent 95%),conic-gradient(var(--demo-accent) var(--focus-progress),#293950 0); }
 .contact-banner { border-top:1px solid var(--line); padding-block:43px; }
+.contact-banner>.eyebrow { font-size:8px; letter-spacing:.8px; }
 .contact-banner>div { align-items:center; margin-top:21px; }
 .contact-banner h2 { font:500 clamp(45px,6.7vw,94px)/1 var(--serif); letter-spacing:-4.5px; }
 .contact-banner h2 em { font:500 1.03em/1 var(--serif); }
