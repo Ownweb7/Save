@@ -81,7 +81,7 @@
     const fade = Math.max(0, 1 - scrollPosition / (heroHeight * .9));
     if (fade <= 0) return;
     const small = width < 761;
-    const scale = small ? width * .41 : Math.min(width * .225,340);
+    const scale = small ? Math.min(width * .41,heroHeight * .4) : Math.min(width * .225,heroHeight * .47,310);
     const centerX = width * (small ? .79 : .77);
     const centerY = (small ? heroHeight * .36 + 60 : heroHeight * .46 + 70) - scrollPosition * .2;
     const time = enabled ? sceneTime : 0;
@@ -142,12 +142,12 @@
     if (!enabled || !element.animate) return;
     const isTitle=element.classList.contains('title-line');
     const animation=element.animate(isTitle ? [
-      {transform:'translateY(45px)',opacity:0,clipPath:'inset(0 0 100% 0)'},
-      {transform:'translateY(0)',opacity:1,clipPath:'inset(0 0 0% 0)'}
+      {transform:'perspective(1000px) translateY(30px) rotateX(18deg)',opacity:0,clipPath:'inset(0 0 100% 0)'},
+      {transform:'perspective(1000px) translateY(0) rotateX(0)',opacity:1,clipPath:'inset(0 0 0% 0)'}
     ] : [
       {transform:'translateY(38px)',opacity:0},
       {transform:'translateY(0)',opacity:1}
-    ], {duration:isTitle?1000:750,delay,easing:'cubic-bezier(.16,1,.3,1)',fill:'backwards'});
+    ], {duration:isTitle?850:600,delay,easing:'cubic-bezier(.16,1,.3,1)',fill:'backwards'});
     activeAnimations.add(animation);
     animation.finished.then(()=>activeAnimations.delete(animation)).catch(()=>{});
   }
@@ -167,6 +167,35 @@
       node.replaceWith(fragment);
     });
   }
+  // Each word rolls around its baseline as its heading enters the viewport.
+  const rollingHeadings=[...document.querySelectorAll('.section-heading h2,.lab-copy h2,.contact-banner h2,.page-hero h1')];
+  rollingHeadings.forEach(heading=>{
+    heading.classList.add('roll-heading');
+    const walker=document.createTreeWalker(heading,NodeFilter.SHOW_TEXT);
+    const nodes=[];
+    while(walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(node=>{
+      const fragment=document.createDocumentFragment();
+      node.textContent.split(/(\s+)/).forEach(word=>{
+        if(!word.trim()) { fragment.append(document.createTextNode(word)); return; }
+        const span=document.createElement('span');
+        span.className='roll-word'; span.textContent=word; fragment.append(span);
+      });
+      node.replaceWith(fragment);
+    });
+  });
+  const projectGrid=document.querySelector('.app-grid');
+  const rollingCards=[...document.querySelectorAll('.app-card')];
+  rollingCards.forEach(card=>card.classList.add('roll-card'));
+  // Duplicate only the visual label; assistive technology reads the original once.
+  document.querySelectorAll('.nav-links>a,.hero-links>a,.try-app').forEach(link=>{
+    [...link.childNodes].filter(node=>node.nodeType===Node.TEXT_NODE&&node.textContent.trim()).forEach(node=>{
+      const label=document.createElement('span'); label.className='roll-label';
+      const front=document.createElement('span'); front.className='roll-label-front'; front.textContent=node.textContent.trim();
+      const back=front.cloneNode(true); back.className='roll-label-back'; back.setAttribute('aria-hidden','true');
+      label.append(front,back); node.replaceWith(label);
+    });
+  });
   const projectImages=[...document.querySelectorAll('.app-art img')];
   let scrollScheduled=false;
   function updateScroll() {
@@ -176,6 +205,11 @@
     document.querySelector('.site-header')?.classList.toggle('scrolled',scrollPosition>20);
     const statementTop=statement?.getBoundingClientRect().top;
     const imageRects=projectImages.map(image=>image.getBoundingClientRect());
+    const headingTops=rollingHeadings.map(heading=>heading.getBoundingClientRect().top);
+    const gridTop=projectGrid?.getBoundingClientRect().top || 0;
+    // Use untransformed layout offsets so scroll transforms cannot feed back into themselves.
+    const cardTops=rollingCards.map(card=>gridTop+card.offsetTop);
+    const cardHeights=rollingCards.map(card=>card.offsetHeight);
     if(statement) {
       const reveal=enabled?Math.max(0,Math.min(1,(height*.85-statementTop)/(height*.5))):1;
       statementWords.forEach((word,index)=>word.style.setProperty('--lit',String(Math.max(0,Math.min(1,reveal*statementWords.length-index)))));
@@ -184,6 +218,17 @@
       const rect=imageRects[index];
       const drift=enabled&&width>760?Math.max(-16,Math.min(16,(rect.top+rect.height/2-height/2)*.035)):0;
       image.style.setProperty('--art-drift',`${drift}px`);
+    });
+    rollingHeadings.forEach((heading,index)=>{
+      const entrance=enabled?Math.max(0,Math.min(1,(headingTops[index]-height*.6)/(height*.4))):0;
+      heading.style.setProperty('--word-roll',`${entrance*55}deg`);
+      heading.style.setProperty('--word-lift',`${entrance*16}px`);
+    });
+    rollingCards.forEach((card,index)=>{
+      const distance=Math.min(height*.42,cardHeights[index]*.8);
+      const entrance=enabled&&!card.hidden?Math.max(0,Math.min(1,(cardTops[index]-height+distance)/Math.max(1,distance))):0;
+      card.style.setProperty('--roll-angle',`${entrance*8}deg`);
+      card.style.setProperty('--roll-lift',`${entrance*20}px`);
     });
     if(!enabled) drawScene();
   }
@@ -238,6 +283,10 @@
     button.addEventListener('pointerleave',()=>button.style.removeProperty('translate'));
   });
   addEventListener('scroll',queueScroll,{passive:true});
+  if('ResizeObserver' in window) new ResizeObserver(()=>{
+    heroHeight=hero?.offsetHeight || height;
+    queueScroll();
+  }).observe(document.querySelector('main'));
   addEventListener('resize',()=>{sizeScene();queueScroll();});
   document.addEventListener('visibilitychange',()=>{
     if(document.hidden) { cancelAnimationFrame(frame);frame=0; }
@@ -247,8 +296,8 @@
     const observer=new IntersectionObserver(entries=>{
       entries.forEach(entry=>{if(entry.isIntersecting){animateIn(entry.target);observer.unobserve(entry.target);}});
     },{threshold:.08});
-    document.querySelectorAll('.section-heading,.app-card,.collection-note,.principles article,.lab-copy,.playground,.contact-banner,.contact-form,.about-meta').forEach(element=>observer.observe(element));
+    document.querySelectorAll('.collection-note,.principles article,.playground,.contact-form,.about-meta').forEach(element=>observer.observe(element));
   }
   sizeScene(); updateMotion();
-  document.querySelectorAll('.title-line,.hero-overline,.hero-bottom,.hero-baseline,.page-hero h1').forEach((element,index)=>animateIn(element,index*110));
+  document.querySelectorAll('.title-line,.hero-overline,.hero-bottom,.hero-baseline').forEach((element,index)=>animateIn(element,index*110));
 })();

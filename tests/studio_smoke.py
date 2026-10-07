@@ -30,12 +30,40 @@ try:
         assert page.evaluate("window.beforeFrame !== document.querySelector('canvas').toDataURL()")
         page.mouse.move(150, 250)
         assert page.evaluate("document.documentElement.style.getPropertyValue('--pointer-x')") == '150px'
+        assert page.locator('.studio-hero').evaluate('e => e.offsetHeight') < 700
+        assert page.locator('.studio-process').evaluate('e => e.offsetHeight') < 700
+        for selector in ['.lab-copy', '.philosophy-grid > div:first-child']:
+            assert page.locator(selector).evaluate('e => getComputedStyle(e).position') == 'static'
+        heading = page.locator('.section-heading h2')
+        heading.evaluate("e => scrollTo({top: e.getBoundingClientRect().top + scrollY - innerHeight * .82, behavior: 'instant'})")
+        page.wait_for_function("parseFloat(document.querySelector('.section-heading h2').style.getPropertyValue('--word-roll')) > 0")
+        heading.evaluate("e => scrollTo({top: e.getBoundingClientRect().top + scrollY - innerHeight * .4, behavior: 'instant'})")
+        page.wait_for_function("parseFloat(document.querySelector('.section-heading h2').style.getPropertyValue('--word-roll')) === 0")
+        card = page.locator('.app-card').first
+        card.evaluate("e => scrollTo({top: e.offsetParent.getBoundingClientRect().top + scrollY + e.offsetTop - innerHeight * .85, behavior: 'instant'})")
+        page.wait_for_function("parseFloat(document.querySelector('.app-card').style.getPropertyValue('--roll-angle')) > 0")
+        card.evaluate("e => scrollTo({top: e.offsetParent.getBoundingClientRect().top + scrollY + e.offsetTop - innerHeight * .35, behavior: 'instant'})")
+        page.wait_for_function("parseFloat(document.querySelector('.app-card').style.getPropertyValue('--roll-angle')) === 0")
+        # Native End/Home and wheel scrolling must remain available to the footer.
+        page.evaluate('document.activeElement.blur()')
+        page.keyboard.press('End')
+        page.wait_for_function('scrollY + innerHeight >= document.documentElement.scrollHeight - 3')
+        assert page.locator('.footer-bottom').is_visible()
+        page.keyboard.press('Home')
+        page.wait_for_function('scrollY < 2')
+        page.mouse.wheel(0, 400)
+        page.wait_for_function('scrollY > 100')
+        page.evaluate("scrollTo({top:0,behavior:'instant'})")
+        print('Compact flow, scroll-linked rolls, and native wheel/keyboard scrolling passed.', flush=True)
+
         page.locator('#motion-toggle').click()
         assert page.locator('#motion-toggle').get_attribute('aria-pressed') == 'false'
         page.evaluate("window.beforeFrame = document.querySelector('canvas').toDataURL()")
         page.wait_for_timeout(200)
         assert page.evaluate("window.beforeFrame === document.querySelector('canvas').toDataURL()")
         assert page.locator('.marquee-track').evaluate('e => getComputedStyle(e).animationName') == 'none'
+        assert page.locator('.roll-word').first.evaluate('e => getComputedStyle(e).transform') == 'none'
+        assert page.locator('.roll-card').first.evaluate('e => getComputedStyle(e).transform') == 'none'
         page.reload(wait_until='domcontentloaded')
         assert page.locator('#motion-toggle').get_attribute('aria-pressed') == 'false'
         page.locator('#motion-toggle').click()

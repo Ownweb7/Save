@@ -18,7 +18,7 @@ Plain HTML, CSS and vanilla JavaScript. No build step or runtime dependencies.
 - Filterable app collection and keyboard-accessible app detail dialogs.
 - Five working browser demos: editable savings goals with deposits and undo; a focus countdown; an impulse-purchase pause and savings estimate; a keyboard-enabled calculator; and a stopwatch with laps.
 - Search by app name or feature, with category filters and a recoverable empty state.
-- Pointer-reactive wireframe canvas, a moving type strip, progressive text reveals, parallax artwork, hover depth, sticky sections, and page transitions in supported browsers. Motion respects system preferences and can be paused with a session-persistent control.
+- A compact, continuous scrolling layout with a pointer-reactive wireframe canvas, moving type strip, rolling headings and project cards, rolling link labels, parallax artwork, and page transitions in supported browsers. Sections stay in normal document flow; wheel, touch and keyboard scrolling remain native. Motion respects system preferences and can be paused with a session-persistent control.
 - Demos use temporary in-memory state. Refreshing clears it. They do not reproduce native Android app blocking, make purchases, or save personal data.
 - Privacy-policy selector and section navigation. Existing policy text is preserved.
 - Contact composer that opens the visitor’s email client or Gmail. It does not send or store messages itself.
