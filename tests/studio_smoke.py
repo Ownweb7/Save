@@ -31,22 +31,32 @@ try:
         assert page.evaluate("window.beforeFrame !== document.querySelector('canvas').toDataURL()")
         page.mouse.move(150, 250)
         assert page.evaluate("document.documentElement.style.getPropertyValue('--pointer-x')") == '150px'
-        # The hero responds to a pointer without taking over native scrolling.
+        # The decorative scene and its eye respond to a pointer, then settle.
+        world = page.locator('.studio-world')
+        world_vars = ['--world-x', '--world-y', '--world-turn', '--world-look-x', '--world-look-y']
+        bounds = world.bounding_box()
+        page.mouse.move(bounds['x'] + bounds['width'] * .85, bounds['y'] + bounds['height'] * .65)
+        page.wait_for_function("parseFloat(document.querySelector('.studio-world').style.getPropertyValue('--world-turn')) > .5")
+        page.wait_for_function("parseFloat(document.querySelector('.studio-world').style.getPropertyValue('--world-look-x')) > 3")
+        page.mouse.move(10, 10)
+        page.wait_for_function("Math.abs(parseFloat(document.querySelector('.studio-world').style.getPropertyValue('--world-look-x'))) < .05")
+        # The product preview responds to a pointer in its own scrollable section.
         stage = page.locator('.app-stage')
+        stage.scroll_into_view_if_needed()
         bounds = stage.bounding_box()
         page.mouse.move(bounds['x'] + bounds['width'] * .85, bounds['y'] + bounds['height'] * .65)
         page.wait_for_function("parseFloat(document.querySelector('.app-stage').style.getPropertyValue('--stage-turn')) > .5")
         page.mouse.move(10, 10)
         page.wait_for_function("Math.abs(parseFloat(document.querySelector('.app-stage').style.getPropertyValue('--stage-turn'))) < .05")
-        assert page.locator('.studio-hero').evaluate('e => e.offsetHeight') < 700
+        assert page.locator('.studio-hero').evaluate('e => e.offsetHeight') < 900
         assert page.locator('.studio-process').evaluate('e => e.offsetHeight') < 700
         for selector in ['.lab-copy', '.philosophy-grid > div:first-child']:
             assert page.locator(selector).evaluate('e => getComputedStyle(e).position') == 'static'
-        heading = page.locator('.section-heading h2')
+        heading = page.locator('#apps .section-heading h2')
         heading.evaluate("e => scrollTo({top: e.getBoundingClientRect().top + scrollY - innerHeight * .82, behavior: 'instant'})")
-        page.wait_for_function("parseFloat(document.querySelector('.section-heading h2').style.getPropertyValue('--word-roll')) > 0")
+        page.wait_for_function("parseFloat(document.querySelector('#apps .section-heading h2').style.getPropertyValue('--word-roll')) > 0")
         heading.evaluate("e => scrollTo({top: e.getBoundingClientRect().top + scrollY - innerHeight * .4, behavior: 'instant'})")
-        page.wait_for_function("parseFloat(document.querySelector('.section-heading h2').style.getPropertyValue('--word-roll')) === 0")
+        page.wait_for_function("parseFloat(document.querySelector('#apps .section-heading h2').style.getPropertyValue('--word-roll')) === 0")
         card = page.locator('.app-card').first
         card.evaluate("e => scrollTo({top: e.offsetParent.getBoundingClientRect().top + scrollY + e.offsetTop - innerHeight * .85, behavior: 'instant'})")
         page.wait_for_function("parseFloat(document.querySelector('.app-card').style.getPropertyValue('--roll-angle')) > 0")
@@ -75,7 +85,14 @@ try:
         assert page.locator('.marquee-track').evaluate('e => getComputedStyle(e).animationName') == 'none'
         assert page.locator('.roll-word').first.evaluate('e => getComputedStyle(e).transform') == 'none'
         assert page.locator('.roll-card').first.evaluate('e => getComputedStyle(e).transform') == 'none'
+        assert all(world.evaluate('(e, key) => parseFloat(e.style.getPropertyValue(key))', key) == 0 for key in world_vars)
+        world.scroll_into_view_if_needed()
+        bounds = world.bounding_box()
+        page.mouse.move(bounds['x'] + bounds['width'] * .85, bounds['y'] + bounds['height'] * .65)
+        page.wait_for_timeout(200)
+        assert all(world.evaluate('(e, key) => parseFloat(e.style.getPropertyValue(key))', key) == 0 for key in world_vars)
         assert stage.evaluate("e => parseFloat(e.style.getPropertyValue('--stage-turn'))") == 0
+        stage.scroll_into_view_if_needed()
         bounds = stage.bounding_box()
         page.mouse.move(bounds['x'] + bounds['width'] * .85, bounds['y'] + bounds['height'] * .65)
         page.wait_for_timeout(200)
@@ -88,8 +105,25 @@ try:
         page.wait_for_function("document.documentElement.dataset.motion === 'off'")
         assert page.locator('#motion-toggle').is_disabled()
         assert page.locator('.marquee-track').evaluate('e => getComputedStyle(e).animationName') == 'none'
+        assert all(world.evaluate('(e, key) => parseFloat(e.style.getPropertyValue(key))', key) == 0 for key in world_vars)
         # Every product preview leads to its actual catalog entry and working demo.
         catalog = page.evaluate('window.ODN_APPS')
+        # The floating app links work with pointer and keyboard selection.
+        assert world.locator('[data-world-app]').count() == 5
+        for app in catalog:
+            link = world.get_by_role('link', name=f'Explore {app["name"]}', exact=True)
+            assert link.get_attribute('href') == f'#app-{app["id"]}'
+            link.click()
+            tab = page.locator(f'#showcase-tab-{app["id"]}')
+            assert tab.get_attribute('aria-selected') == 'true'
+            assert tab.evaluate('e => document.activeElement === e')
+            assert page.locator('#showcase-name').inner_text() == app['name']
+            assert world.locator('[aria-current="true"]').count() == 1
+            assert link.get_attribute('aria-current') == 'true'
+        world.locator('[data-world-app="glow"]').focus()
+        page.keyboard.press('Enter')
+        assert page.locator('#showcase-tab-glow').evaluate('e => document.activeElement === e')
+        print('Floating app links, preview selection and keyboard focus passed.', flush=True)
         # The static product cards expose the same useful facts as the catalog.
         for app in catalog:
             card = page.locator(f'.app-card:has(.app-art[data-app="{app["id"]}"])')
@@ -130,7 +164,7 @@ try:
             assert showcase_tabs.locator('[tabindex="0"]').count() == 1
         print('All five product previews, catalog links, demo entry points and keyboard tabs passed.', flush=True)
         print('Reactive app stage and canvas, pause/resume, session preference and reduced motion passed.', flush=True)
-        for width in [1440, 768, 390, 320]:
+        for width in [1440, 1024, 768, 600, 390, 320]:
             page.set_viewport_size({'width': width, 'height': 900})
             for path in root.glob('*.html'):
                 page.goto(f'{base_url}/{path.name}', wait_until='domcontentloaded')
@@ -159,13 +193,18 @@ try:
         assert not page.locator('#navigation').is_visible()
         assert page.locator('#playground').is_visible()
         no_js = browser.new_page(java_script_enabled=False)
+        no_js.emulate_media(reduced_motion='reduce')
         no_js.goto(base_url, wait_until='domcontentloaded')
-        assert no_js.get_by_role('heading', name='Your everyday. Upgraded.').is_visible()
+        assert no_js.get_by_role('heading', name='Small apps. Big possibilities.').is_visible()
         assert no_js.locator('#showcase-name').inner_text() == 'Save+'
         assert no_js.locator('#showcase-store').get_attribute('href') == catalog[0]['url']
         assert no_js.locator('.app-card').count() == 5
         assert no_js.locator('.app-card .app-feature-list li').count() == 15
         assert no_js.locator('a[href="about.html"]').first.is_visible()
+        for app in catalog:
+            no_js.locator(f'[data-world-app="{app["id"]}"]').click()
+            no_js.wait_for_url(f'**/#app-{app["id"]}')
+            assert no_js.locator(f'#app-{app["id"]}').is_visible()
         assert not errors, errors
         print('Mobile navigation and no-JavaScript content passed; no browser errors.', flush=True)
         browser.close()

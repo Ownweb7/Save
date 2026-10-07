@@ -14,8 +14,8 @@ The official publisher website for ODN & Sons, an independent mobile app studio 
 
 Plain HTML, CSS and vanilla JavaScript. No build step or runtime dependencies.
 
-- Futuristic app studio design across all pages: dark graphite surfaces, cyan and violet accents, clear product typography, and phone previews for the existing Android app collection.
-- Interactive homepage product selector for all five apps, with keyboard-accessible tabs, matching Google Play links, and direct entry into each working browser demo. Phone previews show illustrative sample content.
+- An original immersive app studio homepage with a chrome and lavender orb, a pointer-reactive eye, and five floating app links. These select a product preview with JavaScript and lead directly to the app cards without it. Dark graphite surfaces, clear product information, and consistent styling carry through the studio, support, and policy pages.
+- Interactive product previews below the hero for all five apps, with keyboard-accessible tabs, matching Google Play links, and direct entry into each working browser demo. Phone previews show illustrative sample content.
 - Compact, filterable app collection with three columns on desktop, two on tablets, and one on narrow screens. Each card keeps a clear description, three feature chips, aligned demo and Google Play controls, and keyboard-accessible app details.
 - Five working browser demos: editable savings goals with deposits and undo; a focus countdown; an impulse-purchase pause and savings estimate; a keyboard-enabled calculator; and a stopwatch with laps.
 - Search by app name or feature, with category filters and a recoverable empty state.
@@ -66,7 +66,7 @@ Fonts are served locally as WOFF2 files with system fallbacks; their licenses ar
 
 ## Browser checks
 
-The regression checks cover all five product previews and their store/demo destinations, catalog-aligned feature chips, all five demos, input validation, timer completion and pause/resume, calculator error recovery, app search, keyboard navigation, dialog focus, reactive phone composition and canvas, motion preferences, no-JavaScript content, and responsive layouts on every page.
+The regression checks cover floating app selection, all five product previews and their store/demo destinations, catalog-aligned feature chips, all five demos, input validation, timer completion and pause/resume, calculator error recovery, app search, keyboard navigation, dialog focus, reactive scene, phone composition and canvas, motion preferences, no-JavaScript content, and responsive layouts on every page.
 
 With Python Playwright and Chromium available, run:
 

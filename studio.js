@@ -5,8 +5,10 @@
   const finePointer = matchMedia('(hover:hover) and (pointer:fine)');
   const root = document.documentElement;
   const hero = document.querySelector('.studio-hero');
+  const studioWorld = document.querySelector('.studio-world');
   const appStage = document.querySelector('.app-stage');
   const stageMotion = {x:0, y:0, turn:0, targetX:0, targetY:0, targetTurn:0};
+  const worldMotion = {x:0, y:0, turn:0, lookX:0, lookY:0, targetX:0, targetY:0, targetTurn:0, targetLookX:0, targetLookY:0};
   let stageBounds = null;
   let manuallyPaused = false;
   try { manuallyPaused = sessionStorage.getItem('odn-motion-paused') === '1'; } catch { /* Preferences are optional. */ }
@@ -20,6 +22,7 @@
 
   // The hero introduces every app with a keyboard-accessible, user-controlled preview.
   const showcaseTabs = [...document.querySelectorAll('.showcase-tabs [role="tab"]')];
+  const worldApps = [...document.querySelectorAll('.world-app[data-world-app]')];
   const showcasePanel = document.querySelector('#showcase-panel');
   const showcasePreviews = showcasePanel ? [...showcasePanel.querySelectorAll('[data-preview]')] : [];
   let activeShowcase = appStage?.dataset.activeApp || 'save';
@@ -35,6 +38,16 @@
       tab.setAttribute('aria-selected', String(selected));
       tab.tabIndex = selected ? 0 : -1;
     });
+    worldApps.forEach(link => {
+      const selected = link.dataset.worldApp === id;
+      if (selected) link.setAttribute('aria-current', 'true');
+      else link.removeAttribute('aria-current');
+      link.classList.toggle('is-selected', selected);
+    });
+    if (studioWorld) {
+      studioWorld.dataset.activeApp = id;
+      studioWorld.style.setProperty('--preview-accent', app.color);
+    }
     showcasePanel.setAttribute('aria-labelledby', selectedTab.id);
     appStage.dataset.activeApp = id;
     appStage.style.setProperty('--preview-accent', app.color);
@@ -98,6 +111,18 @@
       selectShowcase(showcaseTabs[index].dataset.showcase, true);
     });
   });
+  worldApps.forEach(link => {
+    link.addEventListener('click', event => {
+      const id = link.dataset.worldApp;
+      const selectedTab = showcaseTabs.find(tab => tab.dataset.showcase === id);
+      const preview = document.querySelector('#app-preview');
+      if (!selectedTab || !preview) return;
+      event.preventDefault();
+      selectShowcase(id);
+      selectedTab.focus({preventScroll:true});
+      preview.scrollIntoView({behavior:enabled?'smooth':'instant', block:'start'});
+    });
+  });
 
   const toggle = document.createElement('button');
   toggle.type = 'button';
@@ -141,6 +166,19 @@
     appStage.style.setProperty('--stage-x',`${stageMotion.x.toFixed(2)}px`);
     appStage.style.setProperty('--stage-y',`${stageMotion.y.toFixed(2)}px`);
     appStage.style.setProperty('--stage-turn',`${stageMotion.turn.toFixed(2)}deg`);
+  }
+  function updateWorld(reset=false) {
+    if (!studioWorld) return;
+    for (const key of ['x','y','turn','lookX','lookY']) {
+      const targetKey = `target${key[0].toUpperCase()}${key.slice(1)}`;
+      if (reset) worldMotion[key] = worldMotion[targetKey] = 0;
+      else worldMotion[key] += (worldMotion[targetKey]-worldMotion[key])*.1;
+    }
+    studioWorld.style.setProperty('--world-x',`${worldMotion.x.toFixed(2)}px`);
+    studioWorld.style.setProperty('--world-y',`${worldMotion.y.toFixed(2)}px`);
+    studioWorld.style.setProperty('--world-turn',`${worldMotion.turn.toFixed(2)}deg`);
+    studioWorld.style.setProperty('--world-look-x',`${worldMotion.lookX.toFixed(2)}px`);
+    studioWorld.style.setProperty('--world-look-y',`${worldMotion.lookY.toFixed(2)}px`);
   }
   function project(u, v, scale, time, centerX, centerY) {
     const radius = 1 + .09 * sin(u * 3 + time * .3);
@@ -200,7 +238,7 @@
         connectionCount++;
       }
     }
-    if (!hero) return;
+    if (!hero || studioWorld) return;
     const fade = Math.max(0, 1 - scrollPosition / (heroHeight * .9));
     if (fade <= 0) return;
     const small = width < 761;
@@ -256,12 +294,13 @@
       pointer.x += (pointer.targetX-pointer.x)*.07;
       pointer.y += (pointer.targetY-pointer.y)*.07;
       updateStage();
+      updateWorld();
       drawScene();
     }
     frame = requestAnimationFrame(loop);
   }
   function startLoop() {
-    if (!frame && enabled && !document.hidden && (ctx||appStage)) { lastTime=performance.now(); frame=requestAnimationFrame(loop); }
+    if (!frame && enabled && !document.hidden && (ctx||appStage||studioWorld)) { lastTime=performance.now(); frame=requestAnimationFrame(loop); }
   }
   function sizeScene() {
     width=innerWidth; height=innerHeight; heroHeight=hero?.offsetHeight || height;
@@ -404,6 +443,7 @@
       pointer.x=pointer.targetX=.76; pointer.y=pointer.targetY=.38; pointer.active=false;
       resetCardGlows();
       updateStage(true);
+      updateWorld(true);
       drawScene();
     } else startLoop();
     updateScroll();
@@ -430,8 +470,21 @@
   appStage?.addEventListener('pointerleave',()=>{
     stageMotion.targetX=0; stageMotion.targetY=0; stageMotion.targetTurn=0;
   });
+  studioWorld?.addEventListener('pointermove',event=>{
+    if(!enabled||!finePointer.matches) return;
+    const rect=studioWorld.getBoundingClientRect();
+    const x=Math.max(-1,Math.min(1,(event.clientX-rect.left)/Math.max(1,rect.width)*2-1));
+    const y=Math.max(-1,Math.min(1,(event.clientY-rect.top)/Math.max(1,rect.height)*2-1));
+    const lookScale=12/Math.max(1,Math.hypot(x,y));
+    worldMotion.targetX=x*18; worldMotion.targetY=y*12; worldMotion.targetTurn=x*3;
+    worldMotion.targetLookX=x*lookScale; worldMotion.targetLookY=y*lookScale;
+  },{passive:true});
+  studioWorld?.addEventListener('pointerleave',()=>{
+    worldMotion.targetX=0; worldMotion.targetY=0; worldMotion.targetTurn=0;
+    worldMotion.targetLookX=0; worldMotion.targetLookY=0;
+  });
   finePointer.addEventListener('change',()=>{
-    if(!finePointer.matches) { updateStage(true); resetCardGlows(); pointer.active=false; }
+    if(!finePointer.matches) { updateStage(true); updateWorld(true); resetCardGlows(); pointer.active=false; }
   });
   root.addEventListener('pointerleave',()=>{ pointer.active=false; });
   document.querySelectorAll('.app-art').forEach(card=>{
