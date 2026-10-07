@@ -90,6 +90,12 @@ try:
         assert page.locator('.marquee-track').evaluate('e => getComputedStyle(e).animationName') == 'none'
         # Every product preview leads to its actual catalog entry and working demo.
         catalog = page.evaluate('window.ODN_APPS')
+        # The static product cards expose the same useful facts as the catalog.
+        for app in catalog:
+            card = page.locator(f'.app-card:has(.app-art[data-app="{app["id"]}"])')
+            features = card.locator('.app-feature-list li')
+            assert features.all_text_contents() == app['features'], app['id']
+            assert all(features.nth(i).is_visible() for i in range(3)), app['id']
         showcase_tabs = page.locator('.showcase-tabs')
         assert showcase_tabs.get_attribute('role') == 'tablist'
         assert showcase_tabs.get_by_role('tab').count() == 5
@@ -154,10 +160,11 @@ try:
         assert page.locator('#playground').is_visible()
         no_js = browser.new_page(java_script_enabled=False)
         no_js.goto(base_url, wait_until='domcontentloaded')
-        assert no_js.get_by_role('heading', name='Small apps. Better everyday.').is_visible()
+        assert no_js.get_by_role('heading', name='Your everyday. Upgraded.').is_visible()
         assert no_js.locator('#showcase-name').inner_text() == 'Save+'
         assert no_js.locator('#showcase-store').get_attribute('href') == catalog[0]['url']
         assert no_js.locator('.app-card').count() == 5
+        assert no_js.locator('.app-card .app-feature-list li').count() == 15
         assert no_js.locator('a[href="about.html"]').first.is_visible()
         assert not errors, errors
         print('Mobile navigation and no-JavaScript content passed; no browser errors.', flush=True)

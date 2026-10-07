@@ -15,7 +15,7 @@
   let height = innerHeight;
   let heroHeight = hero?.offsetHeight || height;
   let scrollPosition = scrollY;
-  const pointer = {x: .76, y: .38, targetX: .76, targetY: .38};
+  const pointer = {x: .76, y: .38, targetX: .76, targetY: .38, active: false};
   const activeAnimations = new Set();
 
   // The hero introduces every app with a keyboard-accessible, user-controlled preview.
@@ -120,10 +120,10 @@
   let pixelRatio = 1;
 
   // Deterministic dots avoid noise jumps on resize and do not require images.
-  const dots = Array.from({length:48}, (_, i) => ({
+  const dots = Array.from({length:56}, (_, i) => ({
     x: ((i * 73.731 + 17) % 100) / 100,
     y: ((i * 37.919 + 23) % 100) / 100,
-    radius: i % 5 === 0 ? 1.5 : .7
+    radius: i % 7 === 0 ? 1.3 : .65
   }));
   const sin = Math.sin, cos = Math.cos, PI = Math.PI;
   function sizeStage() {
@@ -164,18 +164,41 @@
     if (!ctx) return;
     ctx.clearRect(0,0,width,height);
     const cursorX = pointer.x * width, cursorY = pointer.y * height;
-    // Quiet, pointer-responsive ambient field persists beyond the introduction.
-    for (const dot of dots) {
+    // Small star points and nearby connections keep the ambient field quiet.
+    const nearStars = [];
+    const responsive = enabled && finePointer.matches && pointer.active;
+    dots.forEach((dot,index) => {
       let x = dot.x * width, y = (dot.y * height - scrollPosition * .045) % height;
       if (y < 0) y += height;
       const distance = Math.hypot(x - cursorX, y - cursorY);
-      if (enabled && distance < 150 && finePointer.matches) {
-        const force = (1 - distance / 150) * 16;
+      const proximity = responsive ? Math.max(0,1 - distance / 190) : 0;
+      if (proximity > 0) {
+        const force = proximity * 9;
         x += (x - cursorX) / Math.max(1,distance) * force;
         y += (y - cursorY) / Math.max(1,distance) * force;
+        nearStars.push({x,y,proximity});
       }
-      ctx.fillStyle = distance < 130 && enabled ? '#325cf544' : '#0d173016';
-      ctx.beginPath(); ctx.arc(x,y,dot.radius,0,PI*2); ctx.fill();
+      const shimmer = enabled ? .025 * sin(sceneTime * .7 + index) : 0;
+      ctx.fillStyle = `rgba(174,220,239,${.16 + shimmer + proximity * .48})`;
+      ctx.beginPath(); ctx.arc(x,y,dot.radius + proximity * .35,0,PI*2); ctx.fill();
+      if (proximity > .5) {
+        ctx.fillStyle = `rgba(103,232,249,${proximity * .06})`;
+        ctx.beginPath(); ctx.arc(x,y,4,0,PI*2); ctx.fill();
+      }
+    });
+    // Only connect stars around the pointer, with a strict limit on line work.
+    let connectionCount = 0;
+    ctx.lineWidth = .6;
+    for (let a=0; a<nearStars.length && connectionCount<10; a++) {
+      for (let b=a+1; b<nearStars.length && connectionCount<10; b++) {
+        const first = nearStars[a], second = nearStars[b];
+        const distance = Math.hypot(first.x-second.x,first.y-second.y);
+        if (distance > 125) continue;
+        const opacity = (1-distance/125) * Math.min(first.proximity,second.proximity) * .28;
+        ctx.strokeStyle = `rgba(103,232,249,${opacity})`;
+        ctx.beginPath(); ctx.moveTo(first.x,first.y); ctx.lineTo(second.x,second.y); ctx.stroke();
+        connectionCount++;
+      }
     }
     if (!hero) return;
     const fade = Math.max(0, 1 - scrollPosition / (heroHeight * .9));
@@ -186,16 +209,16 @@
     const centerY = stageBounds ? stageBounds.top + stageBounds.height*.48 - scrollPosition : heroHeight*.46 + 70 - scrollPosition*.2;
     const time = enabled ? sceneTime : 0;
     ctx.save();
-    ctx.globalAlpha = fade * (small ? .35 : .55);
+    ctx.globalAlpha = fade * (small ? .3 : .55);
     const glow = ctx.createRadialGradient(centerX,centerY,5,centerX,centerY,scale*1.55);
-    glow.addColorStop(0,'#325cf50b'); glow.addColorStop(.55,'#8bb7ff18'); glow.addColorStop(1,'#8bb7ff00');
+    glow.addColorStop(0,'#67e8f905'); glow.addColorStop(.55,'#67e8f91b'); glow.addColorStop(.8,'#ab93ff0b'); glow.addColorStop(1,'#67e8f900');
     ctx.fillStyle = glow; ctx.fillRect(centerX-scale*1.6,centerY-scale*1.6,scale*3.2,scale*3.2);
     // Two families of continuous curves form a twisting, three-dimensional torus.
     for (let ring=0; ring<58; ring++) {
       const u = ring / 58 * PI * 2;
       const depth = project(u,0,scale,time,centerX,centerY)[2];
       const alpha = Math.max(.07, .38 - depth*.15);
-      ctx.strokeStyle = ring % 7 === 0 ? `rgba(13,23,48,${alpha*.6})` : `rgba(50,92,245,${alpha})`;
+      ctx.strokeStyle = ring % 7 === 0 ? `rgba(171,147,255,${alpha*.8})` : `rgba(103,232,249,${alpha})`;
       ctx.lineWidth = ring % 7 === 0 ? .8 : .55;
       ctx.beginPath();
       for (let step=0; step<=48; step++) {
@@ -205,7 +228,7 @@
       ctx.stroke();
     }
     for (let ring=0; ring<22; ring++) {
-      ctx.strokeStyle = ring % 5 === 0 ? '#8bb7ff77' : '#325cf544';
+      ctx.strokeStyle = ring % 5 === 0 ? '#ab93ff88' : '#67e8f966';
       ctx.lineWidth = .6; ctx.beginPath();
       for (let step=0; step<=100; step++) {
         const point = project(step/100*PI*2,ring/22*PI*2,scale,time,centerX,centerY);
@@ -213,6 +236,15 @@
       }
       ctx.stroke();
     }
+    // Broken orbital paths add a little depth around the app preview.
+    ctx.translate(centerX,centerY);
+    ctx.rotate(-.38 + time * .025);
+    ctx.lineWidth = .7;
+    ctx.strokeStyle = '#67e8f94d';
+    ctx.beginPath(); ctx.ellipse(0,0,scale*1.4,scale*.54,0,.22*PI,1.24*PI); ctx.stroke();
+    ctx.rotate(.86);
+    ctx.strokeStyle = '#ab93ff44';
+    ctx.beginPath(); ctx.ellipse(0,0,scale*1.42,scale*.64,0,1.08*PI,1.82*PI); ctx.stroke();
     ctx.restore();
   }
   function loop(timestamp) {
@@ -288,7 +320,25 @@
   });
   const projectGrid=document.querySelector('.app-grid');
   const rollingCards=[...document.querySelectorAll('.app-card')];
-  rollingCards.forEach(card=>card.classList.add('roll-card'));
+  rollingCards.forEach(card=>{
+    card.classList.add('roll-card');
+    card.addEventListener('pointermove',event=>{
+      if(!enabled||!finePointer.matches) return;
+      const rect=card.getBoundingClientRect();
+      const x=Math.max(0,Math.min(100,(event.clientX-rect.left)/Math.max(1,rect.width)*100));
+      const y=Math.max(0,Math.min(100,(event.clientY-rect.top)/Math.max(1,rect.height)*100));
+      card.style.setProperty('--card-x',`${x.toFixed(1)}%`);
+      card.style.setProperty('--card-y',`${y.toFixed(1)}%`);
+    },{passive:true});
+    card.addEventListener('pointerleave',()=>{
+      card.style.removeProperty('--card-x'); card.style.removeProperty('--card-y');
+    });
+  });
+  function resetCardGlows() {
+    rollingCards.forEach(card=>{
+      card.style.removeProperty('--card-x'); card.style.removeProperty('--card-y');
+    });
+  }
   // Duplicate only the visual label; assistive technology reads the original once.
   document.querySelectorAll('.nav-links>a,.hero-links>a,.try-app').forEach(link=>{
     [...link.childNodes].filter(node=>node.nodeType===Node.TEXT_NODE&&node.textContent.trim()).forEach(node=>{
@@ -351,7 +401,8 @@
       });
       // Cancel short demo transitions too, keeping all controls immediately usable.
       document.querySelectorAll('.demo-panel,#demo-saved').forEach(element=>element.getAnimations().forEach(animation=>animation.cancel()));
-      pointer.x=.76; pointer.y=.38;
+      pointer.x=pointer.targetX=.76; pointer.y=pointer.targetY=.38; pointer.active=false;
+      resetCardGlows();
       updateStage(true);
       drawScene();
     } else startLoop();
@@ -365,6 +416,7 @@
   reduced.addEventListener('change',updateMotion);
   addEventListener('pointermove',event=>{
     if(!enabled||!finePointer.matches) return;
+    pointer.active=true;
     pointer.targetX=event.clientX/width; pointer.targetY=event.clientY/height;
     root.style.setProperty('--pointer-x',`${event.clientX}px`); root.style.setProperty('--pointer-y',`${event.clientY}px`);
   },{passive:true});
@@ -378,7 +430,10 @@
   appStage?.addEventListener('pointerleave',()=>{
     stageMotion.targetX=0; stageMotion.targetY=0; stageMotion.targetTurn=0;
   });
-  finePointer.addEventListener('change',()=>{ if(!finePointer.matches) updateStage(true); });
+  finePointer.addEventListener('change',()=>{
+    if(!finePointer.matches) { updateStage(true); resetCardGlows(); pointer.active=false; }
+  });
+  root.addEventListener('pointerleave',()=>{ pointer.active=false; });
   document.querySelectorAll('.app-art').forEach(card=>{
     card.addEventListener('pointermove',event=>{
       if(!enabled||!finePointer.matches) return;
