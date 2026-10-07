@@ -49,32 +49,40 @@
     }
   });
 
-  const savings = document.querySelector('#savings-range');
-  savings?.addEventListener('input', () => {
-    const amount = Number(savings.value);
-    const percent = Math.round(amount / 500);
-    document.querySelector('#saved-amount').textContent = '₹' + amount.toLocaleString('en-IN');
-    document.querySelector('#goal-percent').textContent = percent === 100 ? 'Goal reached. You did it!' : `${percent}% of the way there`;
-    document.querySelector('#savings-ring').style.setProperty('--progress', `${percent}%`);
-    savings.setAttribute('aria-valuetext', `${amount.toLocaleString('en-IN')} rupees saved, ${percent} percent of goal`);
-  });
-
   const filters = document.querySelectorAll('[data-filter]');
+  const search = document.querySelector('#app-search');
+  let selectedCategory = 'All';
+  function filterApps() {
+    const query = (search?.value || '').trim().toLowerCase();
+    let count = 0;
+    document.querySelectorAll('.app-card').forEach(card => {
+      const id = card.querySelector('[data-app]').dataset.app;
+      const app = window.ODN_APPS.find(item => item.id === id);
+      const text = [app.name, app.tag, app.desc, app.category, ...app.features].join(' ').toLowerCase();
+      card.hidden = (selectedCategory !== 'All' && card.dataset.category !== selectedCategory) || !text.includes(query);
+      if (!card.hidden) count++;
+    });
+    document.querySelector('.collection-note').hidden = selectedCategory !== 'All' || Boolean(query);
+    document.querySelector('#collection-count').textContent = `Showing ${count} of 5 apps`;
+    document.querySelector('#search-empty').hidden = count > 0;
+    document.querySelector('#clear-search').hidden = !search.value;
+  }
   filters.forEach(button => button.addEventListener('click', () => {
-    const selected = button.dataset.filter;
+    selectedCategory = button.dataset.filter;
     filters.forEach(filter => {
       const active = filter === button;
       filter.classList.toggle('active', active);
       filter.setAttribute('aria-pressed', String(active));
     });
-    let count = 0;
-    document.querySelectorAll('.app-card').forEach(card => {
-      card.hidden = selected !== 'All' && card.dataset.category !== selected;
-      if (!card.hidden) count++;
-    });
-    document.querySelector('.collection-note').hidden = selected !== 'All';
-    document.querySelector('#collection-count').textContent = selected === 'All' ? 'Showing all 5 apps' : `${count} ${selected.toLowerCase()} ${count === 1 ? 'app' : 'apps'}`;
+    filterApps();
   }));
+  search?.addEventListener('input', filterApps);
+  document.querySelector('#clear-search')?.addEventListener('click', () => { search.value = ''; filterApps(); search.focus(); });
+  document.querySelector('#reset-search')?.addEventListener('click', () => {
+    search.value = '';
+    document.querySelector('[data-filter="All"]').click();
+    search.focus();
+  });
 
   const dialog = document.querySelector('#app-dialog');
   let dialogTrigger;
@@ -89,8 +97,9 @@
       <h2 class="dialog-title" id="dialog-title">${app.name}</h2>
       <p class="dialog-description">${app.desc}</p>
       <ul class="dialog-features">${app.features.map(feature => `<li>${feature}</li>`).join('')}</ul>
-      <div class="dialog-actions"><a class="btn btn-gold" href="${app.url}" target="_blank" rel="noopener">${app.id === 'will' ? 'Find on Google Play' : 'Get it on Google Play'} <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a><a href="${app.policy}">Read privacy policy</a></div>
+      <div class="dialog-actions"><button class="btn btn-gold" data-try="${app.id}">Try the browser demo</button><a class="btn btn-ghost" href="${app.url}" target="_blank" rel="noopener">${app.id === 'will' ? 'Find on Google Play' : 'Get it on Google Play'} <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a><a href="${app.policy}">Read privacy policy</a></div>
       <p class="dialog-note">By ODN &amp; Sons · Made with care in Hisar, India</p>`;
+    dialog.returnValue = '';
     dialog.showModal();
     document.body.classList.add('dialog-open');
   }));
@@ -114,7 +123,7 @@
   });
   dialog?.addEventListener('close', () => {
     document.body.classList.remove('dialog-open');
-    dialogTrigger?.focus();
+    if (dialog.returnValue !== 'demo') dialogTrigger?.focus();
   });
 
   document.querySelector('#policy-select')?.addEventListener('change', event => {
@@ -165,4 +174,56 @@
     emailLink.remove();
   });
   document.querySelector('#contact-message')?.addEventListener('input', event => event.target.setCustomValidity(''));
+})();
+
+(() => {
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const progress = document.createElement('div');
+  progress.className = 'page-scroll-progress';
+  progress.setAttribute('aria-hidden', 'true');
+  document.body.append(progress);
+  let scheduled = false;
+  function updateScroll() {
+    const max = document.documentElement.scrollHeight - innerHeight;
+    progress.style.transform = `scaleX(${max > 0 ? Math.min(1, scrollY / max) : 0})`;
+    document.querySelector('.site-header')?.classList.toggle('scrolled', scrollY > 15);
+    scheduled = false;
+  }
+  addEventListener('scroll', () => {
+    if (!scheduled) { scheduled = true; requestAnimationFrame(updateScroll); }
+  }, {passive: true});
+  addEventListener('resize', updateScroll);
+  updateScroll();
+  const animations = new Set();
+  function enter(element, delay = 0) {
+    if (reduced.matches || !element.animate) return;
+    const animation = element.animate([
+      {opacity: 0, transform: 'translateY(20px)'},
+      {opacity: 1, transform: 'translateY(0)'}
+    ], {duration: 600, delay, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'backwards'});
+    animations.add(animation);
+    animation.finished.then(() => animations.delete(animation)).catch(() => {});
+  }
+  document.querySelectorAll('.hero-copy > *, .playground, .page-hero > *').forEach((element, index) => enter(element, index * 60));
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) { enter(entry.target); observer.unobserve(entry.target); }
+      });
+    }, {threshold: .12});
+    document.querySelectorAll('.app-card, .principles article, .collection-note, .contact-banner, .contact-form, .about-meta').forEach(element => observer.observe(element));
+  }
+  const finePointer = matchMedia('(hover:hover) and (pointer:fine)');
+  document.querySelectorAll('.app-art').forEach(card => {
+    card.addEventListener('pointermove', event => {
+      if (reduced.matches || !finePointer.matches) return;
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty('--tilt-x', `${(0.5 - (event.clientY - rect.top) / rect.height) * 5}deg`);
+      card.style.setProperty('--tilt-y', `${((event.clientX - rect.left) / rect.width - 0.5) * 5}deg`);
+    });
+    card.addEventListener('pointerleave', () => { card.style.removeProperty('--tilt-x'); card.style.removeProperty('--tilt-y'); });
+  });
+  reduced.addEventListener('change', event => {
+    if (event.matches) { animations.forEach(animation => animation.cancel()); animations.clear(); }
+  });
 })();

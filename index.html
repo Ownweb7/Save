@@ -45,18 +45,18 @@
 <div class="eyebrow">
 <span class="tiny-rule">
 </span> INDEPENDENT MINDS. THOUGHTFUL APPS.</div>
-<h1>A little simpler.<br>A little better.<br>
+<h1>A little simpler.<br> A little better.<br>
 <em>Every day.</em>
 </h1>
-<p>Small moments make a life. We build thoughtful apps to help you make the most of yours.</p>
+<p>Save a little. Find your focus. Make time for what matters. Try our everyday tools right here, then take them with you on Android.</p>
 <div class="hero-actions">
-<a href="#apps" class="btn btn-gold">Find your everyday app <span aria-hidden="true">
+<a href="#playground" class="btn btn-gold">Try the apps <span aria-hidden="true">
 <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
 <path d="M6 18 18 6M6 6h12v12"/>
 </svg>
 </span>
 </a>
-<a href="about.html" class="text-button">Meet the studio</a>
+<a href="#apps" class="text-button">Explore the collection</a>
 </div>
 <div class="hero-footnote">
 <span class="mini-icons">
@@ -64,60 +64,79 @@
 <img src="icons/Bond%20Time.png" alt="">
 <img src="icons/Glowcalc%20Icon.png" alt="">
 </span>
-<span>Five apps. One thoughtful approach.</span>
+<span>Five apps. Five ways to try them.</span>
 </div>
 </div>
-<div class="showcase">
-<div class="showcase-top">
-<span class="eyebrow">SMALL STEPS. REAL PROGRESS.</span>
-<span class="showcase-star" aria-hidden="true">
-<svg class="star-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-<path d="M20 2v36M2 20h36M7 7l26 26M7 33 33 7"/>
-</svg>
-</span>
-</div>
-<div class="goal-preview">
-<div class="preview-heading">
-<span class="preview-logo">s<span>+</span>
-</span>
-<span>Save+<small>A little closer, every day.</small>
-</span>
-<span class="preview-dots" aria-hidden="true">•••</span>
-</div>
-<div class="goal-label">
-<span>YOUR NEXT CHAPTER</span>
-<span aria-hidden="true">✧</span>
-</div>
-<h2>Something worth<br>saving for.</h2>
-<div class="savings-ring" id="savings-ring">
-<div>
-<span>Saved so far</span>
-<strong id="saved-amount">₹32,500</strong>
-<small>of ₹50,000</small>
-</div>
-</div>
-<div class="goal-progress">
-<span id="goal-percent">65% of the way there</span>
-<span>✦ You’ve got this</span>
-</div>
-<label class="range-label" for="savings-range">Try it — move your goal forward</label>
-<input id="savings-range" type="range" min="0" max="50000" step="500" value="32500" aria-label="Savings preview amount">
-<div class="preview-bottom">
-<span>ONE SMALL STEP AT A TIME</span>
-<button class="preview-more" data-app="save" aria-label="Learn about Save+">
-<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-<path d="M6 18 18 6M6 6h12v12"/>
-</svg>
-</button>
-</div>
-</div>
-<div class="showcase-bottom">
-<span>
-<span class="sample-dot">
-</span> INTERACTIVE WEB PREVIEW</span>
-<span>01 / 05</span>
-</div>
-</div>
+<section class="playground" id="playground" aria-label="Try our apps" style="--demo-accent:#bfdaa3">
+  <div class="playground-heading"><div><span class="eyebrow">LESS READING. MORE DOING.</span><h2>Give it a little try.</h2></div><span class="demo-badge">LIVE DEMOS</span></div>
+  <div class="demo-tabs" role="tablist" aria-label="App demos">
+    <button id="tab-save" role="tab" aria-selected="true" aria-controls="demo-save" tabindex="0" data-demo="save"><img src="icons/Website%20Icon.png" alt=""><span>Save+</span></button>
+    <button id="tab-bond" role="tab" aria-selected="false" aria-controls="demo-bond" tabindex="-1" data-demo="bond"><img src="icons/Bond%20Time.png" alt=""><span>Bond Time</span></button>
+    <button id="tab-will" role="tab" aria-selected="false" aria-controls="demo-will" tabindex="-1" data-demo="will"><img src="icons/Will%20impulse.png" alt=""><span>Will Impulse</span></button>
+    <button id="tab-glow" role="tab" aria-selected="false" aria-controls="demo-glow" tabindex="-1" data-demo="glow"><img src="icons/Glowcalc%20Icon.png" alt=""><span>GlowCalc</span></button>
+    <button id="tab-clock" role="tab" aria-selected="false" aria-controls="demo-clock" tabindex="-1" data-demo="clock"><img src="icons/LockClock%20AURUM.png" alt=""><span>LockClock</span></button>
+  </div>
+  <div class="demo-panel save-demo" id="demo-save" role="tabpanel" aria-labelledby="tab-save" tabindex="0">
+    <div class="demo-intro"><span class="demo-kicker">YOUR NEXT CHAPTER</span><h3>Small steps. A real goal.</h3><p>Set a target, then add a little towards it.</p></div>
+    <div class="save-total"><span>Sample savings</span><strong id="demo-saved">₹12,500</strong><span id="demo-remaining">₹37,500 to go</span></div>
+    <div class="demo-progress" role="progressbar" aria-label="Savings goal progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25"><span id="demo-progress-fill" style="width:25%"></span></div>
+    <div class="demo-field-pair"><div><label for="demo-target">Goal amount (₹)</label><input id="demo-target" type="number" min="1" max="100000000" step="1" value="50000" required></div><div><label for="demo-monthly">Save each month (₹)</label><input id="demo-monthly" type="number" min="1" max="100000000" step="1" value="5000" required></div></div>
+    <p class="demo-insight" id="demo-forecast" role="status">At ₹5,000 a month, you’re 8 months away.</p>
+    <form id="demo-deposit-form" class="deposit-form"><div><label class="sr-only" for="demo-deposit">Amount to add in rupees</label><input id="demo-deposit" type="number" min="1" max="100000000" step="1" value="1000" required></div><button class="demo-button" type="submit">Add to savings</button></form>
+    <div class="demo-utility"><button id="demo-undo" type="button" disabled>Undo last addition</button><button id="demo-save-reset" type="button">Reset demo</button></div>
+    <p class="demo-feedback" id="demo-save-status" role="status">Sample numbers. Try adding your first ₹1,000.</p>
+  </div>
+  <div class="demo-panel bond-demo" id="demo-bond" role="tabpanel" aria-labelledby="tab-bond" tabindex="0" hidden>
+    <div class="demo-intro"><span class="demo-kicker">PHONES DOWN. FAMILY UP.</span><h3>A moment to be present.</h3><p>Choose a duration and start a little focus session.</p></div>
+    <div class="duration-options" role="group" aria-label="Focus duration"><button data-duration="60" aria-pressed="true">1 minute</button><button data-duration="300" aria-pressed="false">5 minutes</button><button data-duration="900" aria-pressed="false">15 minutes</button></div>
+    <div class="focus-orbit" id="focus-orbit"><span>TIME TOGETHER</span><output id="focus-time" role="timer" aria-live="off">01:00</output><span id="focus-phase">Ready when you are</span></div>
+    <div class="demo-controls"><button id="focus-start" class="demo-button">Start session</button><button id="focus-reset" class="demo-button secondary">Reset</button></div>
+    <p class="demo-feedback" id="focus-status" role="status">A browser timer. The Android app can also block distractions.</p>
+  </div>
+  <div class="demo-panel will-demo" id="demo-will" role="tabpanel" aria-labelledby="tab-will" tabindex="0" hidden>
+    <div class="demo-intro"><span class="demo-kicker">A LITTLE PAUSE GOES A LONG WAY</span><h3>Do you still want that order?</h3><p>See what skipping a few impulse orders could add up to.</p></div>
+    <div class="demo-field-pair"><div><label for="impulse-cost">Cost per order (₹)</label><input id="impulse-cost" type="number" value="400" min="1" max="1000000" required></div><div><label for="impulse-count">Orders skipped / week</label><input id="impulse-count" type="number" value="2" min="1" max="100" step="1" required></div></div>
+    <div class="impulse-estimate"><span>A LITTLE MORE IN YOUR POCKET</span><strong id="impulse-total">₹41,600</strong><span>in a year · estimate based on 52 weeks</span></div>
+    <button id="impulse-start" class="demo-button">Try a 5-second pause</button>
+    <div class="impulse-pause" id="impulse-pause" hidden><span>Take a breath.</span><output id="impulse-countdown" role="timer" aria-live="off">5</output><div class="demo-controls"><button id="impulse-skip" class="demo-button" disabled>Skip the order</button><button id="impulse-continue" class="demo-button secondary" disabled>Still want it</button></div></div>
+    <p class="demo-feedback" id="impulse-status" role="status">This demo never opens or blocks other apps.</p>
+  </div>
+  <div class="demo-panel glow-demo" id="demo-glow" role="tabpanel" aria-labelledby="tab-glow" tabindex="0" hidden>
+    <div class="demo-intro"><span class="demo-kicker">NUMBERS, WITH A LITTLE PERSONALITY</span><h3>Go on. Make it add up.</h3></div>
+    <div class="calculator" id="calculator" style="--neon:#c5a2ff"><div class="calc-screen"><span id="calc-expression">Ready to calculate</span><output id="calc-result" aria-live="polite" aria-atomic="true">0</output></div>
+    <div class="calc-keys" role="group" aria-label="Calculator keypad"><button type="button" data-calc="AC" aria-label="Clear calculator">AC</button>
+<button type="button" data-calc="±" aria-label="Change sign">±</button>
+<button type="button" data-calc="%" aria-label="Percent">%</button>
+<button type="button" data-calc="÷" aria-label="Divide" class="calc-operation">÷</button>
+<button type="button" data-calc="7" aria-label="7">7</button>
+<button type="button" data-calc="8" aria-label="8">8</button>
+<button type="button" data-calc="9" aria-label="9">9</button>
+<button type="button" data-calc="×" aria-label="Multiply" class="calc-operation">×</button>
+<button type="button" data-calc="4" aria-label="4">4</button>
+<button type="button" data-calc="5" aria-label="5">5</button>
+<button type="button" data-calc="6" aria-label="6">6</button>
+<button type="button" data-calc="−" aria-label="Subtract" class="calc-operation">−</button>
+<button type="button" data-calc="1" aria-label="1">1</button>
+<button type="button" data-calc="2" aria-label="2">2</button>
+<button type="button" data-calc="3" aria-label="3">3</button>
+<button type="button" data-calc="+" aria-label="Add" class="calc-operation">+</button>
+<button type="button" data-calc="⌫" aria-label="Backspace">⌫</button>
+<button type="button" data-calc="0" aria-label="0">0</button>
+<button type="button" data-calc="." aria-label="Decimal point">.</button>
+<button type="button" data-calc="=" aria-label="Equals" class="calc-operation">=</button>
+</div></div><div class="calc-colors" role="group" aria-label="Calculator glow colour"><span>Make it yours</span><button data-neon="#c5a2ff" style="--swatch:#c5a2ff" aria-label="Violet glow" aria-pressed="true"></button><button data-neon="#7de3e0" style="--swatch:#7de3e0" aria-label="Aqua glow" aria-pressed="false"></button><button data-neon="#ffa4c4" style="--swatch:#ffa4c4" aria-label="Pink glow" aria-pressed="false"></button></div>
+    <p class="demo-feedback">Use the keypad or your keyboard. Basic calculator demo.</p>
+  </div>
+  <div class="demo-panel clock-demo" id="demo-clock" role="tabpanel" aria-labelledby="tab-clock" tabindex="0" hidden>
+    <div class="demo-intro"><span class="demo-kicker">MAKE EVERY SECOND COUNT</span><h3>Your time. Beautifully kept.</h3><p>Start the stopwatch. Capture a lap. Find your rhythm.</p></div>
+    <div class="stopwatch-face"><span>STOPWATCH</span><output id="stopwatch-time" role="timer" aria-live="off">00:00<span>.00</span></output><span id="stopwatch-state">Ready</span></div>
+    <div class="demo-controls"><button id="stopwatch-start" class="demo-button">Start</button><button id="stopwatch-lap" class="demo-button secondary" disabled>Lap</button><button id="stopwatch-reset" class="demo-button secondary">Reset</button></div>
+    <div class="lap-history"><div><span>LAP</span><span>ELAPSED TIME</span></div><ol id="stopwatch-laps" aria-label="Recorded laps"></ol><p id="lap-empty">Your laps will appear here.</p></div>
+    <p class="demo-feedback" id="stopwatch-status" role="status">Times stay in this tab and reset when you reload.</p>
+  </div>
+  <div class="playground-footer"><span>Browser demos · no sign-in · nothing saved</span><a id="demo-store" href="https://play.google.com/store/apps/details?id=com.shadow.save" target="_blank" rel="noopener">Get Save+ on Google Play</a></div>
+  <noscript><p>Enable JavaScript to try these demos, or explore our apps below.</p></noscript>
+</section>
 </section>
 <div class="values-strip">
 <div class="wrap">
@@ -152,6 +171,7 @@
 </div>
 <p>A little more focus. A little less friction.<br>Find a small change that makes a difference.</p>
 </div>
+<div class="collection-search"><label for="app-search">Find your everyday app</label><div><input id="app-search" type="search" placeholder="Search apps or features…" autocomplete="off"><button id="clear-search" type="button" hidden>Clear</button></div></div>
 <div class="collection-toolbar">
 <div class="filters" role="group" aria-label="Filter apps by category">
 <button class="filter active" data-filter="All" aria-pressed="true">All apps <span>5</span>
@@ -162,6 +182,7 @@
 </div>
 <span class="collection-count" id="collection-count" role="status">Showing all 5 apps</span>
 </div>
+<div class="search-empty" id="search-empty" hidden><h3>No apps found.</h3><p>Try another word, or see the whole collection.</p><button type="button" class="btn btn-gold" id="reset-search">Show all apps</button></div>
 <div class="app-grid">
 <article class="app-card" data-category="Money" style="--app-color:#bfdaa3">
 <button class="app-art" data-app="save" aria-label="Explore Save+">
@@ -181,7 +202,8 @@
 </div>
 <p>Make room for your next big thing.</p>
 <div class="app-links">
-<button class="text-button" data-app="save">Explore app <span aria-hidden="true">
+<button class="text-button try-app" data-try="save">Try it now</button>
+<button class="text-button" data-app="save" aria-label="About Save+">About <span aria-hidden="true">
 <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
 <path d="M6 18 18 6M6 6h12v12"/>
 </svg>
@@ -209,7 +231,8 @@
 </div>
 <p>Less screen time. More together time.</p>
 <div class="app-links">
-<button class="text-button" data-app="bond">Explore app <span aria-hidden="true">
+<button class="text-button try-app" data-try="bond">Try it now</button>
+<button class="text-button" data-app="bond" aria-label="About Bond Time">About <span aria-hidden="true">
 <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
 <path d="M6 18 18 6M6 6h12v12"/>
 </svg>
@@ -237,7 +260,8 @@
 </div>
 <p>A little pause. A better decision.</p>
 <div class="app-links">
-<button class="text-button" data-app="will">Explore app <span aria-hidden="true">
+<button class="text-button try-app" data-try="will">Try it now</button>
+<button class="text-button" data-app="will" aria-label="About Will Impulse">About <span aria-hidden="true">
 <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
 <path d="M6 18 18 6M6 6h12v12"/>
 </svg>
@@ -265,7 +289,8 @@
 </div>
 <p>Everyday numbers. A little more glow.</p>
 <div class="app-links">
-<button class="text-button" data-app="glow">Explore app <span aria-hidden="true">
+<button class="text-button try-app" data-try="glow">Try it now</button>
+<button class="text-button" data-app="glow" aria-label="About GlowCalc">About <span aria-hidden="true">
 <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
 <path d="M6 18 18 6M6 6h12v12"/>
 </svg>
@@ -293,7 +318,8 @@
 </div>
 <p>Your time. Beautifully kept.</p>
 <div class="app-links">
-<button class="text-button" data-app="clock">Explore app <span aria-hidden="true">
+<button class="text-button try-app" data-try="clock">Try it now</button>
+<button class="text-button" data-app="clock" aria-label="About LockClock Aurum">About <span aria-hidden="true">
 <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
 <path d="M6 18 18 6M6 6h12v12"/>
 </svg>
@@ -432,6 +458,7 @@
 </div>
 <script src="apps.js">
 </script>
+<script src="playground.js"></script>
 <script src="main.js">
 </script>
 </body>
