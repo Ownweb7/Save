@@ -16,10 +16,10 @@ Plain HTML, CSS and vanilla JavaScript. No build step or runtime dependencies.
 
 - Futuristic app studio design across all pages: dark graphite surfaces, cyan and violet accents, clear product typography, and phone previews for the existing Android app collection.
 - Interactive homepage product selector for all five apps, with keyboard-accessible tabs, matching Google Play links, and direct entry into each working browser demo. Phone previews show illustrative sample content.
-- Filterable app collection with clear descriptions, three feature chips per app, Google Play links, and keyboard-accessible app detail dialogs.
+- Compact, filterable app collection with three columns on desktop, two on tablets, and one on narrow screens. Each card keeps a clear description, three feature chips, aligned demo and Google Play controls, and keyboard-accessible app details.
 - Five working browser demos: editable savings goals with deposits and undo; a focus countdown; an impulse-purchase pause and savings estimate; a keyboard-enabled calculator; and a stopwatch with laps.
 - Search by app name or feature, with category filters and a recoverable empty state.
-- A compact, fully scrollable layout with a pointer-reactive phone composition and interactive sci-fi canvas, moving type strip, rolling headings and product cards, rolling link labels, parallax artwork, and page transitions in supported browsers. Sections stay in normal document flow; wheel, touch and keyboard scrolling remain native. Motion respects system preferences and can be paused with a session-persistent control.
+- A compact, fully scrollable layout with a pointer-reactive phone composition and interactive sci-fi canvas, moving type strip, rolling headings and product cards, rolling link labels, parallax artwork, and page transitions in supported browsers. Product cards use subtle grid artwork, illuminated corners, pointer-reactive glow, and a single scan transition on hover or keyboard focus. Sections stay in normal document flow; wheel, touch and keyboard scrolling remain native. Motion respects system preferences and can be paused with a session-persistent control.
 - Demos use temporary in-memory state. Refreshing clears it. They do not reproduce native Android app blocking, make purchases, or save personal data.
 - Privacy-policy selector and section navigation. Existing policy text is preserved.
 - Contact composer that opens the visitor’s email client or Gmail. It does not send or store messages itself.
