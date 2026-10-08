@@ -28,7 +28,7 @@ try:
         page.emulate_media(reduced_motion='reduce')
         errors = []
         page.on('pageerror', lambda error: errors.append(str(error)))
-        page.goto(base_url, wait_until='domcontentloaded')
+        page.goto(f'{base_url}/apps.html', wait_until='domcontentloaded')
         catalog = page.evaluate('window.ODN_APPS')
 
         # Search matches features, combines with categories and recovers from no results.
@@ -50,34 +50,32 @@ try:
         assert page.locator('#app-search').evaluate('e => document.activeElement === e')
         page.locator('[data-filter="All"]').click()
 
-        # Every card opens matching details and exposes correct store/privacy destinations.
-        dialog = page.locator('#app-dialog')
+        # Cards navigate to persistent app pages, with matching content and destinations.
         for app in catalog:
             card = page.locator(f'#app-{app["id"]}')
             assert card.locator('.store-link').get_attribute('href') == app['url']
-            trigger = card.locator('.app-art')
-            trigger.click()
-            assert dialog.is_visible()
-            assert dialog.locator('h2').inner_text() == app['name']
-            assert dialog.locator('.dialog-description').inner_text() == app['desc']
-            assert dialog.locator('.dialog-features li').all_text_contents() == app['features']
-            assert dialog.locator(f'a[href="{app["url"]}"]').count() == 1
-            last = dialog.locator(f'a[href="{app["policy"]}"]')
-            assert last.count() == 1
-            first = dialog.locator('.dialog-close')
-            first.focus()
-            page.keyboard.press('Shift+Tab')
-            assert last.evaluate('e => document.activeElement === e')
-            page.keyboard.press('Tab')
-            assert first.evaluate('e => document.activeElement === e')
-            page.keyboard.press('Escape')
-            page.wait_for_function('!document.querySelector("#app-dialog").open')
-            assert trigger.evaluate('e => document.activeElement === e')
-        page.get_by_role('button', name='About Save+', exact=True).click()
-        assert dialog.locator('h2').inner_text() == 'Save+'
-        dialog.locator('.dialog-close').click()
-        assert page.get_by_role('button', name='About Save+', exact=True).evaluate('e => document.activeElement === e')
-        print('App search, category recovery, five details dialogs, destinations and focus passed.', flush=True)
+            card.locator('.app-art').click()
+            page.wait_for_url(f'**/{app["page"]}')
+            assert page.locator('h1').inner_text() == app['name']
+            assert page.locator('.product-description').inner_text() == app['desc']
+            assert page.locator('.product-feature-grid h3').all_text_contents() == app['features']
+            assert page.locator('.product-store').get_attribute('href') == app['url']
+            assert page.locator('.product-policy').get_attribute('href') == app['policy']
+            assert page.locator('.site-footer').count() == 1
+            page.locator('.product-back').click()
+            page.wait_for_url('**/apps.html')
+        page.get_by_role('link', name='About Save+', exact=True).first.focus()
+        page.keyboard.press('Enter')
+        page.wait_for_url('**/save-plus.html')
+        assert page.locator('h1').inner_text() == 'Save+'
+        # Next/previous links visit complete pages; browser Back remains useful.
+        page.locator('.product-pagination a').last.click()
+        page.wait_for_url('**/bond-time.html')
+        page.go_back(wait_until='domcontentloaded')
+        assert page.locator('h1').inner_text() == 'Save+'
+        page.locator('.product-policy').click()
+        page.wait_for_url('**/save-plus-privacy.html')
+        print('App search, category recovery, five app pages and keyboard navigation passed.', flush=True)
 
         # Contact composition produces a correctly encoded message without sending it.
         page.goto(f'{base_url}/contact.html', wait_until='domcontentloaded')
@@ -121,7 +119,7 @@ try:
 
         for width in [1440, 768, 390, 320]:
             page.set_viewport_size({'width': width, 'height': 1000})
-            page.goto(base_url, wait_until='domcontentloaded')
+            page.goto(f'{base_url}/apps.html', wait_until='domcontentloaded')
             if width <= 760:
                 menu = page.get_by_role('button', name='Open navigation')
                 menu.click()
@@ -130,16 +128,24 @@ try:
                 assert not page.locator('#navigation').is_visible()
                 assert menu.evaluate('e => document.activeElement === e')
             for app in catalog:
-                page.locator(f'#app-{app["id"]} .app-art').click()
+                page.goto(f'{base_url}/{app["page"]}', wait_until='domcontentloaded')
                 assert not page.evaluate('document.documentElement.scrollWidth > innerWidth'), (width, app['id'])
-                assert dialog.evaluate('e => {const r=e.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth}')
-                page.keyboard.press('Escape')
-            print(f'All app details fit {width}px.', flush=True)
+                assert page.locator('.product-store').is_visible()
+                assert page.locator('.product-back').is_visible()
+            print(f'All app pages fit {width}px.', flush=True)
         for path in root.glob('*.html'):
             page.goto(f'{base_url}/{path.name}', wait_until='domcontentloaded')
             missing = page.locator('a[href^="#"]').evaluate_all("""links => links.map(a => a.getAttribute('href'))
                 .filter(href => href.length > 1 && !document.getElementById(href.slice(1)))""")
             assert not missing, (path.name, missing)
+        # Shared bookmarks from the former one-page layout reach their new destinations.
+        for fragment, destination in [('apps', 'apps.html'), ('app-preview', 'apps.html'),
+                                      ('studio-intro', 'about.html'), ('approach', 'about.html#approach')]:
+            page.goto(f'{base_url}/?v=old#{fragment}', wait_until='domcontentloaded')
+            page.wait_for_url(f'**/{destination}')
+        for app in catalog:
+            page.goto(f'{base_url}/#app-{app["id"]}', wait_until='domcontentloaded')
+            page.wait_for_url(f'**/{app["page"]}')
         assert not errors, errors
         print('Shared mobile navigation, local section links and browser errors passed.', flush=True)
         browser.close()

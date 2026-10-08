@@ -52,8 +52,6 @@
     const openingOpacity = 1 - smooth(clamp(progress / .24));
     stage.style.setProperty('--portrait-opacity', (1 - eyes).toFixed(3));
     stage.style.setProperty('--portrait-scale', (1.02 + progress * .48).toFixed(3));
-    stage.style.setProperty('--wing-spread', `${progress * 125}px`);
-    stage.style.setProperty('--wing-turn', `${progress * 7}deg`);
     stage.style.setProperty('--eyes-opacity', eyes.toFixed(3));
     stage.style.setProperty('--eyes-scale', (1.15 - eyes * .15).toFixed(3));
     stage.style.setProperty('--opening-opacity', openingOpacity.toFixed(3));

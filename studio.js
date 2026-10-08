@@ -20,9 +20,8 @@
   const pointer = {x: .76, y: .38, targetX: .76, targetY: .38, active: false};
   const activeAnimations = new Set();
 
-  // The hero introduces every app with a keyboard-accessible, user-controlled preview.
+  // The collection includes a keyboard-accessible, user-controlled app preview.
   const showcaseTabs = [...document.querySelectorAll('.showcase-tabs [role="tab"]')];
-  const worldApps = [...document.querySelectorAll('.world-app[data-world-app]')];
   const showcasePanel = document.querySelector('#showcase-panel');
   const showcasePreviews = showcasePanel ? [...showcasePanel.querySelectorAll('[data-preview]')] : [];
   let activeShowcase = appStage?.dataset.activeApp || 'save';
@@ -37,12 +36,6 @@
       const selected = tab === selectedTab;
       tab.setAttribute('aria-selected', String(selected));
       tab.tabIndex = selected ? 0 : -1;
-    });
-    worldApps.forEach(link => {
-      const selected = link.dataset.worldApp === id;
-      if (selected) link.setAttribute('aria-current', 'true');
-      else link.removeAttribute('aria-current');
-      link.classList.toggle('is-selected', selected);
     });
     if (studioWorld) {
       studioWorld.dataset.activeApp = id;
@@ -74,7 +67,7 @@
     }
     if (aboutLink) {
       aboutLink.dataset.app = id;
-      aboutLink.href = `#app-${id}`;
+      aboutLink.href = app.page;
       aboutLink.textContent = `About ${app.name}`;
     }
     showcasePreviews.forEach(preview => { preview.hidden = preview.dataset.preview !== id; });
@@ -112,19 +105,6 @@
       selectShowcase(showcaseTabs[index].dataset.showcase, true);
     });
   });
-  worldApps.forEach(link => {
-    link.addEventListener('click', event => {
-      const id = link.dataset.worldApp;
-      const selectedTab = showcaseTabs.find(tab => tab.dataset.showcase === id);
-      const preview = document.querySelector('#app-preview');
-      if (!selectedTab || !preview) return;
-      event.preventDefault();
-      selectShowcase(id);
-      selectedTab.focus({preventScroll:true});
-      preview.scrollIntoView({behavior:enabled?'smooth':'instant', block:'start'});
-    });
-  });
-
   const toggle = document.createElement('button');
   toggle.type = 'button';
   toggle.id = 'motion-toggle';

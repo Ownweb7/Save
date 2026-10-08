@@ -13,7 +13,8 @@ window.ODN_APPS = [
       "Progress tracking",
       "Private by design"
     ],
-    "color": "#bfdaa3"
+    "color": "#bfdaa3",
+    "page": "save-plus.html"
   },
   {
     "id": "bond",
@@ -29,7 +30,8 @@ window.ODN_APPS = [
       "Works offline",
       "No accounts or ads"
     ],
-    "color": "#b9c9ed"
+    "color": "#b9c9ed",
+    "page": "bond-time.html"
   },
   {
     "id": "will",
@@ -45,7 +47,8 @@ window.ODN_APPS = [
       "Intentional spending",
       "On-device data"
     ],
-    "color": "#e2bbb1"
+    "color": "#e2bbb1",
+    "page": "will-impulse.html"
   },
   {
     "id": "glow",
@@ -61,7 +64,8 @@ window.ODN_APPS = [
       "Custom neon colours",
       "Offline & ad-free"
     ],
-    "color": "#cec0ef"
+    "color": "#cec0ef",
+    "page": "glowcalc.html"
   },
   {
     "id": "clock",
@@ -77,6 +81,7 @@ window.ODN_APPS = [
       "Custom clock faces",
       "No internet needed"
     ],
-    "color": "#e1c68e"
+    "color": "#e1c68e",
+    "page": "lockclock-aurum.html"
   }
 ];
