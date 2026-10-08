@@ -3,7 +3,7 @@
   // Keep previously shared homepage section links useful after the page split.
   if (document.body.classList.contains('cinematic-home')) {
     const oldSections = {
-      '#apps': 'apps.html', '#app-preview': 'apps.html#app-preview',
+      '#apps': 'apps.html', '#app-preview': 'apps.html#apps',
       '#creative-world': 'apps.html',
       '#studio-intro': 'about.html', '#approach': 'about.html#approach'
     };
@@ -14,6 +14,9 @@
     };
     followOldLink();
     addEventListener('hashchange', followOldLink);
+  }
+  if (document.body.classList.contains('apps-page') && location.hash === '#app-preview') {
+    location.replace('#apps');
   }
   const menu = document.querySelector('.menu-btn');
   const navigation = document.querySelector('.nav-links');

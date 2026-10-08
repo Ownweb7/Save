@@ -16,7 +16,7 @@ Plain HTML, CSS and vanilla JavaScript. No build step or runtime dependencies.
 
 - A cinematic homepage with original portrait and eye illustrations. Native scrolling moves from a full-screen portrait into an eye close-up with working links to the app collection and studio. On mobile, the panoramic eye artwork sits above two full-width destination links. Portrait parallax, drifting feathers, and a gold pointer halo respond to motion preferences.
 - Antique gold, charcoal surfaces, and locally hosted serif typography carry through the studio, support, and policy pages.
-- The eye navigation opens separate Apps and Studio pages. The animated portal scene opens the Apps page; all five app links lead to dedicated pages, including without JavaScript. The Apps page includes keyboard-accessible preview tabs and Google Play destinations.
+- The eye navigation opens separate Apps and Studio pages. The animated portal scene opens the Apps page; all five app links lead to dedicated pages, including without JavaScript. The Apps page includes compact, searchable cards with Google Play destinations.
 - Compact, filterable app cards with descriptions, feature chips, Google Play links and privacy policies. Each app has a shareable page with its description, features, preview, privacy policy, support link, and previous/next app navigation.
 - Search by app name or feature, category filters, and a recoverable empty state.
 - Optional ambient audio synthesized locally with Web Audio. Sound starts only after an explicit click and pauses while the page is hidden. No audio downloads or autoplay.
@@ -31,14 +31,14 @@ Plain HTML, CSS and vanilla JavaScript. No build step or runtime dependencies.
 | File | Purpose |
 | --- | --- |
 | `index.html` | Cinematic portrait and responsive destination scene |
-| `apps.html` | Animated portal entrance, searchable collection, and interactive previews |
+| `apps.html` | Animated portal entrance and searchable app collection |
 | `save-plus.html`, `bond-time.html`, `will-impulse.html`, `glowcalc.html`, `lockclock-aurum.html` | Individual app pages |
 | `about.html` | Illustrated studio portfolio, company story, approach, and contact banner |
 | `contact.html` | Contact information and email composer |
 | `privacy-policies.html` | General privacy policy |
 | `*-privacy.html` | Individual app policies |
 | `terms-and-conditions.html` | Terms and conditions |
-| `apps.js` | App catalog used by search, previews, and page/policy navigation |
+| `apps.js` | App catalog used by search and page/policy navigation |
 | `main.js` | Shared interactions, app search, and legacy section-link redirects |
 | `styles.css` | Base layouts and shared component styles |
 | `studio.css` | Product preview and shared presentation |
@@ -46,7 +46,7 @@ Plain HTML, CSS and vanilla JavaScript. No build step or runtime dependencies.
 | `destinations.css` | Mobile entrance, Apps portal, and Studio portfolio layouts |
 | `cinema.js` | Scroll chapters, eye navigation, pointer effects and optional ambient audio |
 | `art/` | Three original generated illustrations, optimized as WebP (under 1 MiB combined) |
-| `studio.js` | Product preview selector, canvas, scroll effects, and motion control |
+| `studio.js` | Product pointer effects, canvas, scroll effects, and motion control |
 | `icons/` | Existing app artwork |
 | `fonts/` | Locally hosted WOFF2 typefaces and their licenses |
 

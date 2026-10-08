@@ -131,24 +131,7 @@ try:
         page.goto(f'{base_url}/apps.html', wait_until='domcontentloaded')
         for app in catalog:
             assert page.locator(f'#app-{app["id"]} .app-feature-list li').all_text_contents() == app['features']
-            page.locator(f'#showcase-tab-{app["id"]}').click()
-            assert page.locator('.showcase-tabs [aria-selected="true"]').count() == 1
-            assert page.locator('.showcase-tabs [tabindex="0"]').count() == 1
-            assert page.locator('#showcase-panel').get_attribute('aria-labelledby') == f'showcase-tab-{app["id"]}'
-            assert page.locator('#showcase-name').inner_text() == app['name']
-            assert page.locator('#showcase-store').get_attribute('href') == app['url']
-            assert page.locator('#showcase-about').get_attribute('href') == app['page']
-            assert page.locator('[data-preview]:visible').count() == 1
-            page.locator('#showcase-about').focus()
-            page.keyboard.press('Enter')
-            page.wait_for_url(f'**/{app["page"]}')
-            page.go_back(wait_until='domcontentloaded')
-        page.locator('#showcase-tab-save').focus()
-        for key, expected in [('ArrowRight', 'bond'), ('ArrowLeft', 'save'), ('ArrowLeft', 'clock'), ('Home', 'save'), ('End', 'clock')]:
-            page.keyboard.press(key)
-            selected = page.locator(f'#showcase-tab-{expected}')
-            assert selected.get_attribute('aria-selected') == 'true'
-            assert selected.evaluate('e=>document.activeElement===e')
+        page.goto(f'{base_url}/save-plus.html', wait_until='domcontentloaded')
         # Pointer response resets when the system disables motion.
         page.emulate_media(reduced_motion='no-preference')
         page.wait_for_function("document.documentElement.dataset.motion === 'on'")
@@ -160,7 +143,7 @@ try:
         page.emulate_media(reduced_motion='reduce')
         page.wait_for_function("document.documentElement.dataset.motion === 'off'")
         assert stage.evaluate("e=>parseFloat(e.style.getPropertyValue('--stage-turn'))") == 0
-        print('Five product previews, real page links, keyboard tabs and reactive preview passed.',flush=True)
+        print('Catalog features and dedicated app page pointer response passed.',flush=True)
 
         for width in [1440, 1024, 768, 600, 390, 320]:
             page.set_viewport_size({'width': width, 'height': 900})
@@ -171,16 +154,6 @@ try:
                 assert page.locator('main').count() == 1
                 assert page.locator('h1').count() == 1
                 assert page.locator('.site-footer').count() == (0 if path.name=='index.html' else 1)
-                if path.name=='apps.html':
-                    for app in catalog:
-                        page.locator(f'#showcase-tab-{app["id"]}').click()
-                        assert not page.evaluate('document.documentElement.scrollWidth > innerWidth'), (app['id'],width)
-                        preview = page.locator(f'[data-preview="{app["id"]}"]')
-                        layout = preview.evaluate("""e=>{
-                            const home=e.closest('.phone-screen').querySelector('.phone-home');
-                            return {sameParent:e.offsetParent===home.offsetParent,bottom:e.offsetTop+e.offsetHeight,home:home.offsetTop};
-                        }""")
-                        assert layout['sameParent'] and layout['bottom']<=layout['home'],(app['id'],width,layout)
                 if path.name in [app['page'] for app in catalog]:
                     assert page.locator('[data-preview]').count() == 1
                     assert page.locator('[data-preview]').evaluate("""e=>e.offsetTop+e.offsetHeight<=e.closest('.phone-screen').querySelector('.phone-home').offsetTop"""),(path.name,width)

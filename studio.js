@@ -21,91 +21,6 @@
   const pointer = {x: .76, y: .38, targetX: .76, targetY: .38, active: false};
   const activeAnimations = new Set();
 
-  // The collection includes a keyboard-accessible, user-controlled app preview.
-  const showcaseTabs = [...document.querySelectorAll('.showcase-tabs [role="tab"]')];
-  const showcasePanel = document.querySelector('#showcase-panel');
-  const showcasePreviews = showcasePanel ? [...showcasePanel.querySelectorAll('[data-preview]')] : [];
-  let activeShowcase = appStage?.dataset.activeApp || 'save';
-  let showcaseAnimation = null;
-  function selectShowcase(id, focus = false, animate = true) {
-    const app = window.ODN_APPS?.find(item => item.id === id);
-    const selectedTab = showcaseTabs.find(tab => tab.dataset.showcase === id);
-    if (!app || !selectedTab || !showcasePanel || !appStage) return;
-    const changed = activeShowcase !== id;
-    activeShowcase = id;
-    showcaseTabs.forEach(tab => {
-      const selected = tab === selectedTab;
-      tab.setAttribute('aria-selected', String(selected));
-      tab.tabIndex = selected ? 0 : -1;
-    });
-    if (studioWorld) {
-      studioWorld.dataset.activeApp = id;
-      studioWorld.style.setProperty('--preview-accent', app.color);
-    }
-    showcasePanel.setAttribute('aria-labelledby', selectedTab.id);
-    appStage.dataset.activeApp = id;
-    appStage.style.setProperty('--preview-accent', app.color);
-    const name = document.querySelector('#showcase-name');
-    const tag = document.querySelector('#showcase-tag');
-    const icon = document.querySelector('#showcase-icon');
-    const features = document.querySelector('#showcase-features');
-    const store = document.querySelector('#showcase-store');
-    const aboutLink = document.querySelector('#showcase-about');
-    if (name) name.textContent = app.name;
-    if (tag) tag.textContent = app.tag;
-    if (icon) {
-      icon.src = `icons/${encodeURIComponent(app.icon)}`;
-      icon.alt = '';
-    }
-    if (features) features.replaceChildren(...app.features.map(feature => {
-      const item = document.createElement('li');
-      item.textContent = feature;
-      return item;
-    }));
-    if (store) {
-      store.href = app.url;
-      store.textContent = `${id === 'will' ? 'Find' : 'Get'} ${app.name} on Google Play`;
-    }
-    if (aboutLink) {
-      aboutLink.dataset.app = id;
-      aboutLink.href = app.page;
-      aboutLink.textContent = `About ${app.name}`;
-    }
-    showcasePreviews.forEach(preview => { preview.hidden = preview.dataset.preview !== id; });
-    if (focus) selectedTab.focus();
-    if (showcaseAnimation) {
-      showcaseAnimation.cancel();
-      activeAnimations.delete(showcaseAnimation);
-      showcaseAnimation = null;
-    }
-    if (changed && animate && enabled && showcasePanel.animate) {
-      const animation = showcasePanel.animate([
-        {opacity: .35, transform: 'translateY(8px)'},
-        {opacity: 1, transform: 'translateY(0)'}
-      ], {duration: 280, easing: 'cubic-bezier(.16,1,.3,1)'});
-      showcaseAnimation = animation;
-      activeAnimations.add(animation);
-      animation.finished.then(() => {
-        activeAnimations.delete(animation);
-        if (showcaseAnimation === animation) showcaseAnimation = null;
-      }).catch(() => {});
-    }
-    sizeStage();
-    queueScroll();
-  }
-  showcaseTabs.forEach(tab => {
-    tab.addEventListener('click', () => selectShowcase(tab.dataset.showcase));
-    tab.addEventListener('keydown', event => {
-      let index = showcaseTabs.indexOf(tab);
-      if (event.key === 'ArrowRight') index = (index + 1) % showcaseTabs.length;
-      else if (event.key === 'ArrowLeft') index = (index + showcaseTabs.length - 1) % showcaseTabs.length;
-      else if (event.key === 'Home') index = 0;
-      else if (event.key === 'End') index = showcaseTabs.length - 1;
-      else return;
-      event.preventDefault();
-      selectShowcase(showcaseTabs[index].dataset.showcase, true);
-    });
-  });
   const toggle = document.createElement('button');
   toggle.type = 'button';
   toggle.id = 'motion-toggle';
@@ -508,6 +423,5 @@
     document.querySelectorAll('.collection-note,.principles article,.contact-form,.about-meta').forEach(element=>observer.observe(element));
   }
   sizeScene(); updateMotion();
-  selectShowcase(activeShowcase, false, false);
   document.querySelectorAll('.title-line,.hero-overline,.hero-bottom,.hero-baseline').forEach((element,index)=>animateIn(element,index*110));
 })();
