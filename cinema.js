@@ -10,7 +10,6 @@
   const eyeImage = intro.querySelector('.eyes-scene img');
   const eyeLinks = [...eyeNavigation.querySelectorAll('.eye-portal')];
   const sceneNumber = document.querySelector('#scene-number');
-  const world = document.querySelector('.creative-world');
   const finePointer = matchMedia('(hover:hover) and (pointer:fine)');
   const reduced = matchMedia('(prefers-reduced-motion:reduce)');
   const clamp = (value, min=0, max=1) => Math.max(min, Math.min(max, value));
@@ -27,17 +26,20 @@
   document.body.append(cursor);
 
   function placeEyeLinks() {
+    if (matchMedia('(max-width:900px)').matches) {
+      eyeLinks.forEach(link => { link.style.removeProperty('left'); link.style.removeProperty('top'); });
+      return;
+    }
     const stageBox = stage.getBoundingClientRect();
     const imageBox = eyeImage.getBoundingClientRect();
     const ratio = 1672 / 941;
-    const mobile = matchMedia('(max-width:900px)').matches;
     const renderedWidth = Math.max(imageBox.width, imageBox.height * ratio);
     const renderedHeight = renderedWidth / ratio;
     const startX = imageBox.left - stageBox.left + (imageBox.width - renderedWidth) / 2;
     const startY = imageBox.top - stageBox.top + (imageBox.height - renderedHeight) / 2;
     eyeLinks.forEach((link, index) => {
-      const eyeX = mobile ? (index ? .575 : .448) : (index ? .776 : .269);
-      const eyeY = mobile ? (index ? .343 : .332) : .442;
+      const eyeX = index ? .776 : .269;
+      const eyeY = .442;
       link.style.left = `${clamp(startX + renderedWidth * eyeX, link.offsetWidth / 2 + 10, stageBox.width - link.offsetWidth / 2 - 10)}px`;
       link.style.top = `${startY + renderedHeight * eyeY}px`;
     });
@@ -63,12 +65,6 @@
     opening.inert = openingOpacity < .15;
     sceneNumber.textContent = progress > .4 ? '02' : '01';
     placeEyeLinks();
-    if (world) {
-      const worldBox = world.getBoundingClientRect();
-      const inView = clamp((innerHeight - worldBox.top) / (innerHeight + worldBox.height));
-      world.style.setProperty('--portal-drift', `${motion ? (inView - .5) * 60 : 0}px`);
-      world.style.setProperty('--portal-scale', String(motion ? .88 + inView * .2 : 1));
-    }
   }
   function queueScroll() {
     if (!pending) pending = requestAnimationFrame(renderScroll);

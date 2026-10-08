@@ -139,7 +139,8 @@ try:
                 .filter(href => href.length > 1 && !document.getElementById(href.slice(1)))""")
             assert not missing, (path.name, missing)
         # Shared bookmarks from the former one-page layout reach their new destinations.
-        for fragment, destination in [('apps', 'apps.html'), ('app-preview', 'apps.html'),
+        for fragment, destination in [('apps', 'apps.html'), ('app-preview', 'apps.html#app-preview'),
+                                      ('creative-world', 'apps.html'),
                                       ('studio-intro', 'about.html'), ('approach', 'about.html#approach')]:
             page.goto(f'{base_url}/?v=old#{fragment}', wait_until='domcontentloaded')
             page.wait_for_url(f'**/{destination}')

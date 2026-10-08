@@ -7,6 +7,7 @@
   const hero = document.querySelector('.studio-hero');
   const studioWorld = document.querySelector('.studio-world');
   const appStage = document.querySelector('.app-stage');
+  const portalWorld = document.querySelector('.creative-world');
   const stageMotion = {x:0, y:0, turn:0, targetX:0, targetY:0, targetTurn:0};
   const worldMotion = {x:0, y:0, turn:0, lookX:0, lookY:0, targetX:0, targetY:0, targetTurn:0, targetLookX:0, targetLookY:0};
   let stageBounds = null;
@@ -402,6 +403,12 @@
       card.style.setProperty('--roll-angle',`${entrance*8}deg`);
       card.style.setProperty('--roll-lift',`${entrance*20}px`);
     });
+    if (portalWorld) {
+      const box = portalWorld.getBoundingClientRect();
+      const visible = Math.max(0, Math.min(1, (height-box.top)/(height+box.height)));
+      portalWorld.style.setProperty('--portal-drift', `${enabled ? (visible-.5)*60 : 0}px`);
+      portalWorld.style.setProperty('--portal-scale', String(enabled ? .88+visible*.2 : 1));
+    }
     if(!enabled) drawScene();
   }
   function queueScroll() { if(!scrollScheduled) { scrollScheduled=true; requestAnimationFrame(updateScroll); } }

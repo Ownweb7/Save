@@ -37,7 +37,7 @@ try:
 
         page.goto(base_url, wait_until='networkidle')
         page.evaluate('document.fonts.ready')
-        assert page.locator('.site-footer,#apps,#studio-intro,#approach,.raven-wing').count() == 0
+        assert page.locator('.site-footer,#apps,#creative-world,#studio-intro,#approach,.raven-wing').count() == 0
         assert page.locator('#motion-toggle').get_attribute('aria-pressed') == 'true'
         assert page.locator('.portrait-image').evaluate('e => e.complete && e.naturalWidth > 1000')
         assert page.evaluate('window.testAudioContexts.length') == 0
@@ -63,39 +63,36 @@ try:
         page.wait_for_url('**/about.html')
         assert page.get_by_role('heading', name='The makers. The studio.').is_visible()
         assert page.locator('#approach').count() == 1
-        assert '2022' in page.locator('.content').inner_text()
-        assert 'Hisar' in page.locator('.content').inner_text()
+        assert '2022' in page.locator('.studio-story').inner_text()
+        assert 'Hisar' in page.locator('.studio-story').inner_text()
         assert page.locator('.site-footer').count() == 1
-        page.locator('.studio-destination-hero a').click()
+        assert page.locator('.studio-projects a').count() == 5
+        assert page.locator('.studio-value-grid article').count() == 3
+        page.locator('.studio-collection-link').click()
         page.wait_for_url('**/apps.html')
         open_eyes()
         page.evaluate("document.activeElement.blur(); window.nativeScrollDone=false; addEventListener('scrollend',()=>window.nativeScrollDone=true,{once:true})")
         page.keyboard.press('End')
         page.wait_for_function('window.nativeScrollDone && scrollY + innerHeight >= document.documentElement.scrollHeight - 3')
-        assert page.locator('.portal-copy').is_visible()
-        # The overscanned artwork covers every edge throughout its parallax travel.
-        assert page.locator('.portal-landscape').evaluate("""e=>{
-            const image=e.getBoundingClientRect(), scene=e.parentElement.getBoundingClientRect();
-            return image.top<=scene.top && image.bottom>=scene.bottom && image.left<=scene.left && image.right>=scene.right;
-        }""")
+        assert page.locator('.eye-navigation').is_visible()
         page.evaluate("window.nativeScrollDone=false; addEventListener('scrollend',()=>window.nativeScrollDone=true,{once:true})")
         page.keyboard.press('Home')
         page.wait_for_function('window.nativeScrollDone && scrollY < 2')
         print('Separate eye destinations, studio content, transparent header, native scroll and opt-in sound passed.', flush=True)
 
-        for width in [1440, 1024, 768, 600, 390, 320]:
-            page.set_viewport_size({'width':width,'height':844})
+        for width, height in [(1440,844),(1024,844),(768,844),(600,844),(390,844),(320,667),(844,390)]:
+            page.set_viewport_size({'width':width,'height':height})
             page.evaluate("scrollTo({top:(document.querySelector('.cinematic-intro').offsetHeight-document.querySelector('.cinema-stage').offsetHeight)*.82,behavior:'instant'})")
             page.wait_for_function('!document.querySelector(".eye-navigation").inert')
             page.wait_for_timeout(100)
             assert page.locator('.eye-portal').evaluate_all("""links=>links.every(e=>{
                 const b=e.getBoundingClientRect(),hit=document.elementFromPoint(b.x+b.width/2,b.y+b.height/2);
                 return b.x>=0 && b.right<=innerWidth && b.y>68 && b.bottom<innerHeight && (e===hit||e.contains(hit));
-            })"""),width
+            })"""),(width,page.locator(".eye-portal").evaluate_all("links=>links.map(e=>e.getBoundingClientRect().toJSON())"),page.evaluate("scrollY"))
         page.set_viewport_size({'width':1440,'height':900})
         page.locator('#motion-toggle').click()
         page.wait_for_function('document.querySelector(".eye-navigation").inert')
-        for selector in ['.portrait-image','.floating-feathers i','.portal-landscape','.portal-radiance','.portal-particles i']:
+        for selector in ['.portrait-image','.floating-feathers i']:
             assert page.locator(selector).first.evaluate('e=>getComputedStyle(e).animationName') == 'none',selector
         page.reload(wait_until='domcontentloaded')
         assert page.locator('#motion-toggle').get_attribute('aria-pressed') == 'false'
@@ -105,11 +102,30 @@ try:
         assert page.locator('#motion-toggle').is_disabled()
         assert page.locator('.cinematic-intro').evaluate('e=>e.offsetHeight') == 900
         catalog = page.evaluate('window.ODN_APPS')
+        page.goto(f'{base_url}/apps.html',wait_until='domcontentloaded')
+        assert page.locator('.portal-copy h1').inner_text() == 'Imagination.\nMade useful.'
+        assert page.locator('.creative-world').bounding_box()['y'] == 0
+        # The moved portal fills its frame and every app opens its own URL.
+        assert page.locator('.portal-landscape').evaluate("""e=>{
+            const image=e.getBoundingClientRect(), scene=e.parentElement.getBoundingClientRect();
+            return image.top<=scene.top && image.bottom>=scene.bottom && image.left<=scene.left && image.right>=scene.right;
+        }""")
+        for selector in ['.portal-landscape','.portal-radiance','.portal-particles i']:
+            assert page.locator(selector).first.evaluate('e=>getComputedStyle(e).animationName') == 'none',selector
         for app in catalog:
             page.locator(f'[data-world-app="{app["id"]}"]').click()
             page.wait_for_url(f'**/{app["page"]}')
             assert page.locator('h1').inner_text() == app['name']
-            page.goto(base_url, wait_until='domcontentloaded')
+            page.goto(f'{base_url}/apps.html', wait_until='domcontentloaded')
+        page.locator('.portal-collection-link').click()
+        page.wait_for_url('**/apps.html#apps')
+        assert page.locator('#app-search').is_visible()
+        # The Studio portfolio uses the same real destinations.
+        for app in catalog:
+            page.goto(f'{base_url}/about.html',wait_until='domcontentloaded')
+            page.locator(f'.studio-project[href="{app["page"]}"]').click()
+            page.wait_for_url(f'**/{app["page"]}')
+            assert page.locator('h1').inner_text() == app['name']
         print('Responsive eye targets, portal destinations, pause persistence and reduced motion passed.',flush=True)
 
         page.goto(f'{base_url}/apps.html', wait_until='domcontentloaded')
@@ -179,6 +195,8 @@ try:
         no_js.emulate_media(reduced_motion='reduce')
         no_js.goto(base_url,wait_until='domcontentloaded')
         assert no_js.get_by_role('heading',name='A little wonder. In your everyday.').is_visible()
+        no_js.locator('.cinema-enter').click()
+        no_js.wait_for_url('**/apps.html')
         no_js.locator('[data-world-app="save"]').click()
         no_js.wait_for_url('**/save-plus.html')
         no_js.locator('.product-back').click()
