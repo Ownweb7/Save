@@ -16,6 +16,7 @@ Plain HTML, CSS and vanilla JavaScript. No build step or runtime dependencies.
 
 - A cinematic homepage with original sci-fi battlefield artwork: an armored sentinel, a close-up visor, and a jump gate. Native scrolling moves from a full-screen sentinel into a visor close-up with working links to the app collection and studio. On mobile, the panoramic visor artwork sits above two full-width destination links. Portrait parallax, drifting embers, and a gold pointer halo respond to motion preferences.
 - Antique gold, charcoal surfaces, and locally hosted serif typography carry through the studio, support, and policy pages.
+- The header's **Background** submenu offers six thumbnail previews: War Sentinel, Anime Ravens, Battlefield, Cyber Visor, Fantasy Portal, and Anime Eyes. On mobile, open the navigation menu first. A choice updates the cinematic scenes and page backdrops, and is saved locally on the visitor's device across pages and visits. The earlier anime and fantasy artwork remains available alongside the sci-fi collection.
 - The eye navigation opens separate Apps and Studio pages. The animated portal scene opens the Apps page; all five app links lead to dedicated pages, including without JavaScript. The Apps page includes compact, searchable cards with Google Play destinations.
 - Compact, filterable app cards with descriptions, feature chips, Google Play links and privacy policies. Each app has a shareable page with its description, features, preview, privacy policy, support link, and previous/next app navigation.
 - Search by app name or feature, category filters, and a recoverable empty state.
@@ -45,7 +46,9 @@ Plain HTML, CSS and vanilla JavaScript. No build step or runtime dependencies.
 | `cinema.css` | Cinematic scenes, gold theme, responsive artwork, and app/studio page layouts |
 | `destinations.css` | Mobile entrance, Apps portal, and Studio portfolio layouts |
 | `cinema.js` | Scroll chapters, eye navigation, pointer effects and optional ambient audio |
-| `art/` | Three original generated sci-fi illustrations, optimized as WebP (under 1 MiB combined) |
+| `backgrounds.js`, `backgrounds.css` | Accessible wallpaper picker, image loading, responsive submenu, and local preference |
+| `art/` | Six original generated anime, fantasy, and sci-fi illustrations, optimized as WebP (under 1.4 MiB combined) |
+| `art/thumbnails/` | Small wallpaper previews (under 60 KiB combined); full artwork loads only when needed |
 | `studio.js` | Product pointer effects, canvas, scroll effects, and motion control |
 | `icons/` | Existing app artwork |
 | `fonts/` | Locally hosted WOFF2 typefaces and their licenses |
@@ -79,8 +82,11 @@ With Python Playwright and Chromium available, run:
 ```sh
 python tests/browser_smoke.py
 python tests/studio_smoke.py
+python tests/background_smoke.py
 ```
 
 If needed, install the test tools with `python -m pip install playwright` and `python -m playwright install chromium`. They are only for testing; the website has no runtime dependencies.
 
-The background caps pixel density and frame rate, pauses while the tab is hidden, and falls back to a still composition when motion is disabled. All content and navigation remain available without animations. The motion preference is stored only in session storage; contact messages are never stored on the website.
+The wallpaper checks cover all six images, keyboard selection, mobile and landscape layouts, dismissal and focus restoration, persistence across all pages and reloads, reduced motion, slow or failed downloads, and unavailable storage. Only the most recent selection is applied when downloads overlap; a failed download preserves the previous wallpaper.
+
+The background caps pixel density and frame rate, pauses while the tab is hidden, and falls back to a still composition when motion is disabled. All content and navigation remain available without animations. The motion preference is stored only in session storage; the wallpaper ID uses local storage (`odn-background-theme`). Contact messages are never stored on the website.

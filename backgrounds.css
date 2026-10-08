@@ -1,0 +1,56 @@
+/* A compact wallpaper library, shared by every page. */
+.site-header:has(.background-panel:not([hidden])){z-index:70}
+.background-toggle{display:flex;align-items:center;gap:7px;min-height:44px;padding:8px 0;border:0;background:transparent;color:inherit;font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer}
+.background-toggle>svg{width:17px;height:17px;flex:none}
+.background-toggle .background-chevron{width:12px;height:12px;transition:rotate .2s}
+.background-toggle[aria-expanded=true]{color:#fff0c1}
+.background-toggle[aria-expanded=true] .background-chevron{rotate:180deg}
+.background-panel{position:absolute;top:calc(100% + 4px);right:max(24px,calc((100vw - 1320px)/2));width:460px;max-width:calc(100vw - 24px);max-height:calc(100dvh - 104px);overflow-y:auto;overscroll-behavior:contain;padding:22px;background:#101311f5;border:1px solid #bcaa764d;border-radius:12px;box-shadow:0 22px 80px #000a;backdrop-filter:blur(24px);color:#e4d6b0;text-shadow:none}
+.background-panel[hidden]{display:none}
+.background-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:19px}
+.background-kicker{display:block;font:8px/1.5 var(--sans);letter-spacing:1.8px;color:#a79b7c}
+.background-heading h2{font:400 25px/1.2 var(--serif);letter-spacing:-.3px;margin:7px 0 0}
+.background-close{display:grid;place-items:center;flex:none;width:44px;height:44px;padding:10px;border:1px solid #c9b78030;border-radius:50%;background:transparent;color:#dfcf9f;cursor:pointer}
+.background-close svg{width:20px;height:20px}
+.background-close:hover{background:#c9b78012}
+.background-grid{border:0;padding:0;margin:0;min-width:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px 10px}
+.background-choice{position:relative;display:flex;flex-direction:column;min-width:0;cursor:pointer}
+.background-choice input{position:absolute;inset:0;width:100%;height:100%;opacity:0;margin:0;cursor:pointer;z-index:1}
+.background-preview{position:relative;display:block;overflow:hidden;border:1px solid #a79b7c35;border-radius:6px;aspect-ratio:1.5;background:#090b0b;transition:border-color .2s,box-shadow .2s}
+.background-preview img{display:block;width:100%;height:100%;object-fit:cover;opacity:.76;transition:opacity .2s,scale .3s}
+.background-check{position:absolute;right:6px;bottom:6px;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#e0cc91;color:#151810;font:600 13px/1 var(--sans);opacity:0}
+.background-name{font:400 15px/1.2 var(--serif);color:#c5bca5;margin-top:9px}
+.background-note{font:9px/1.5 var(--sans);color:#9f9f92;margin-top:4px}
+.background-choice:hover img,.background-choice input:checked+.background-preview img{opacity:1}
+.background-choice:hover img{scale:1.04}
+.background-choice input:checked+.background-preview{border-color:#dec88f;box-shadow:0 0 0 1px #dec88f}
+.background-choice input:checked+.background-preview .background-check{opacity:1}
+.background-choice input:checked~.background-name{color:#f3e1b2}
+.background-choice input:focus-visible+.background-preview{outline:2px solid #f5e4b5;outline-offset:4px}
+.background-status{border-top:1px solid #c9b78026;padding-top:14px;margin:18px 0 0;font:10px/1.7 var(--sans);color:#aea58e;min-height:32px}
+.background-wallpaper{position:fixed;inset:0;z-index:-2;pointer-events:none;background-position:center top;background-size:cover;opacity:.12;mask-image:linear-gradient(#000, #000a 55%,transparent)}
+html[data-background-kind=character] .portal-emblem,html[data-background-kind=detail] .portal-emblem,html[data-background-kind=character] .portal-radiance,html[data-background-kind=detail] .portal-radiance{visibility:hidden}
+@media(max-width:1200px) and (min-width:1001px){.nav-links{gap:16px;font-size:10px;letter-spacing:1.2px}.nav-links .nav-contact{margin-left:0}.nav-contact span{margin-left:8px}}
+@media(max-width:1000px){
+ .nav{min-height:68px}
+ .menu-btn{display:block;color:#e0d4aa}.menu-btn span{background:#e0d4aa}
+ .nav-links{display:none;position:absolute;top:68px;left:0;right:0;max-height:calc(100dvh - 68px);overflow-y:auto;padding:18px 24px;align-items:stretch;flex-direction:column;gap:7px;border-bottom:1px solid #565a3b;background:#11140cf7;backdrop-filter:blur(20px)}
+ .nav-links.open{display:flex}
+ .nav-links>a,.nav-links .background-toggle{font-size:15px;letter-spacing:2px;min-height:44px}
+ .nav-links>a.active:after{display:none}
+ .nav-links .nav-contact{margin-left:0;padding:9px 0;border:0;background:transparent}
+ .nav-links .sound-toggle{align-self:flex-start;font-size:13px}
+ .background-panel{position:fixed;top:80px;right:12px;max-height:calc(100dvh - 96px)}
+}
+@media(max-width:480px){
+ .background-panel{width:calc(100vw - 24px);padding:18px}
+ .background-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:15px 12px}
+ .background-heading h2{font-size:23px}
+ .background-kicker{font-size:7px;letter-spacing:1.5px}
+ .background-heading{gap:5px}
+ .background-preview{aspect-ratio:1.8}
+ .background-name{font-size:16px}
+}
+html[data-motion=off] .background-preview img{transition:none}
+@media(prefers-reduced-motion:reduce){.background-preview,.background-preview img,.background-chevron{transition:none}}
+@media print{.background-panel,.background-wallpaper{display:none}}
