@@ -32,14 +32,14 @@
     }
     const stageBox = stage.getBoundingClientRect();
     const imageBox = eyeImage.getBoundingClientRect();
-    const ratio = 1672 / 941;
+    const ratio = eyeImage.naturalWidth && eyeImage.naturalHeight ? eyeImage.naturalWidth / eyeImage.naturalHeight : 1672 / 941;
     const renderedWidth = Math.max(imageBox.width, imageBox.height * ratio);
     const renderedHeight = renderedWidth / ratio;
     const startX = imageBox.left - stageBox.left + (imageBox.width - renderedWidth) / 2;
     const startY = imageBox.top - stageBox.top + (imageBox.height - renderedHeight) / 2;
     eyeLinks.forEach((link, index) => {
-      const eyeX = index ? .776 : .269;
-      const eyeY = .442;
+      const eyeX = index ? .745 : .255;
+      const eyeY = .417;
       link.style.left = `${clamp(startX + renderedWidth * eyeX, link.offsetWidth / 2 + 10, stageBox.width - link.offsetWidth / 2 - 10)}px`;
       link.style.top = `${startY + renderedHeight * eyeY}px`;
     });
@@ -118,6 +118,7 @@
   reduced.addEventListener('change', updateMotion);
   addEventListener('scroll', queueScroll, {passive:true});
   addEventListener('resize', queueScroll, {passive:true});
+  eyeImage.addEventListener('load', queueScroll);
   document.addEventListener('visibilitychange', () => { if (document.hidden) resetPointer(); });
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(entries => {

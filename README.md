@@ -14,7 +14,7 @@ The official publisher website for ODN & Sons, an independent mobile app studio 
 
 Plain HTML, CSS and vanilla JavaScript. No build step or runtime dependencies.
 
-- A cinematic homepage with original portrait and eye illustrations. Native scrolling moves from a full-screen portrait into an eye close-up with working links to the app collection and studio. On mobile, the panoramic eye artwork sits above two full-width destination links. Portrait parallax, drifting feathers, and a gold pointer halo respond to motion preferences.
+- A cinematic homepage with original sci-fi battlefield artwork: an armored sentinel, a close-up visor, and a jump gate. Native scrolling moves from a full-screen sentinel into a visor close-up with working links to the app collection and studio. On mobile, the panoramic visor artwork sits above two full-width destination links. Portrait parallax, drifting embers, and a gold pointer halo respond to motion preferences.
 - Antique gold, charcoal surfaces, and locally hosted serif typography carry through the studio, support, and policy pages.
 - The eye navigation opens separate Apps and Studio pages. The animated portal scene opens the Apps page; all five app links lead to dedicated pages, including without JavaScript. The Apps page includes compact, searchable cards with Google Play destinations.
 - Compact, filterable app cards with descriptions, feature chips, Google Play links and privacy policies. Each app has a shareable page with its description, features, preview, privacy policy, support link, and previous/next app navigation.
@@ -45,7 +45,7 @@ Plain HTML, CSS and vanilla JavaScript. No build step or runtime dependencies.
 | `cinema.css` | Cinematic scenes, gold theme, responsive artwork, and app/studio page layouts |
 | `destinations.css` | Mobile entrance, Apps portal, and Studio portfolio layouts |
 | `cinema.js` | Scroll chapters, eye navigation, pointer effects and optional ambient audio |
-| `art/` | Three original generated illustrations, optimized as WebP (under 1 MiB combined) |
+| `art/` | Three original generated sci-fi illustrations, optimized as WebP (under 1 MiB combined) |
 | `studio.js` | Product pointer effects, canvas, scroll effects, and motion control |
 | `icons/` | Existing app artwork |
 | `fonts/` | Locally hosted WOFF2 typefaces and their licenses |

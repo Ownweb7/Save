@@ -92,7 +92,7 @@ try:
         page.set_viewport_size({'width':1440,'height':900})
         page.locator('#motion-toggle').click()
         page.wait_for_function('document.querySelector(".eye-navigation").inert')
-        for selector in ['.portrait-image','.floating-feathers i']:
+        for selector in ['.portrait-image','.floating-embers i']:
             assert page.locator(selector).first.evaluate('e=>getComputedStyle(e).animationName') == 'none',selector
         page.reload(wait_until='domcontentloaded')
         assert page.locator('#motion-toggle').get_attribute('aria-pressed') == 'false'
