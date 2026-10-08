@@ -218,10 +218,10 @@
         nearStars.push({x,y,proximity});
       }
       const shimmer = enabled ? .025 * sin(sceneTime * .7 + index) : 0;
-      ctx.fillStyle = `rgba(174,220,239,${.16 + shimmer + proximity * .48})`;
+      ctx.fillStyle = `rgba(210,199,155,${.16 + shimmer + proximity * .48})`;
       ctx.beginPath(); ctx.arc(x,y,dot.radius + proximity * .35,0,PI*2); ctx.fill();
       if (proximity > .5) {
-        ctx.fillStyle = `rgba(103,232,249,${proximity * .06})`;
+        ctx.fillStyle = `rgba(214,197,143,${proximity * .06})`;
         ctx.beginPath(); ctx.arc(x,y,4,0,PI*2); ctx.fill();
       }
     });
@@ -234,7 +234,7 @@
         const distance = Math.hypot(first.x-second.x,first.y-second.y);
         if (distance > 125) continue;
         const opacity = (1-distance/125) * Math.min(first.proximity,second.proximity) * .28;
-        ctx.strokeStyle = `rgba(103,232,249,${opacity})`;
+        ctx.strokeStyle = `rgba(214,197,143,${opacity})`;
         ctx.beginPath(); ctx.moveTo(first.x,first.y); ctx.lineTo(second.x,second.y); ctx.stroke();
         connectionCount++;
       }
@@ -257,7 +257,7 @@
       const u = ring / 58 * PI * 2;
       const depth = project(u,0,scale,time,centerX,centerY)[2];
       const alpha = Math.max(.07, .38 - depth*.15);
-      ctx.strokeStyle = ring % 7 === 0 ? `rgba(171,147,255,${alpha*.8})` : `rgba(103,232,249,${alpha})`;
+      ctx.strokeStyle = ring % 7 === 0 ? `rgba(171,147,255,${alpha*.8})` : `rgba(214,197,143,${alpha})`;
       ctx.lineWidth = ring % 7 === 0 ? .8 : .55;
       ctx.beginPath();
       for (let step=0; step<=48; step++) {

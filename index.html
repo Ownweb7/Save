@@ -3,14 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#080c14">
+<meta name="theme-color" content="#0d0e0e">
 <title>ODN &amp; Sons — Independent App Studio</title>
 <meta name="description" content="Discover Save+, Bond Time, Will Impulse, GlowCalc and LockClock Aurum. Thoughtfully crafted Android apps by ODN & Sons, Hisar, India.">
 <link rel="icon" href="icons/Website%20Icon.png">
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="studio.css">
+<link rel="stylesheet" href="cinema.css">
 </head>
-<body id="top" class="studio-home future-studio">
+<body id="top" class="studio-home cinematic-home">
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header">
 <div class="wrap nav">
@@ -19,9 +20,11 @@
 </a>
 <nav class="nav-links" id="navigation" aria-label="Main navigation">
 
+<a href="#intro">Intro</a>
 <a href="index.html#apps">Our apps</a>
 <a href="about.html">Our story</a>
 <a href="privacy-policies.html">Privacy</a>
+<button id="sound-toggle" class="sound-toggle" type="button" hidden aria-pressed="false" aria-label="Play ambient sound">Sound off</button>
 <a href="contact.html" class="nav-contact" >Let’s talk <span aria-hidden="true">
 <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
 <path d="M6 18 18 6M6 6h12v12"/>
@@ -38,34 +41,42 @@
 </div>
 </header>
 <main id="main">
-<section class="studio-hero wrap world-hero" aria-labelledby="studio-title">
-  <div class="hero-overline"><span><span class="signal-mark" aria-hidden="true"></span> ODN &amp; SONS · INDEPENDENT APP STUDIO</span><span>HISAR, INDIA · EST. 2022</span></div>
-  <div class="world-hero-grid">
-    <div class="app-hero-copy">
-      <span class="world-kicker">A LITTLE UTILITY. A LOT OF POSSIBILITY.</span>
-      <h1 id="studio-title"><span class="title-line">Small apps.</span> <span class="title-line app-title-accent">Big possibilities.</span></h1>
-      <div class="hero-bottom"><p>Welcome to our little universe. We’re an independent studio making thoughtful Android apps for saving, focus, better decisions, and everything in between.</p><div class="hero-links"><a class="btn btn-gold magnetic" href="#apps">Enter the studio <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a><a class="hero-demo-link" href="#studio-intro">Meet the studio <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a></div></div>
-      <div class="hero-proof"><span><span aria-hidden="true">+</span> 5 apps. One curious studio.</span><span>Made for everyday life.</span></div>
+<section class="cinematic-intro" id="intro" aria-labelledby="studio-title">
+  <div class="cinema-stage">
+    <div class="cinema-art" aria-hidden="true">
+      <div class="portrait-scene"><img class="portrait-image" src="art/studio-ravens.webp" alt="" width="1672" height="941" fetchpriority="high"><div class="raven-wing wing-left"></div><div class="raven-wing wing-right"></div></div>
+      <div class="eyes-scene"><picture><source media="(max-width:900px)" srcset="art/studio-ravens.webp"><img src="art/studio-eyes.webp" alt="" width="1672" height="941"></picture></div>
+      <div class="cinema-shade"></div><div class="cinema-grain"></div>
+      <div class="floating-feathers"><i></i><i></i><i></i><i></i><i></i><i></i></div>
     </div>
-    <div class="studio-world">
-      <div class="world-art" aria-hidden="true">
-        <div class="world-aura"></div><div class="world-orbit orbit-one"></div><div class="world-orbit orbit-two"></div><div class="world-floor"></div>
-        <span class="world-coordinate coordinate-top">ODN / CREATIVE SYSTEM</span><span class="world-coordinate coordinate-bottom">IMAGINE · DESIGN · BUILD</span>
-        <div class="world-sculpture"><div class="world-shell"><div class="world-lens"><div class="world-iris"><i class="world-eye"></i></div><span class="lens-mark">o.</span></div></div><span class="sculpture-label">THE STUDIO EYE</span></div>
-        <div class="world-object object-chrome"></div><div class="world-object object-cube"><span></span></div><span class="world-spark spark-one"><svg viewBox="0 0 60 60" width="52" height="52" fill="none" stroke="currentColor" stroke-width="4"><path d="M30 4v52M4 30h52M12 12l36 36M12 48l36-36"/></svg></span><span class="world-spark spark-two">+</span>
-      </div>
-      <a class="world-app world-save is-selected" data-world-app="save" href="#app-save" aria-label="Explore Save+" aria-current="true"><span class="world-app-icon"><img src="icons/Website%20Icon.png" alt="" width="42" height="42"></span><span class="world-app-label">Save+ <span aria-hidden="true"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></span></span></a>
-      <a class="world-app world-bond" data-world-app="bond" href="#app-bond" aria-label="Explore Bond Time"><span class="world-app-icon"><img src="icons/Bond%20Time.png" alt="" width="42" height="42"></span><span class="world-app-label">Bond Time <span aria-hidden="true"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></span></span></a>
-      <a class="world-app world-will" data-world-app="will" href="#app-will" aria-label="Explore Will Impulse"><span class="world-app-icon"><img src="icons/Will%20impulse.png" alt="" width="42" height="42"></span><span class="world-app-label">Will Impulse <span aria-hidden="true"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></span></span></a>
-      <a class="world-app world-glow" data-world-app="glow" href="#app-glow" aria-label="Explore GlowCalc"><span class="world-app-icon"><img src="icons/Glowcalc%20Icon.png" alt="" width="42" height="42"></span><span class="world-app-label">GlowCalc <span aria-hidden="true"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></span></span></a>
-      <a class="world-app world-clock" data-world-app="clock" href="#app-clock" aria-label="Explore LockClock Aurum"><span class="world-app-icon"><img src="icons/LockClock%20AURUM.png" alt="" width="42" height="42"></span><span class="world-app-label">LockClock <span aria-hidden="true"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></span></span></a>
-      <p class="world-hint">Choose an app. Explore its world.</p>
+    <div class="cinema-opening wrap">
+      <span class="cinema-kicker">ODN &amp; SONS · INDEPENDENT APP STUDIO</span>
+      <h1 id="studio-title">A little wonder.<br><em>In your everyday.</em></h1>
+      <div class="cinema-caption"><p>Thoughtful Android apps, born from curiosity.<br>Designed with care in Hisar, India.</p><a class="cinema-enter" href="#apps">Explore our apps <svg class="cinema-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a></div>
     </div>
+    <nav class="eye-navigation" aria-label="Explore the studio">
+      <a class="eye-portal eye-portal-left" href="#apps"><span class="eye-orbit" aria-hidden="true"></span><span class="eye-portal-label"><small>01 / DISCOVER</small>OUR APPS<svg class="cinema-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></span></a>
+      <a class="eye-portal eye-portal-right" href="#studio-intro"><span class="eye-orbit" aria-hidden="true"></span><span class="eye-portal-label"><small>02 / THE MAKERS</small>THE STUDIO<svg class="cinema-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></span></a>
+    </nav>
+    <div class="cinema-bottom wrap"><span class="scene-count"><b id="scene-number">01</b> / 03</span><a class="scroll-invitation" href="#creative-world"><span>SCROLL TO EXPLORE</span><i aria-hidden="true"></i></a><span class="cinema-location">HISAR, INDIA <i aria-hidden="true">✧</i> EST. 2022</span></div>
   </div>
-  <div class="world-baseline"><span>GOOD DESIGN STARTS WITH CURIOSITY.</span><a href="#apps">Scroll to explore <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 4v16m-6-6 6 6 6-6"/></svg></a><span>DESIGNED FOR LIFE. BUILT FOR ANDROID.</span></div>
+</section>
+<section class="creative-world" id="creative-world" aria-labelledby="world-title">
+  <img class="portal-landscape" src="art/studio-portal.webp" alt="" width="1672" height="941" loading="lazy">
+  <div class="portal-shade" aria-hidden="true"></div>
+  <div class="portal-emblem" aria-hidden="true"><span></span><i>o.</i><span></span></div>
+  <div class="portal-copy"><span class="eyebrow">A SMALL IDEA CAN OPEN A WHOLE NEW WORLD</span><h2 id="world-title">Imagination.<br><em>Made useful.</em></h2><p>Five little apps. More room for the things that matter.</p></div>
+  <div class="orbit-apps" aria-label="Choose an app to preview">
+    <a class="world-app is-selected" data-world-app="save" href="#app-save" aria-label="Explore Save+" aria-current="true"><img src="icons/Website%20Icon.png" alt="" width="36" height="36"><span>Save+</span></a>
+    <a class="world-app" data-world-app="bond" href="#app-bond" aria-label="Explore Bond Time"><img src="icons/Bond%20Time.png" alt="" width="36" height="36"><span>Bond Time</span></a>
+    <a class="world-app" data-world-app="will" href="#app-will" aria-label="Explore Will Impulse"><img src="icons/Will%20impulse.png" alt="" width="36" height="36"><span>Will Impulse</span></a>
+    <a class="world-app" data-world-app="glow" href="#app-glow" aria-label="Explore GlowCalc"><img src="icons/Glowcalc%20Icon.png" alt="" width="36" height="36"><span>GlowCalc</span></a>
+    <a class="world-app" data-world-app="clock" href="#app-clock" aria-label="Explore LockClock Aurum"><img src="icons/LockClock%20AURUM.png" alt="" width="36" height="36"><span>LockClock</span></a>
+  </div>
+  <span class="world-bottom-label">03 / IMAGINE · DESIGN · BUILD</span>
 </section>
 <section class="app-preview-section wrap" id="app-preview" aria-labelledby="preview-title">
-  <div class="preview-layout"><div class="preview-intro"><span class="eyebrow">01 / FROM OUR UNIVERSE TO YOUR EVERYDAY</span><h2 id="preview-title">A little app.<br><em>A real difference.</em></h2><p>Five ideas, made useful. Choose an app to explore its features, then find it on Google Play.</p><a class="text-button" href="#apps">Meet the whole collection <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a><div class="preview-stamp"><span aria-hidden="true">o.</span><div>THOUGHTFULLY MADE<br><strong>ODN &amp; SONS · HISAR, INDIA</strong></div></div></div>
+  <div class="preview-layout"><div class="preview-intro"><span class="eyebrow">01 / A CLOSER LOOK</span><h2 id="preview-title">A little app.<br><em>A real difference.</em></h2><p>Five ideas, made useful. Choose an app to explore its features, then find it on Google Play.</p><a class="text-button" href="#apps">Meet the whole collection <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a><div class="preview-stamp"><span aria-hidden="true">o.</span><div>THOUGHTFULLY MADE<br><strong>ODN &amp; SONS · HISAR, INDIA</strong></div></div></div>
     <div class="app-stage" data-active-app="save" style="--preview-accent:#bfdaa3">
       <div class="stage-orbit" aria-hidden="true"></div>
       <span class="app-floating-label" aria-hidden="true"><span class="floating-spark">+</span> DESIGNED FOR LIFE.<br><strong>BUILT FOR ANDROID.</strong></span>
@@ -98,9 +109,9 @@
 <section class="section wrap" id="apps">
 <div class="section-heading">
 <div>
-<span class="eyebrow">02 / SELECTED APPS</span>
-<h2>Made for life.<br>
-<em>Built for you.</em>
+<span class="eyebrow">02 / SELECTED WORK</span>
+<h2>Small tools.<br>
+<em>Thoughtfully made.</em>
 </h2>
 </div>
 <p>What you need. Nothing complicated.<br>Explore features, read app details, or get the app.</p>
@@ -396,5 +407,6 @@
 <script src="main.js">
 </script>
 <script src="studio.js"></script>
+<script src="cinema.js"></script>
 </body>
 </html>

@@ -14,11 +14,13 @@ The official publisher website for ODN & Sons, an independent mobile app studio 
 
 Plain HTML, CSS and vanilla JavaScript. No build step or runtime dependencies.
 
-- An original immersive app studio homepage with a chrome and lavender orb, a pointer-reactive eye, and five floating app links. These select a product preview with JavaScript and lead directly to the app cards without it. Dark graphite surfaces, clear product information, and consistent styling carry through the studio, support, and policy pages.
-- Interactive product previews below the hero for all five apps, with keyboard-accessible tabs, matching Google Play links, and direct access to app details. Phone previews show illustrative sample content.
-- Compact, filterable app collection with three columns on desktop, two on tablets, and one on narrow screens. Each card keeps a clear description, three feature chips, a full-width Google Play control, app details, and its privacy policy.
-- Search by app name or feature, with category filters and a recoverable empty state.
-- A compact, fully scrollable layout with a pointer-reactive phone composition and interactive sci-fi canvas, moving type strip, rolling headings and product cards, rolling link labels, parallax artwork, and page transitions in supported browsers. Product cards use subtle grid artwork, illuminated corners, pointer-reactive glow, and a single scan transition on hover or keyboard focus. Sections stay in normal document flow; wheel, touch and keyboard scrolling remain native. Motion respects system preferences and can be paused with a session-persistent control.
+- A cinematic illustrated homepage with original raven, portrait, and portal artwork. Native scrolling moves from a full-screen portrait into an eye close-up with working links to the app collection and studio. Portrait parallax, drifting feathers, a gold pointer halo, and orbit details respond to motion preferences.
+- Antique gold, charcoal surfaces, and locally hosted serif typography carry through the studio, support, and policy pages.
+- Five portal app links select matching product previews, with keyboard-accessible tabs, Google Play destinations, and app details. Without JavaScript, the links reach the corresponding static app cards.
+- Compact, filterable app cards with descriptions, feature chips, Google Play links and privacy policies. The project details dialog supports previous/next app navigation, focus trapping, and Escape to close.
+- Search by app name or feature, category filters, and a recoverable empty state.
+- Optional ambient audio synthesized locally with Web Audio. Sound starts only after an explicit click and pauses while the page is hidden. No audio downloads or autoplay.
+- Scroll and pointer effects respect reduced motion and the session-persistent motion control. All sections retain native wheel, touch and keyboard scrolling.
 - A compact contact banner and footer keep support, app navigation, and policy links easy to find.
 - Privacy-policy selector and section navigation. Existing policy text is preserved.
 - Contact composer that opens the visitor’s email client or Gmail. It does not send or store messages itself.
@@ -37,7 +39,10 @@ Plain HTML, CSS and vanilla JavaScript. No build step or runtime dependencies.
 | `apps.js` | App details used by interactive dialogs and policy navigation |
 | `main.js` | Shared interactions and app search |
 | `styles.css` | Base layouts and shared component styles |
-| `studio.css` | Studio theme and responsive presentation |
+| `studio.css` | Product preview and shared presentation |
+| `cinema.css` | Cinematic scenes, gold theme, responsive artwork and project dialogs |
+| `cinema.js` | Scroll chapters, eye navigation, pointer effects and optional ambient audio |
+| `art/` | Three original generated illustrations, optimized as WebP (under 1 MiB combined) |
 | `studio.js` | Product preview selector, canvas, scroll effects, and motion control |
 | `icons/` | Existing app artwork |
 | `fonts/` | Locally hosted WOFF2 typefaces and their licenses |
@@ -64,7 +69,7 @@ Fonts are served locally as WOFF2 files with system fallbacks; their licenses ar
 
 ## Browser checks
 
-The regression checks cover floating app selection, all five product previews and their store/detail destinations, catalog-aligned feature chips, app search, keyboard navigation, dialog focus, contact validation and email composition, clipboard support, FAQs, policy navigation, reactive scene, phone composition and canvas, motion preferences, no-JavaScript content, and responsive layouts on every page. Phone previews are checked for all five apps at six widths.
+The regression checks cover cinematic eye navigation and responsive hit targets, opt-in sound, portal app selection, all five product previews and their store/detail destinations, catalog-aligned feature chips, app search, keyboard navigation, dialog focus, contact validation and email composition, clipboard support, FAQs, policy navigation, portrait parallax, phone composition and canvas, motion preferences, no-JavaScript content, and responsive layouts on every page. Phone previews are checked for all five apps at six widths.
 
 With Python Playwright and Chromium available, run:
 

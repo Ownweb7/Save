@@ -86,24 +86,45 @@
 
   const dialog = document.querySelector('#app-dialog');
   let dialogTrigger;
+  let dialogAppIndex = 0;
+  function renderAppDetails(app) {
+    dialogAppIndex = window.ODN_APPS.indexOf(app);
+    // All values below come from the repository's app catalog, never user input.
+    document.querySelector('#dialog-content').innerHTML = `
+      <div class="dialog-layout">
+      <div class="dialog-art" style="--app-color:${app.color}">
+        <span>ODN &amp; SONS / SELECTED WORK</span>
+        <img class="dialog-icon" src="icons/${encodeURIComponent(app.icon)}" alt="${app.name} icon">
+        <strong aria-hidden="true">${app.name}</strong>
+        <span>THOUGHTFULLY MADE FOR ANDROID</span>
+      </div>
+      <div class="dialog-body">
+      <span class="dialog-category">${app.category} · Android</span>
+      <h2 class="dialog-title" id="dialog-title">${app.name}</h2>
+      <p class="dialog-description">${app.desc}</p>
+      <ul class="dialog-features">${app.features.map(feature => `<li>${feature}</li>`).join('')}</ul>
+      <div class="dialog-paging"><span>${String(dialogAppIndex + 1).padStart(2, '0')} / 05 · THE COLLECTION</span><button type="button" data-dialog-step="-1" aria-label="Previous app">‹</button><button type="button" data-dialog-step="1" aria-label="Next app">›</button></div>
+      <div class="dialog-actions"><a class="btn btn-gold" href="${app.url}" target="_blank" rel="noopener">${app.id === 'will' ? 'Find on Google Play' : 'Get it on Google Play'} <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a><a href="${app.policy}">Read privacy policy</a></div>
+      <p class="dialog-note">By ODN &amp; Sons · Made with care in Hisar, India</p>
+      </div></div>`;
+  }
   document.querySelectorAll('[data-app]').forEach(button => button.addEventListener('click', event => {
     const app = window.ODN_APPS.find(item => item.id === button.dataset.app);
     if (!app || !dialog) return;
     if (button.matches('a')) event.preventDefault();
     dialogTrigger = button;
-    // All values below come from the repository's app catalog, never user input.
-    document.querySelector('#dialog-content').innerHTML = `
-      <img class="dialog-icon" src="icons/${encodeURIComponent(app.icon)}" alt="${app.name} icon">
-      <span class="dialog-category">${app.category} · Android</span>
-      <h2 class="dialog-title" id="dialog-title">${app.name}</h2>
-      <p class="dialog-description">${app.desc}</p>
-      <ul class="dialog-features">${app.features.map(feature => `<li>${feature}</li>`).join('')}</ul>
-      <div class="dialog-actions"><a class="btn btn-gold" href="${app.url}" target="_blank" rel="noopener">${app.id === 'will' ? 'Find on Google Play' : 'Get it on Google Play'} <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a><a href="${app.policy}">Read privacy policy</a></div>
-      <p class="dialog-note">By ODN &amp; Sons · Made with care in Hisar, India</p>`;
+    renderAppDetails(app);
     dialog.returnValue = '';
     dialog.showModal();
     document.body.classList.add('dialog-open');
   }));
+  dialog?.addEventListener('click', event => {
+    const step = event.target.closest('[data-dialog-step]')?.dataset.dialogStep;
+    if (!step) return;
+    const apps = window.ODN_APPS;
+    renderAppDetails(apps[(dialogAppIndex + Number(step) + apps.length) % apps.length]);
+    dialog.querySelector(`[data-dialog-step="${step}"]`)?.focus({preventScroll:true});
+  });
   dialog?.querySelector('.dialog-close').addEventListener('click', () => dialog.close());
   dialog?.addEventListener('keydown', event => {
     if (event.key !== 'Tab') return;
