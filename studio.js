@@ -56,7 +56,7 @@
     const icon = document.querySelector('#showcase-icon');
     const features = document.querySelector('#showcase-features');
     const store = document.querySelector('#showcase-store');
-    const tryLink = document.querySelector('#showcase-try');
+    const aboutLink = document.querySelector('#showcase-about');
     if (name) name.textContent = app.name;
     if (tag) tag.textContent = app.tag;
     if (icon) {
@@ -72,9 +72,10 @@
       store.href = app.url;
       store.textContent = `${id === 'will' ? 'Find' : 'Get'} ${app.name} on Google Play`;
     }
-    if (tryLink) {
-      tryLink.dataset.try = id;
-      tryLink.textContent = `Try ${app.name}`;
+    if (aboutLink) {
+      aboutLink.dataset.app = id;
+      aboutLink.href = `#app-${id}`;
+      aboutLink.textContent = `About ${app.name}`;
     }
     showcasePreviews.forEach(preview => { preview.hidden = preview.dataset.preview !== id; });
     if (focus) selectedTab.focus();
@@ -341,7 +342,7 @@
     });
   }
   // Each word rolls around its baseline as its heading enters the viewport.
-  const rollingHeadings=[...document.querySelectorAll('.section-heading h2,.lab-copy h2,.contact-banner h2,.page-hero h1')];
+  const rollingHeadings=[...document.querySelectorAll('.section-heading h2,.contact-banner h2,.page-hero h1')];
   rollingHeadings.forEach(heading=>{
     heading.classList.add('roll-heading');
     const walker=document.createTreeWalker(heading,NodeFilter.SHOW_TEXT);
@@ -379,7 +380,7 @@
     });
   }
   // Duplicate only the visual label; assistive technology reads the original once.
-  document.querySelectorAll('.nav-links>a,.hero-links>a,.try-app').forEach(link=>{
+  document.querySelectorAll('.nav-links>a,.hero-links>a').forEach(link=>{
     [...link.childNodes].filter(node=>node.nodeType===Node.TEXT_NODE&&node.textContent.trim()).forEach(node=>{
       const label=document.createElement('span'); label.className='roll-label';
       const front=document.createElement('span'); front.className='roll-label-front'; front.textContent=node.textContent.trim();
@@ -438,8 +439,6 @@
       document.querySelectorAll('.app-art,.magnetic').forEach(element=>{
         element.style.removeProperty('--tilt-x'); element.style.removeProperty('--tilt-y'); element.style.removeProperty('translate');
       });
-      // Cancel short demo transitions too, keeping all controls immediately usable.
-      document.querySelectorAll('.demo-panel,#demo-saved').forEach(element=>element.getAnimations().forEach(animation=>animation.cancel()));
       pointer.x=pointer.targetX=.76; pointer.y=pointer.targetY=.38; pointer.active=false;
       resetCardGlows();
       updateStage(true);
@@ -519,7 +518,7 @@
     const observer=new IntersectionObserver(entries=>{
       entries.forEach(entry=>{if(entry.isIntersecting){animateIn(entry.target);observer.unobserve(entry.target);}});
     },{threshold:.08});
-    document.querySelectorAll('.collection-note,.principles article,.playground,.contact-form,.about-meta').forEach(element=>observer.observe(element));
+    document.querySelectorAll('.collection-note,.principles article,.contact-form,.about-meta').forEach(element=>observer.observe(element));
   }
   sizeScene(); updateMotion();
   selectShowcase(activeShowcase, false, false);

@@ -15,12 +15,11 @@ The official publisher website for ODN & Sons, an independent mobile app studio 
 Plain HTML, CSS and vanilla JavaScript. No build step or runtime dependencies.
 
 - An original immersive app studio homepage with a chrome and lavender orb, a pointer-reactive eye, and five floating app links. These select a product preview with JavaScript and lead directly to the app cards without it. Dark graphite surfaces, clear product information, and consistent styling carry through the studio, support, and policy pages.
-- Interactive product previews below the hero for all five apps, with keyboard-accessible tabs, matching Google Play links, and direct entry into each working browser demo. Phone previews show illustrative sample content.
-- Compact, filterable app collection with three columns on desktop, two on tablets, and one on narrow screens. Each card keeps a clear description, three feature chips, aligned demo and Google Play controls, and keyboard-accessible app details.
-- Five working browser demos: editable savings goals with deposits and undo; a focus countdown; an impulse-purchase pause and savings estimate; a keyboard-enabled calculator; and a stopwatch with laps.
+- Interactive product previews below the hero for all five apps, with keyboard-accessible tabs, matching Google Play links, and direct access to app details. Phone previews show illustrative sample content.
+- Compact, filterable app collection with three columns on desktop, two on tablets, and one on narrow screens. Each card keeps a clear description, three feature chips, a full-width Google Play control, app details, and its privacy policy.
 - Search by app name or feature, with category filters and a recoverable empty state.
 - A compact, fully scrollable layout with a pointer-reactive phone composition and interactive sci-fi canvas, moving type strip, rolling headings and product cards, rolling link labels, parallax artwork, and page transitions in supported browsers. Product cards use subtle grid artwork, illuminated corners, pointer-reactive glow, and a single scan transition on hover or keyboard focus. Sections stay in normal document flow; wheel, touch and keyboard scrolling remain native. Motion respects system preferences and can be paused with a session-persistent control.
-- Demos use temporary in-memory state. Refreshing clears it. They do not reproduce native Android app blocking, make purchases, or save personal data.
+- A compact contact banner and footer keep support, app navigation, and policy links easy to find.
 - Privacy-policy selector and section navigation. Existing policy text is preserved.
 - Contact composer that opens the visitor’s email client or Gmail. It does not send or store messages itself.
 - Copy-email control, FAQ accordions, mobile navigation and reduced-motion support.
@@ -37,8 +36,7 @@ Plain HTML, CSS and vanilla JavaScript. No build step or runtime dependencies.
 | `terms-and-conditions.html` | Terms and conditions |
 | `apps.js` | App details used by interactive dialogs and policy navigation |
 | `main.js` | Shared interactions and app search |
-| `playground.js` | Five interactive browser demos |
-| `styles.css` | Base layouts and browser demo styles |
+| `styles.css` | Base layouts and shared component styles |
 | `studio.css` | Studio theme and responsive presentation |
 | `studio.js` | Product preview selector, canvas, scroll effects, and motion control |
 | `icons/` | Existing app artwork |
@@ -66,7 +64,7 @@ Fonts are served locally as WOFF2 files with system fallbacks; their licenses ar
 
 ## Browser checks
 
-The regression checks cover floating app selection, all five product previews and their store/demo destinations, catalog-aligned feature chips, all five demos, input validation, timer completion and pause/resume, calculator error recovery, app search, keyboard navigation, dialog focus, reactive scene, phone composition and canvas, motion preferences, no-JavaScript content, and responsive layouts on every page.
+The regression checks cover floating app selection, all five product previews and their store/detail destinations, catalog-aligned feature chips, app search, keyboard navigation, dialog focus, contact validation and email composition, clipboard support, FAQs, policy navigation, reactive scene, phone composition and canvas, motion preferences, no-JavaScript content, and responsive layouts on every page. Phone previews are checked for all five apps at six widths.
 
 With Python Playwright and Chromium available, run:
 
@@ -77,4 +75,4 @@ python tests/studio_smoke.py
 
 If needed, install the test tools with `python -m pip install playwright` and `python -m playwright install chromium`. They are only for testing; the website has no runtime dependencies.
 
-The background caps pixel density and frame rate, pauses while the tab is hidden, and falls back to a still composition when motion is disabled. All content and navigation remain available without animations. The motion preference is stored only in session storage; app demo inputs are never persisted.
+The background caps pixel density and frame rate, pauses while the tab is hidden, and falls back to a still composition when motion is disabled. All content and navigation remain available without animations. The motion preference is stored only in session storage; contact messages are never stored on the website.

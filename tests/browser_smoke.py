@@ -1,130 +1,148 @@
-"""Browser regression checks. Run: python tests/browser_smoke.py.
-Requires Playwright for Python and Chromium (system or Playwright-installed).
+"""Browser journeys for the app catalog, details and shared support pages.
+Run: python tests/browser_smoke.py (requires Python Playwright and Chromium).
 """
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from threading import Thread
+from urllib.parse import parse_qs, urlparse
 import shutil
+from playwright.sync_api import sync_playwright
+
 
 class QuietHandler(SimpleHTTPRequestHandler):
     def log_message(self, *_args):
         pass
+
 
 root = Path(__file__).resolve().parents[1]
 server = ThreadingHTTPServer(('127.0.0.1', 0), partial(QuietHandler, directory=str(root)))
 Thread(target=server.serve_forever, daemon=True).start()
 base_url = f'http://127.0.0.1:{server.server_port}'
 try:
-    from playwright.sync_api import sync_playwright
-    from datetime import datetime, timezone
     with sync_playwright() as p:
-     browser=p.chromium.launch(executable_path=shutil.which('chromium'),headless=True,args=['--no-sandbox'])
-     page=browser.new_page(viewport={'width':1440,'height':1100})
-     errors=[]
-     page.on('pageerror',lambda e: errors.append(str(e)))
-     page.clock.install(time=datetime(2026, 10, 8, tzinfo=timezone.utc))
-     page.clock.pause_at(datetime(2026, 10, 8, 0, 0, 1, tzinfo=timezone.utc))
-     page.emulate_media(reduced_motion='reduce')
-     page.goto(base_url,wait_until='domcontentloaded')
-     # Saving goal arithmetic, editable forecast, undo, reset and invalid values.
-     page.locator('#demo-deposit').fill('7500')
-     page.locator('#demo-deposit-form button').click()
-     assert page.locator('#demo-saved').inner_text()=='₹20,000'
-     assert '6 months' in page.locator('#demo-forecast').inner_text()
-     page.locator('#demo-undo').click()
-     assert page.locator('#demo-saved').inner_text()=='₹12,500'
-     page.locator('#demo-target').fill('10000')
-     assert 'Goal reached' in page.locator('#demo-remaining').inner_text()
-     assert page.locator('.demo-progress').get_attribute('aria-valuenow')=='100'
-     page.locator('#demo-monthly').fill('0')
-     assert 'Enter a whole amount' in page.locator('#demo-forecast').inner_text()
-     page.locator('#demo-save-reset').click()
-     assert page.locator('#demo-undo').is_disabled()
-     # Tabs support arrows and display only one panel.
-     page.locator('#tab-save').focus();page.keyboard.press('ArrowRight')
-     assert page.locator('#tab-bond').get_attribute('aria-selected')=='true'
-     assert page.locator('.demo-panel:visible').count()==1
-     page.locator('#focus-start').click();page.clock.fast_forward(10000)
-     assert page.locator('#focus-time').inner_text()=='00:50'
-     page.locator('#focus-start').click();page.clock.fast_forward(10000)
-     assert page.locator('#focus-time').inner_text()=='00:50'
-     page.locator('#focus-start').click()
-     page.locator('#tab-save').click();page.clock.fast_forward(50001)
-     page.locator('#tab-bond').click()
-     assert page.locator('#focus-time').inner_text()=='00:00'
-     assert 'Session complete' in page.locator('#focus-status').inner_text()
-     page.locator('[data-duration="300"]').click()
-     assert page.locator('#focus-time').inner_text()=='05:00'
-     # Pause exercise unlocks at the deadline, and choices never trigger orders.
-     page.locator('#tab-will').click()
-     page.locator('#impulse-cost').fill('500');page.locator('#impulse-count').fill('3')
-     assert page.locator('#impulse-total').inner_text()=='₹78,000'
-     page.locator('#impulse-start').click()
-     assert page.locator('#impulse-skip').is_disabled()
-     page.clock.fast_forward(5001)
-     assert page.locator('#impulse-skip').is_enabled()
-     page.locator('#impulse-skip').click()
-     assert 'You chose to skip' in page.locator('#impulse-status').inner_text()
-     page.locator('#impulse-start').click();page.clock.fast_forward(5001);page.locator('#impulse-continue').click()
-     assert 'does not place an order' in page.locator('#impulse-status').inner_text()
-     # Calculator keyboard, chained operations, decimals, error recovery and colour.
-     page.locator('#tab-glow').click();page.locator('#demo-glow').focus()
-     page.keyboard.type('12.5+7.5=')
-     assert page.locator('#calc-result').inner_text()=='20'
-     page.keyboard.press('Escape');page.keyboard.type('8/0=')
-     assert page.locator('#calc-result').inner_text()=='Error'
-     page.keyboard.type('9*9=')
-     assert page.locator('#calc-result').inner_text()=='81'
-     page.keyboard.press('Escape');page.keyboard.type('2+3*4=')
-     assert page.locator('#calc-result').inner_text()=='20' # simple sequential calculator
-     page.keyboard.press('Escape');page.keyboard.type('0.1+0.2=')
-     assert page.locator('#calc-result').inner_text()=='0.3'
-     page.locator('[data-neon="#7de3e0"]').click()
-     assert page.locator('#calculator').evaluate("e=>e.style.getPropertyValue('--neon')")=='#7de3e0'
-     # Stopwatch includes hidden-tab time, pauses cleanly, records and clears laps.
-     page.locator('#tab-clock').click();page.locator('#stopwatch-start').click();page.clock.fast_forward(2500)
-     assert page.locator('#stopwatch-time').inner_text()=='00:02.50'
-     page.locator('#stopwatch-lap').click()
-     assert page.locator('#stopwatch-laps li').count()==1
-     page.locator('#stopwatch-start').click();page.clock.fast_forward(2000)
-     assert page.locator('#stopwatch-time').inner_text()=='00:02.50'
-     page.locator('#stopwatch-start').click();page.locator('#tab-save').click();page.clock.fast_forward(1500)
-     page.locator('#tab-clock').click();page.clock.fast_forward(50)
-     assert page.locator('#stopwatch-time').inner_text()=='00:04.05'
-     page.locator('#stopwatch-reset').click()
-     assert page.locator('#stopwatch-laps li').count()==0
-     assert page.locator('#stopwatch-time').inner_text()=='00:00.00'
-     # Search and category filters combine; empty state resets both.
-     page.locator('#app-search').fill('scientific')
-     assert page.locator('.app-card:visible').count()==1
-     assert 'GlowCalc' in page.locator('.app-card:visible').inner_text()
-     page.locator('[data-filter="Money"]').click()
-     assert page.locator('#search-empty').is_visible()
-     page.locator('#reset-search').click()
-     assert page.locator('.app-card:visible').count()==5
-     # Both card and dialog deep actions land on their demo with correct focus.
-     page.locator('[data-try="bond"]').first.click()
-     assert page.locator('#tab-bond').get_attribute('aria-selected')=='true'
-     page.locator('.app-art[data-app="clock"]').click()
-     page.locator('dialog [data-try="clock"]').click()
-     page.clock.fast_forward(200)
-     assert not page.locator('dialog').is_visible()
-     assert page.locator('#tab-clock').evaluate('e=>e===document.activeElement')
-     # Reopen and close a normal dialog after using the demo action.
-     page.locator('.app-art[data-app="glow"]').click();page.keyboard.press('Escape');page.clock.fast_forward(100)
-     assert page.locator('.app-art[data-app="glow"]').evaluate('e=>e===document.activeElement')
-     for width in [1440,768,390,320]:
-      page.set_viewport_size({'width':width,'height':1000})
-      for demo in ['save','bond','will','glow','clock']:
-       page.locator('#tab-'+demo).click()
-       assert not page.evaluate('document.documentElement.scrollWidth>innerWidth'),f'Overflow at {width}: {demo}'
-      print('All five demos fit width',width,flush=True)
-     page.set_viewport_size({'width':1440,'height':1100});page.locator('#tab-save').click()
-     page.evaluate('window.scrollTo(0,0)');page.clock.fast_forward(1000)
-     assert not errors,errors
-     print('Five demo journeys, keyboard controls, invalid input, hidden-tab timing and search passed. No browser errors.',flush=True)
-     browser.close()
+        browser = p.chromium.launch(executable_path=shutil.which('chromium'), args=['--no-sandbox'])
+        context = browser.new_context(viewport={'width': 1440, 'height': 1000},
+                                      permissions=['clipboard-read', 'clipboard-write'])
+        page = context.new_page()
+        page.emulate_media(reduced_motion='reduce')
+        errors = []
+        page.on('pageerror', lambda error: errors.append(str(error)))
+        page.goto(base_url, wait_until='domcontentloaded')
+        catalog = page.evaluate('window.ODN_APPS')
+
+        # Search matches features, combines with categories and recovers from no results.
+        page.locator('#app-search').fill('scientific')
+        assert page.locator('.app-card:visible').count() == 1
+        assert 'GlowCalc' in page.locator('.app-card:visible').inner_text()
+        page.locator('[data-filter="Money"]').click()
+        assert page.locator('#search-empty').is_visible()
+        page.locator('#reset-search').click()
+        assert page.locator('.app-card:visible').count() == 5
+        assert page.locator('#app-search').evaluate('e => document.activeElement === e')
+        page.locator('[data-filter="Wellbeing"]').click()
+        assert page.locator('.app-card:visible').count() == 2
+        page.locator('#app-search').fill('on-device')
+        assert page.locator('.app-card:visible').count() == 1
+        assert 'Will Impulse' in page.locator('.app-card:visible').inner_text()
+        page.locator('#clear-search').click()
+        assert page.locator('.app-card:visible').count() == 2
+        assert page.locator('#app-search').evaluate('e => document.activeElement === e')
+        page.locator('[data-filter="All"]').click()
+
+        # Every card opens matching details and exposes correct store/privacy destinations.
+        dialog = page.locator('#app-dialog')
+        for app in catalog:
+            card = page.locator(f'#app-{app["id"]}')
+            assert card.locator('.store-link').get_attribute('href') == app['url']
+            trigger = card.locator('.app-art')
+            trigger.click()
+            assert dialog.is_visible()
+            assert dialog.locator('h2').inner_text() == app['name']
+            assert dialog.locator('.dialog-description').inner_text() == app['desc']
+            assert dialog.locator('.dialog-features li').all_text_contents() == app['features']
+            assert dialog.locator(f'a[href="{app["url"]}"]').count() == 1
+            last = dialog.locator(f'a[href="{app["policy"]}"]')
+            assert last.count() == 1
+            first = dialog.locator('.dialog-close')
+            first.focus()
+            page.keyboard.press('Shift+Tab')
+            assert last.evaluate('e => document.activeElement === e')
+            page.keyboard.press('Tab')
+            assert first.evaluate('e => document.activeElement === e')
+            page.keyboard.press('Escape')
+            page.wait_for_function('!document.querySelector("#app-dialog").open')
+            assert trigger.evaluate('e => document.activeElement === e')
+        page.get_by_role('button', name='About Save+', exact=True).click()
+        assert dialog.locator('h2').inner_text() == 'Save+'
+        dialog.locator('.dialog-close').click()
+        assert page.get_by_role('button', name='About Save+', exact=True).evaluate('e => document.activeElement === e')
+        print('App search, category recovery, five details dialogs, destinations and focus passed.', flush=True)
+
+        # Contact composition produces a correctly encoded message without sending it.
+        page.goto(f'{base_url}/contact.html', wait_until='domcontentloaded')
+        page.locator('#copyEmail').click()
+        page.wait_for_function('document.querySelector("#toast").textContent === "Email address copied."')
+        assert page.evaluate('navigator.clipboard.readText()') == 'support@allcreatormind.com'
+        page.locator('#contact-form button[type="submit"]').click()
+        assert not page.locator('#contact-message').evaluate('e => e.checkValidity()')
+        page.locator('#contact-app').select_option(label='GlowCalc')
+        page.locator('#contact-topic').select_option(label='Report an issue')
+        message = 'Calculator history & keyboard issue on Android 14.'
+        subject = 'GlowCalc — Report an issue'
+        page.locator('#contact-message').fill(message)
+        gmail = parse_qs(urlparse(page.locator('#gmail-link').get_attribute('href')).query)
+        assert gmail['to'] == ['support@allcreatormind.com']
+        assert gmail['su'] == [subject] and gmail['body'] == [message]
+        page.evaluate("""document.addEventListener('click', event => {
+            const link = event.target.closest('a[href^="mailto:"]');
+            if (link) { event.preventDefault(); window.composedEmail = link.href; }
+        }, {capture:true});""")
+        page.locator('#contact-form button[type="submit"]').click()
+        composed = urlparse(page.evaluate('window.composedEmail'))
+        assert composed.path == 'support@allcreatormind.com'
+        values = parse_qs(composed.query)
+        assert values['subject'] == [subject] and values['body'] == [message]
+        assert 'Continue in your email app' in page.locator('#contact-status').inner_text()
+        summary = page.locator('.faqs summary').first
+        summary.click()
+        assert page.locator('.faqs details').first.locator('p').is_visible()
+        summary.click()
+        assert not page.locator('.faqs details').first.locator('p').is_visible()
+
+        # The policy selector reaches each app's published policy and preserves its selection.
+        for app in catalog:
+            page.goto(f'{base_url}/privacy-policies.html', wait_until='domcontentloaded')
+            page.locator('#policy-select').select_option(app['policy'])
+            page.wait_for_url(f'**/{app["policy"]}')
+            assert page.locator('#policy-select').input_value() == app['policy']
+            assert app['name'] in page.title()
+        print('Clipboard, contact validation/composition, FAQ and five policy destinations passed.', flush=True)
+
+        for width in [1440, 768, 390, 320]:
+            page.set_viewport_size({'width': width, 'height': 1000})
+            page.goto(base_url, wait_until='domcontentloaded')
+            if width <= 760:
+                menu = page.get_by_role('button', name='Open navigation')
+                menu.click()
+                assert page.locator('#navigation').is_visible()
+                page.keyboard.press('Escape')
+                assert not page.locator('#navigation').is_visible()
+                assert menu.evaluate('e => document.activeElement === e')
+            for app in catalog:
+                page.locator(f'#app-{app["id"]} .app-art').click()
+                assert not page.evaluate('document.documentElement.scrollWidth > innerWidth'), (width, app['id'])
+                assert dialog.evaluate('e => {const r=e.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth}')
+                page.keyboard.press('Escape')
+            print(f'All app details fit {width}px.', flush=True)
+        for path in root.glob('*.html'):
+            page.goto(f'{base_url}/{path.name}', wait_until='domcontentloaded')
+            missing = page.locator('a[href^="#"]').evaluate_all("""links => links.map(a => a.getAttribute('href'))
+                .filter(href => href.length > 1 && !document.getElementById(href.slice(1)))""")
+            assert not missing, (path.name, missing)
+        assert not errors, errors
+        print('Shared mobile navigation, local section links and browser errors passed.', flush=True)
+        browser.close()
 finally:
     server.shutdown()
     server.server_close()

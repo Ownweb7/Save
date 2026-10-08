@@ -86,9 +86,10 @@
 
   const dialog = document.querySelector('#app-dialog');
   let dialogTrigger;
-  document.querySelectorAll('[data-app]').forEach(button => button.addEventListener('click', () => {
+  document.querySelectorAll('[data-app]').forEach(button => button.addEventListener('click', event => {
     const app = window.ODN_APPS.find(item => item.id === button.dataset.app);
     if (!app || !dialog) return;
+    if (button.matches('a')) event.preventDefault();
     dialogTrigger = button;
     // All values below come from the repository's app catalog, never user input.
     document.querySelector('#dialog-content').innerHTML = `
@@ -97,7 +98,7 @@
       <h2 class="dialog-title" id="dialog-title">${app.name}</h2>
       <p class="dialog-description">${app.desc}</p>
       <ul class="dialog-features">${app.features.map(feature => `<li>${feature}</li>`).join('')}</ul>
-      <div class="dialog-actions"><button class="btn btn-gold" data-try="${app.id}">Try the browser demo</button><a class="btn btn-ghost" href="${app.url}" target="_blank" rel="noopener">${app.id === 'will' ? 'Find on Google Play' : 'Get it on Google Play'} <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a><a href="${app.policy}">Read privacy policy</a></div>
+      <div class="dialog-actions"><a class="btn btn-gold" href="${app.url}" target="_blank" rel="noopener">${app.id === 'will' ? 'Find on Google Play' : 'Get it on Google Play'} <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a><a href="${app.policy}">Read privacy policy</a></div>
       <p class="dialog-note">By ODN &amp; Sons · Made with care in Hisar, India</p>`;
     dialog.returnValue = '';
     dialog.showModal();
@@ -123,7 +124,7 @@
   });
   dialog?.addEventListener('close', () => {
     document.body.classList.remove('dialog-open');
-    if (dialog.returnValue !== 'demo') dialogTrigger?.focus();
+    dialogTrigger?.focus();
   });
 
   document.querySelector('#policy-select')?.addEventListener('change', event => {

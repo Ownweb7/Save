@@ -50,8 +50,7 @@ try:
         page.wait_for_function("Math.abs(parseFloat(document.querySelector('.app-stage').style.getPropertyValue('--stage-turn'))) < .05")
         assert page.locator('.studio-hero').evaluate('e => e.offsetHeight') < 900
         assert page.locator('.studio-process').evaluate('e => e.offsetHeight') < 700
-        for selector in ['.lab-copy', '.philosophy-grid > div:first-child']:
-            assert page.locator(selector).evaluate('e => getComputedStyle(e).position') == 'static'
+        assert page.locator('.philosophy-grid > div:first-child').evaluate('e => getComputedStyle(e).position') == 'static'
         heading = page.locator('#apps .section-heading h2')
         heading.evaluate("e => scrollTo({top: e.getBoundingClientRect().top + scrollY - innerHeight * .82, behavior: 'instant'})")
         page.wait_for_function("parseFloat(document.querySelector('#apps .section-heading h2').style.getPropertyValue('--word-roll')) > 0")
@@ -106,7 +105,7 @@ try:
         assert page.locator('#motion-toggle').is_disabled()
         assert page.locator('.marquee-track').evaluate('e => getComputedStyle(e).animationName') == 'none'
         assert all(world.evaluate('(e, key) => parseFloat(e.style.getPropertyValue(key))', key) == 0 for key in world_vars)
-        # Every product preview leads to its actual catalog entry and working demo.
+        # Every product preview leads to its actual catalog entry and app details.
         catalog = page.evaluate('window.ODN_APPS')
         # The floating app links work with pointer and keyboard selection.
         assert world.locator('[data-world-app]').count() == 5
@@ -146,13 +145,21 @@ try:
             assert panel.get_attribute('aria-labelledby') == f'showcase-tab-{app_id}'
             assert page.locator('#showcase-name').inner_text() == app['name']
             assert page.locator('#showcase-store').get_attribute('href') == app['url']
-            assert page.locator('#showcase-try').get_attribute('data-try') == app_id
+            about = page.locator('#showcase-about')
+            assert about.get_attribute('data-app') == app_id
+            assert about.get_attribute('href') == f'#app-{app_id}'
             assert page.locator('[data-preview]:visible').count() == 1
             assert page.locator(f'[data-preview="{app_id}"]').is_visible()
-            page.locator('#showcase-try').focus()
+            about.focus()
             page.keyboard.press('Enter')
-            assert page.locator(f'#tab-{app_id}').get_attribute('aria-selected') == 'true'
-            page.wait_for_function(f"document.activeElement === document.querySelector('#tab-{app_id}')")
+            assert page.locator('#app-dialog').is_visible()
+            assert page.locator('#dialog-title').inner_text() == app['name']
+            page.evaluate("""window.detailsClosed = false;
+                document.querySelector('#app-dialog').addEventListener('close', () => {
+                    window.detailsClosed = true;
+                }, {once:true});""")
+            page.keyboard.press('Escape')
+            page.wait_for_function("window.detailsClosed && document.activeElement === document.querySelector('#showcase-about')")
         # Product selection works without a pointer, with one tab stop in the strip.
         page.locator('#showcase-tab-save').focus()
         for key, expected in [('ArrowRight', 'bond'), ('ArrowLeft', 'save'),
@@ -162,7 +169,7 @@ try:
             assert selected.get_attribute('aria-selected') == 'true'
             assert selected.evaluate('e => document.activeElement === e')
             assert showcase_tabs.locator('[tabindex="0"]').count() == 1
-        print('All five product previews, catalog links, demo entry points and keyboard tabs passed.', flush=True)
+        print('All five product previews, catalog links, app details and keyboard tabs passed.', flush=True)
         print('Reactive app stage and canvas, pause/resume, session preference and reduced motion passed.', flush=True)
         for width in [1440, 1024, 768, 600, 390, 320]:
             page.set_viewport_size({'width': width, 'height': 900})
@@ -172,6 +179,7 @@ try:
                 assert not page.evaluate('document.documentElement.scrollWidth > innerWidth'), (path.name, width)
                 assert page.locator('main').count() == 1
                 assert page.locator('h1').count() == 1
+                assert page.locator('.site-footer .footer-col a').count() == 6
                 if path.name == 'index.html':
                     for app in catalog:
                         page.locator(f'#showcase-tab-{app["id"]}').click()
@@ -189,9 +197,9 @@ try:
         page.set_viewport_size({'width': 390, 'height': 844})
         page.goto(base_url, wait_until='domcontentloaded')
         page.get_by_role('button', name='Open navigation').click()
-        page.locator('#navigation').get_by_role('link', name='Playground').click()
+        page.locator('#navigation').get_by_role('link', name='Our apps', exact=True).click()
         assert not page.locator('#navigation').is_visible()
-        assert page.locator('#playground').is_visible()
+        assert page.locator('#apps').is_visible()
         no_js = browser.new_page(java_script_enabled=False)
         no_js.emulate_media(reduced_motion='reduce')
         no_js.goto(base_url, wait_until='domcontentloaded')
