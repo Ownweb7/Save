@@ -12,13 +12,13 @@ The official publisher website for ODN & Sons, an independent mobile app studio 
 
 ## Website
 
-Plain HTML, CSS and vanilla JavaScript. No build step or runtime dependencies.
+Plain HTML, CSS and vanilla JavaScript, with no runtime dependencies. A dependency-free Node script generates the five app pages during deployment.
 
 - A cinematic homepage with original sci-fi artwork. Native scrolling moves from a full-screen sentinel into a visor close-up with working links to the app collection and studio. On mobile, the panoramic visor artwork sits above two full-width destination links. Portrait parallax, drifting embers, and a gold pointer halo respond to motion preferences.
 - Antique gold, charcoal surfaces, and locally hosted serif typography carry through the studio, support, and policy pages.
 - The header's **Background** submenu offers two thumbnail previews: War Sentinel and Anime Ravens. On mobile, open the navigation menu first. A choice updates the cinematic scenes and page backdrops, and is saved locally on the visitor's device across pages and visits. Returning visitors with retired Fantasy Portal, Battlefield, or Cyber Visor selections move to War Sentinel; Anime Eyes moves to Anime Ravens. The close-up artwork remains part of the two character themes' scrolling transitions.
 - The eye navigation opens separate Apps and Studio pages. The animated portal scene opens the Apps page; all five app links lead to dedicated pages, including without JavaScript. The Apps page includes compact, searchable cards with Google Play destinations.
-- Compact, filterable app cards with descriptions, feature chips, Google Play links and privacy policies. Each app has a shareable page with its description, features, preview, privacy policy, support link, and previous/next app navigation.
+- Compact, filterable app cards with descriptions, feature chips, Google Play links and privacy policies. Each app has a shareable page with a split gallery and information layout, Overview/Functions/Details tabs, original uploaded images, privacy policy, support link, and previous/next app navigation. Galleries offer category filters, arrows, keyboard and touch navigation, and a full-screen image viewer. Selecting a function displays its image.
 - Search by app name or feature, category filters, and a recoverable empty state.
 - Optional ambient audio synthesized locally with Web Audio. Sound starts only after an explicit click and pauses while the page is hidden. No audio downloads or autoplay.
 - Scroll and pointer effects respect reduced motion and the session-persistent motion control. All sections retain native wheel, touch and keyboard scrolling.
@@ -40,6 +40,10 @@ Plain HTML, CSS and vanilla JavaScript. No build step or runtime dependencies.
 | `*-privacy.html` | Individual app policies |
 | `terms-and-conditions.html` | Terms and conditions |
 | `apps.js` | App catalog used by search and page/policy navigation |
+| `app-pages.json` | App introductions, feature explanations, and image captions/categories |
+| `app-pages.css`, `app-pages.js` | App page layouts, accessible tabs, galleries, and full-screen viewer |
+| `scripts/build-app-pages.mjs` | Generates app page content from the catalog and uploaded images |
+| `App Images/` | Original uploaded screenshots/posters, organized by exact app name |
 | `main.js` | Shared interactions, app search, and legacy section-link redirects |
 | `styles.css` | Base layouts and shared component styles |
 | `studio.css` | Product preview and shared presentation |
@@ -65,17 +69,19 @@ Visit `http://localhost:3000`. An HTTP server enables more reliable browser feat
 
 ## Deploy
 
-The existing `vercel.json` serves this folder as a static site with clean URLs. No build command is needed. Follow the repository’s existing Git/Vercel deployment workflow.
+The existing `vercel.json` runs `node scripts/build-app-pages.mjs` and serves this folder as a static site with clean URLs. Follow the repository’s existing Git/Vercel deployment workflow. Generated HTML is also checked in, so the site can be served locally without running a build first.
 
 ## Update content
 
-When editing app information, keep the cards in `apps.html`, individual app pages, `apps.js`, and Studio page aligned. Keep store URLs and app-specific privacy links current. Company support is `support@allcreatormind.com`; individual policy contact details remain as originally published.
+Edit shared app information in `apps.js` and detailed copy in `app-pages.json`, then run `node scripts/build-app-pages.mjs`. The generator replaces the main content of each app page, preserving the shared header/footer and page metadata. Keep the cards in `apps.html`, page metadata, and Studio page aligned. Keep store URLs and app-specific privacy links current. Company support is `support@allcreatormind.com`; individual policy contact details remain as originally published.
+
+Upload PNG, JPG, WebP, or AVIF images into `App Images/<App Name>/` using the existing folder names. Numeric filename prefixes control display order. The next Vercel deployment automatically includes them; run the same build command to update local HTML. Add filename entries to `app-pages.json` for descriptive titles, function explanations, and categories. Unlisted images receive a filename-based caption. Originals are preserved and additional images load on demand. An empty folder uses the app's existing icon and brand artwork until screenshots are uploaded.
 
 Fonts are served locally as WOFF2 files with system fallbacks; their licenses are included in `fonts/`. No analytics, account system, or server-side message processing is added.
 
 ## Browser checks
 
-The regression checks cover cinematic navigation and responsive hit targets in portrait and landscape, opt-in sound, portal page navigation, all five product previews and their store/detail destinations, catalog-aligned feature chips, app search, keyboard navigation, legacy bookmark redirects, contact validation and email composition, clipboard support, FAQs, policy navigation, portrait parallax, phone composition and canvas, motion preferences, no-JavaScript content, and responsive layouts on every page. Phone previews are checked for all five apps at six widths.
+The regression checks cover cinematic navigation and responsive hit targets in portrait and landscape, opt-in sound, portal page navigation, all five app pages and their store/detail destinations, catalog-aligned feature chips, app search, keyboard navigation, legacy bookmark redirects, contact validation and email composition, clipboard support, FAQs, policy navigation, portrait parallax and canvas, motion preferences, no-JavaScript content, and responsive layouts on every page.
 
 With Python Playwright and Chromium available, run:
 
@@ -83,10 +89,13 @@ With Python Playwright and Chromium available, run:
 python tests/browser_smoke.py
 python tests/studio_smoke.py
 python tests/background_smoke.py
+python tests/app_gallery_smoke.py
 ```
 
 If needed, install the test tools with `python -m pip install playwright` and `python -m playwright install chromium`. They are only for testing; the website has no runtime dependencies.
 
 The wallpaper checks cover both themes, removal of retired choices, migration of saved preferences, keyboard selection, mobile and landscape layouts, dismissal and focus restoration, persistence across all pages and reloads, reduced motion, slow or failed downloads, and unavailable storage. Only the most recent selection is applied when downloads overlap; a failed download preserves the previous wallpaper.
+
+The app gallery checks cover original image paths and lazy loading, function links, accessible tabs, image categories, keyboard navigation, full-screen zoom and focus restoration, touch swipes, mobile panning, slow or failed image requests, and access to every original image without JavaScript. All five layouts and viewers are checked at six desktop, tablet, mobile, and landscape sizes.
 
 The background caps pixel density and frame rate, pauses while the tab is hidden, and falls back to a still composition when motion is disabled. All content and navigation remain available without animations. The motion preference is stored only in session storage; the wallpaper ID uses local storage (`odn-background-theme`). Contact messages are never stored on the website.

@@ -132,18 +132,17 @@ try:
         for app in catalog:
             assert page.locator(f'#app-{app["id"]} .app-feature-list li').all_text_contents() == app['features']
         page.goto(f'{base_url}/save-plus.html', wait_until='domcontentloaded')
-        # Pointer response resets when the system disables motion.
+        # Uploaded image navigation stays available when visual motion is disabled.
         page.emulate_media(reduced_motion='no-preference')
         page.wait_for_function("document.documentElement.dataset.motion === 'on'")
-        stage = page.locator('.app-stage')
-        stage.scroll_into_view_if_needed()
-        bounds = stage.bounding_box()
-        page.mouse.move(bounds['x']+bounds['width']*.85,bounds['y']+bounds['height']*.65)
-        page.wait_for_function("parseFloat(document.querySelector('.app-stage').style.getPropertyValue('--stage-turn')) > .5")
+        gallery = page.locator('.gallery-viewport')
+        gallery.focus()
+        page.keyboard.press('ArrowRight')
+        page.wait_for_function("document.querySelector('.gallery-caption h2').textContent === 'Your monthly plan'")
         page.emulate_media(reduced_motion='reduce')
         page.wait_for_function("document.documentElement.dataset.motion === 'off'")
-        assert stage.evaluate("e=>parseFloat(e.style.getPropertyValue('--stage-turn'))") == 0
-        print('Catalog features and dedicated app page pointer response passed.',flush=True)
+        assert page.locator('.gallery-slide:not([hidden])').evaluate('e=>e.getAnimations().every(a=>a.playState!=="running")')
+        print('Catalog features, app image navigation and reduced motion passed.',flush=True)
 
         for width in [1440, 1024, 768, 600, 390, 320]:
             page.set_viewport_size({'width': width, 'height': 900})
@@ -155,8 +154,8 @@ try:
                 assert page.locator('h1').count() == 1
                 assert page.locator('.site-footer').count() == (0 if path.name=='index.html' else 1)
                 if path.name in [app['page'] for app in catalog]:
-                    assert page.locator('[data-preview]').count() == 1
-                    assert page.locator('[data-preview]').evaluate("""e=>e.offsetTop+e.offsetHeight<=e.closest('.phone-screen').querySelector('.phone-home').offsetTop"""),(path.name,width)
+                    assert page.locator('.product-gallery').count() == 1
+                    assert page.locator('.product-gallery').evaluate('e=>{const b=e.getBoundingClientRect();return b.left>=0 && b.right<=innerWidth}'),(path.name,width)
             print(f'All 16 pages fit {width}px.',flush=True)
         page.set_viewport_size({'width':390,'height':844})
         page.goto(base_url,wait_until='domcontentloaded')

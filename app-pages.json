@@ -1,0 +1,69 @@
+{
+  "save": {
+    "intro": "A little closer to what matters.",
+    "featureNotes": ["Give each goal a target and a place in your plan.", "Follow your deposits and see how far you have come.", "Keep your personal goals at the centre of the experience."],
+    "screens": {
+      "01-goals.png": ["Saving goals", "Set targets for the things you care about and see each goal's balance and progress together.", "Planning"],
+      "02-monthly-plan.png": ["Your monthly plan", "See what to save this month and which goals need your attention.", "Planning"],
+      "03-what-if-planner.png": ["What-if planning", "Try a different monthly saving amount and explore how it changes your finish date.", "Planning"],
+      "04-progress-charts.png": ["Progress, made visible", "See your saving history in cumulative and monthly charts.", "Progress"],
+      "05-monthly-top-up.png": ["Monthly top-ups", "Set a top-up amount and a day to help make saving a regular habit.", "Planning"],
+      "06-saving-challenges.png": ["Saving challenges", "Find a rhythm with challenges, from weekly saving to a no-spend month.", "Progress"],
+      "07-activity-history.png": ["Every deposit, together", "Review, filter and edit saving entries across your goals.", "Progress"],
+      "08-dark-theme.png": ["A calmer view", "Switch to a dark appearance while keeping your goals and progress in view.", "Appearance"]
+    }
+  },
+  "bond": {
+    "intro": "Make room for real connection.",
+    "featureNotes": ["Choose a duration and put distracting apps on pause.", "Make space for family time without an internet connection.", "Get started without creating an account or seeing ads."],
+    "functions": [
+      ["Set a focus session", "Choose how long you want to put distractions aside and be present."],
+      ["Keep the essentials", "Phone, Messages and Camera remain available during your session."],
+      ["Be present, offline", "Use Bond Time without internet, accounts or ads."]
+    ],
+    "screens": {}
+  },
+  "will": {
+    "intro": "A moment to choose differently.",
+    "featureNotes": ["Add a pause before opening tempting food-ordering apps.", "Give each impulse time to become a considered choice.", "Keep your habit tracking and reflections on your device."],
+    "screens": {
+      "01-pause-800x1400.png": ["Pause before you order", "Protect selected apps and give an impulse a moment to pass.", "App control"],
+      "02-unlock-800x1400.png": ["Intentional unlocking", "Answer a quiz, wait through a cooldown or use a key for a short unlock.", "App control"],
+      "03-home-food-800x1400.png": ["Food closer to home", "Find ideas for a craving and keep a list of the food already in your fridge.", "Daily habits"],
+      "04-streak-800x1400.png": ["Build your streak", "Log days without impulse orders and follow your next milestone.", "Progress"],
+      "05-savings-800x1400.png": ["See your savings", "Record what you chose not to spend, with custom amounts and notes.", "Progress"],
+      "06-orders-avoided-800x1400.png": ["Every skipped order", "Log the impulse orders you resist and follow your progress over time.", "Progress"],
+      "07-craving-note-800x1400.png": ["Name the urge", "Choose a trigger or write a short reflection before continuing to the quiz.", "Daily habits"],
+      "08-difficulty-800x1400.png": ["Choose your challenge", "Set the quiz difficulty to match the amount of friction you want.", "App control"]
+    }
+  },
+  "glow": {
+    "intro": "Useful numbers. A little personality.",
+    "featureNotes": ["Move between everyday maths, scientific functions and tax calculations.", "Choose colours and appearance settings that feel like you.", "Calculate without an internet connection or advertising."],
+    "screens": {
+      "01-basic-calculator.png": ["Everyday calculations", "Use a familiar calculator with clear keys and a subtle glow.", "Calculate"],
+      "02-scientific-mode.png": ["Scientific mode", "Work with trigonometry, powers, roots and logarithms from one keypad.", "Calculate"],
+      "03-tax-calculator.png": ["Tax, with a breakdown", "Add or remove tax and see the split, including India's CGST and SGST.", "Calculate"],
+      "04-make-it-yours.png": ["Find your colour", "Choose a glow colour, try a gradient or let the colour change at random.", "Personalise"],
+      "05-two-key-shapes.png": ["Two key shapes", "Switch between round keys and crisp, cut-corner squares.", "Personalise"],
+      "06-appearance.png": ["Light, dark or automatic", "Pick an appearance or let GlowCalc follow your device's theme.", "Personalise"],
+      "07-calculation-history.png": ["Calculation history", "Revisit past calculations and tap a result to use it again.", "Everyday use"],
+      "08-meet-your-mood-face.png": ["Meet your mood face", "A small character reacts as you calculate, adding a little joy to everyday maths.", "Everyday use"]
+    }
+  },
+  "clock": {
+    "intro": "Wake up. Unlock your day.",
+    "featureNotes": ["Set alarms, run timers and use a stopwatch in one app.", "Choose a clock style, colours and sounds to suit your day.", "Use your time tools offline, without accounts or analytics."],
+    "upgradeNote": "Math lock, analog and digital faces are included. Additional alarm locks, clock faces, colours and sounds are available with Premium; see the app's listing for current options.",
+    "screens": {
+      "01.png": ["Your everyday alarms", "Create alarms for any days of the week and use them offline.", "Wake up"],
+      "02.png": ["Ready when it's time", "A full-screen alarm appears over the lock screen with snooze and stop controls.", "Wake up"],
+      "03.png": ["Solve it to stop it", "Use the math lock to solve a challenge before dismissing an alarm.", "Wake up"],
+      "04.png": ["A more intentional wake-up", "Explore math, pattern, gesture and typing locks. Additional lock methods require Premium.", "Wake up"],
+      "05.png": ["A face that feels like you", "Choose analog or digital faces, or explore additional styles with Premium.", "Your style"],
+      "06.png": ["Time on your home screen", "Bring a clock face to your home screen with a widget. More face styles are available with Premium.", "Your style"],
+      "07.png": ["Several timers, together", "Run multiple timers, use quick presets and see which timer is done in its notification.", "Time tools"],
+      "08.png": ["The full set", "Premium brings additional clock faces, tunes, unlock methods and appearance options.", "Your style"]
+    }
+  }
+}
