@@ -8,8 +8,7 @@
 
   const themes = [
     {id:'war', name:'War Sentinel', note:'Armored frontier', image:'scifi-sentinel', detail:'scifi-visor', kind:'character', eyes:[.255,.745,.417]},
-    {id:'anime', name:'Anime Ravens', note:'The original artwork', image:'studio-ravens', detail:'studio-eyes', kind:'character', eyes:[.269,.776,.442]},
-    {id:'fantasy', name:'Fantasy Portal', note:'The moonlit sanctuary', image:'fantasy-portal', kind:'landscape', eyes:[.30,.70,.46]}
+    {id:'anime', name:'Anime Ravens', note:'The original artwork', image:'studio-ravens', detail:'studio-eyes', kind:'character', eyes:[.269,.776,.442]}
   ];
   const storageKey = 'odn-background-theme';
   const reduced = matchMedia('(prefers-reduced-motion:reduce)');
@@ -137,7 +136,7 @@
   try {
     const previous = localStorage.getItem(storageKey);
     // Keep returning visitors in the same visual family after retiring themes.
-    saved = previous === 'scifi' || previous === 'battle' ? 'war' : previous === 'eyes' ? 'anime' : previous;
+    saved = ['scifi', 'battle', 'fantasy'].includes(previous) ? 'war' : previous === 'eyes' ? 'anime' : previous;
     if (saved !== previous) localStorage.setItem(storageKey, saved);
   } catch { /* Switching still works without storage. */ }
   choose(themes.find(theme => theme.id === saved) || themes[0], false);

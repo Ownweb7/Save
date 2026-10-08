@@ -19,7 +19,6 @@ base_url = f'http://127.0.0.1:{server.server_port}'
 themes = [
     ('war', 'War Sentinel', 'scifi-sentinel', 'scifi-visor'),
     ('anime', 'Anime Ravens', 'studio-ravens', 'studio-eyes'),
-    ('fantasy', 'Fantasy Portal', 'fantasy-portal', 'fantasy-portal'),
 ]
 try:
     with sync_playwright() as p:
@@ -43,7 +42,8 @@ try:
         selected('war')
         open_picker()
         expect(page.get_by_role('radio', name='War Sentinel')).to_be_focused()
-        assert page.get_by_role('radio').count() == 3
+        assert page.get_by_role('radio').count() == 2
+        assert page.get_by_role('radio', name='Fantasy Portal').count() == 0
         assert page.get_by_role('radio', name='Battlefield').count() == 0
         assert page.get_by_role('radio', name='Cyber Visor').count() == 0
         assert page.get_by_role('radio', name='Anime Eyes').count() == 0
@@ -54,25 +54,25 @@ try:
             expect(page.locator('.eyes-scene img')).to_have_attribute('src', f'art/{detail}.webp')
             assert page.locator('.portrait-image,.eyes-scene img').evaluate_all('images=>images.every(i=>i.complete && i.naturalWidth>1000)')
         page.keyboard.press('ArrowLeft')
-        selected('anime')
+        selected('war')
         page.keyboard.press('ArrowRight')
-        selected('fantasy')
+        selected('anime')
         page.keyboard.press('Escape')
         expect(page.locator('#background-panel')).to_be_hidden()
         expect(page.locator('#background-toggle')).to_be_focused()
         page.reload(wait_until='networkidle')
-        selected('fantasy')
+        selected('anime')
         for path, selector in [('apps.html','.portal-landscape'), ('about.html','.studio-backdrop img')]:
             page.goto(f'{base_url}/{path}', wait_until='networkidle')
-            selected('fantasy')
-            expect(page.locator(selector)).to_have_attribute('src', 'art/fantasy-portal.webp')
+            selected('anime')
+            expect(page.locator(selector)).to_have_attribute('src', 'art/studio-ravens.webp')
         for path in root.glob('*.html'):
             page.goto(f'{base_url}/{path.name}', wait_until='domcontentloaded')
-            selected('fantasy')
+            selected('anime')
             assert page.locator('#background-toggle').count() == 1, path
             if path.name not in ['index.html','apps.html','about.html']:
-                assert 'fantasy-portal.webp' in page.locator('.background-wallpaper').evaluate('e=>getComputedStyle(e).backgroundImage'), path
-        print('Three wallpapers, retired choices removed, keyboard selection, reload and all-page persistence passed.', flush=True)
+                assert 'studio-ravens.webp' in page.locator('.background-wallpaper').evaluate('e=>getComputedStyle(e).backgroundImage'), path
+        print('Two wallpapers, retired choices removed, keyboard selection, reload and all-page persistence passed.', flush=True)
 
         page.goto(base_url, wait_until='networkidle')
         for width, height in [(1440,900),(1100,844),(1024,844),(1000,844),(768,844),(390,844),(320,667),(844,390)]:
@@ -114,32 +114,32 @@ try:
         page = browser.new_page(viewport={'width':1440, 'height':900})
         page.on('pageerror', lambda error: errors.append(str(error)))
         pending = []
-        page.route('**/art/fantasy-portal.webp', lambda route: pending.append(route))
+        page.route('**/art/studio-ravens.webp', lambda route: pending.append(route))
         page.goto(base_url, wait_until='networkidle')
         open_picker()
-        page.get_by_role('radio', name='Fantasy Portal').check()
-        expect(page.locator('#background-status')).to_contain_text('Loading Fantasy Portal')
         page.get_by_role('radio', name='Anime Ravens').check()
-        selected('anime')
+        expect(page.locator('#background-status')).to_contain_text('Loading Anime Ravens')
+        page.get_by_role('radio', name='War Sentinel').check()
+        selected('war')
         assert pending
-        with page.expect_response('**/art/fantasy-portal.webp'):
+        with page.expect_response('**/art/studio-ravens.webp'):
             pending.pop().continue_()
         page.wait_for_load_state('networkidle')
-        selected('anime')
-        # Retry the portal in a fresh context so a previous image cannot satisfy the request from cache.
+        selected('war')
+        # Retry the artwork in a fresh context so a previous image cannot satisfy the request from cache.
         page.close()
         page = browser.new_page(viewport={'width':1440, 'height':900})
         page.on('pageerror', lambda error: errors.append(str(error)))
-        page.add_init_script("localStorage.setItem('odn-background-theme','anime')")
-        page.route('**/art/fantasy-portal.webp', lambda route: route.abort())
+        page.add_init_script("localStorage.setItem('odn-background-theme','war')")
+        page.route('**/art/studio-ravens.webp', lambda route: route.abort())
         page.goto(base_url, wait_until='networkidle')
-        selected('anime')
+        selected('war')
         open_picker()
-        page.get_by_role('radio', name='Fantasy Portal').click()
-        expect(page.locator('#background-status')).to_contain_text('Couldn’t load Fantasy Portal')
-        selected('anime')
-        expect(page.locator('.portrait-image')).to_have_attribute('src', 'art/studio-ravens.webp')
-        assert page.evaluate("localStorage.getItem('odn-background-theme')") == 'anime'
+        page.get_by_role('radio', name='Anime Ravens').click()
+        expect(page.locator('#background-status')).to_contain_text('Couldn’t load Anime Ravens')
+        selected('war')
+        expect(page.locator('.portrait-image')).to_have_attribute('src', 'art/scifi-sentinel.webp')
+        assert page.evaluate("localStorage.getItem('odn-background-theme')") == 'war'
         print('Slow-download race and failed-download recovery passed.', flush=True)
 
         page.close()
@@ -158,7 +158,7 @@ try:
         page.goto(base_url, wait_until='networkidle')
         selected('war')
         page.close()
-        for retired, replacement in [('scifi', 'war'), ('eyes', 'anime'), ('battle', 'war')]:
+        for retired, replacement in [('scifi', 'war'), ('eyes', 'anime'), ('battle', 'war'), ('fantasy', 'war')]:
             page = browser.new_page()
             page.on('pageerror', lambda error: errors.append(str(error)))
             page.goto(base_url, wait_until='networkidle')

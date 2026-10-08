@@ -26,13 +26,7 @@ em{color:var(--gold);font-style:italic}
 @keyframes portrait-breathe{to{transform:scale(1.035)}}
 .eyes-scene{opacity:var(--eyes-opacity,0);transform:translate(calc(var(--portrait-x,0px) * .3),calc(var(--portrait-y,0px) * .3)) scale(var(--eyes-scale,1.12));filter:brightness(.82) saturate(.72)}
 .eyes-scene picture{display:block;width:100%;height:100%}.eyes-scene img{object-position:50% 50%}
-/* Fantasy stays on one image, with the camera aimed through the central arch. */
-html[data-background=fantasy] .portrait-scene{transform-origin:50% 34%}
-html[data-background=fantasy] .portrait-image{animation:none}
-html[data-background=fantasy] .eyes-scene{display:none}
-@media(min-width:901px){html[data-background=fantasy] .eye-portal{top:64%}}
 .cinema-shade{position:absolute;inset:0;background:linear-gradient(180deg,#05060620,transparent 48%,#050707a3 86%,#090a0ae8),linear-gradient(90deg,#05070732,transparent 60%);pointer-events:none}
-html[data-background=fantasy] .cinema-shade::after{content:'';position:absolute;inset:0;background:linear-gradient(#040711a6,transparent 28%,#04071133 60%,#04071180);opacity:var(--portal-depth,0)}
 .cinema-grain{position:absolute;inset:0;opacity:.045;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23fff' filter='url(%23n)' opacity='.8' d='M0 0h160v160H0z'/%3E%3C/svg%3E");pointer-events:none}
 .cinema-opening{position:absolute;left:0;right:0;bottom:118px;opacity:var(--opening-opacity,1);transform:translateY(var(--opening-lift,0px));will-change:transform,opacity}
 .cinema-kicker{display:block;font:9px/1.7 var(--sans);letter-spacing:3px;color:#d7caa7;margin-bottom:18px}
