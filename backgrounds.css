@@ -13,10 +13,10 @@
 .background-close{display:grid;place-items:center;flex:none;width:44px;height:44px;padding:10px;border:1px solid #c9b78030;border-radius:50%;background:transparent;color:#dfcf9f;cursor:pointer}
 .background-close svg{width:20px;height:20px}
 .background-close:hover{background:#c9b78012}
-.background-grid{border:0;padding:0;margin:0;min-width:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px 10px}
+.background-grid{border:0;padding:0;margin:0;min-width:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 12px}
 .background-choice{position:relative;display:flex;flex-direction:column;min-width:0;cursor:pointer}
 .background-choice input{position:absolute;inset:0;width:100%;height:100%;opacity:0;margin:0;cursor:pointer;z-index:1}
-.background-preview{position:relative;display:block;overflow:hidden;border:1px solid #a79b7c35;border-radius:6px;aspect-ratio:1.5;background:#090b0b;transition:border-color .2s,box-shadow .2s}
+.background-preview{position:relative;display:block;overflow:hidden;border:1px solid #a79b7c35;border-radius:6px;aspect-ratio:1.8;background:#090b0b;transition:border-color .2s,box-shadow .2s}
 .background-preview img{display:block;width:100%;height:100%;object-fit:cover;opacity:.76;transition:opacity .2s,scale .3s}
 .background-check{position:absolute;right:6px;bottom:6px;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#e0cc91;color:#151810;font:600 13px/1 var(--sans);opacity:0}
 .background-name{font:400 15px/1.2 var(--serif);color:#c5bca5;margin-top:9px}
@@ -29,7 +29,7 @@
 .background-choice input:focus-visible+.background-preview{outline:2px solid #f5e4b5;outline-offset:4px}
 .background-status{border-top:1px solid #c9b78026;padding-top:14px;margin:18px 0 0;font:10px/1.7 var(--sans);color:#aea58e;min-height:32px}
 .background-wallpaper{position:fixed;inset:0;z-index:-2;pointer-events:none;background-position:center top;background-size:cover;opacity:.12;mask-image:linear-gradient(#000, #000a 55%,transparent)}
-html[data-background-kind=character] .portal-emblem,html[data-background-kind=detail] .portal-emblem,html[data-background-kind=character] .portal-radiance,html[data-background-kind=detail] .portal-radiance{visibility:hidden}
+html[data-background-kind=character] .portal-emblem,html[data-background-kind=character] .portal-radiance,html[data-background=battle] .portal-emblem,html[data-background=battle] .portal-radiance{visibility:hidden}
 @media(max-width:1200px) and (min-width:1001px){.nav-links{gap:16px;font-size:10px;letter-spacing:1.2px}.nav-links .nav-contact{margin-left:0}.nav-contact span{margin-left:8px}}
 @media(max-width:1000px){
  .nav{min-height:68px}
@@ -41,6 +41,10 @@ html[data-background-kind=character] .portal-emblem,html[data-background-kind=de
  .nav-links .nav-contact{margin-left:0;padding:9px 0;border:0;background:transparent}
  .nav-links .sound-toggle{align-self:flex-start;font-size:13px}
  .background-panel{position:fixed;top:80px;right:12px;max-height:calc(100dvh - 96px)}
+}
+@media(max-width:760px){
+ html[data-background=battle] :is(.portrait-image,.portal-landscape,.studio-backdrop img){object-position:60% 35%}
+ html[data-background=battle] .background-wallpaper{background-position:60% top}
 }
 @media(max-width:480px){
  .background-panel{width:calc(100vw - 24px);padding:18px}

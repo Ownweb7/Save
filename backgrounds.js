@@ -9,10 +9,8 @@
   const themes = [
     {id:'war', name:'War Sentinel', note:'Armored frontier', image:'scifi-sentinel', detail:'scifi-visor', kind:'character', eyes:[.255,.745,.417]},
     {id:'anime', name:'Anime Ravens', note:'The original artwork', image:'studio-ravens', detail:'studio-eyes', kind:'character', eyes:[.269,.776,.442]},
-    {id:'battle', name:'Battlefield', note:'Beyond the jump gate', image:'scifi-gate', kind:'landscape', eyes:[.30,.70,.46]},
-    {id:'scifi', name:'Cyber Visor', note:'A futuristic perspective', image:'scifi-visor', kind:'detail', eyes:[.255,.745,.417]},
-    {id:'fantasy', name:'Fantasy Portal', note:'A world of possibility', image:'studio-portal', kind:'landscape', eyes:[.30,.70,.46]},
-    {id:'eyes', name:'Anime Eyes', note:'A closer look', image:'studio-eyes', kind:'detail', eyes:[.269,.776,.442]}
+    {id:'battle', name:'Battlefield', note:'Giants in the storm', image:'battlefield', kind:'landscape', eyes:[.30,.70,.46]},
+    {id:'fantasy', name:'Fantasy Portal', note:'The moonlit sanctuary', image:'fantasy-portal', kind:'landscape', eyes:[.30,.70,.46]}
   ];
   const storageKey = 'odn-background-theme';
   const reduced = matchMedia('(prefers-reduced-motion:reduce)');
@@ -35,7 +33,7 @@
   panel.innerHTML = `<div class="background-heading"><div><span class="background-kicker">MAKE YOURSELF AT HOME</span><h2 id="background-title">Choose your background</h2></div><button class="background-close" type="button" aria-label="Close background menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"/></svg></button></div>
     <fieldset class="background-grid"><legend class="sr-only">Wallpaper themes</legend>${themes.map(theme => `
       <label class="background-choice"><input type="radio" name="background" value="${theme.id}" aria-label="${theme.name}"${theme.id === 'war' ? ' checked' : ''}><span class="background-preview"><img src="art/thumbnails/${theme.image}.webp" alt="" width="320" height="180" loading="lazy"><span class="background-check" aria-hidden="true">✓</span></span><span class="background-name">${theme.name}</span><span class="background-note">${theme.note}</span></label>`).join('')}
-    </fieldset><p id="background-status" class="background-status" role="status" aria-live="polite">Six worlds. Pick your view.</p>`;
+    </fieldset><p id="background-status" class="background-status" role="status" aria-live="polite">Pick your view.</p>`;
   header.append(panel);
   const status = panel.querySelector('#background-status');
   const choices = [...panel.querySelectorAll('input')];
@@ -117,7 +115,7 @@
       if (remember) {
         try { localStorage.setItem(storageKey, theme.id); } catch { saved = false; }
       }
-      status.textContent = `${theme.name} selected. ${remember ? (saved ? 'Your choice stays on this device.' : 'Storage unavailable; applied to this page.') : 'Six worlds. Pick your view.'}`;
+      status.textContent = `${theme.name} selected. ${remember ? (saved ? 'Your choice stays on this device.' : 'Storage unavailable; applied to this page.') : 'Pick your view.'}`;
       if (remember && !reduced.matches && root.dataset.motion !== 'off') {
         animations = [...images, eyeImage, wallpaper].filter(Boolean).map(element => element.animate(
           [{opacity:0}, {opacity:getComputedStyle(element).opacity}], {duration:420, easing:'ease-out'}
@@ -137,6 +135,11 @@
     if (theme) choose(theme);
   });
   let saved;
-  try { saved = localStorage.getItem(storageKey); } catch { /* Switching still works without storage. */ }
+  try {
+    const previous = localStorage.getItem(storageKey);
+    // Keep returning visitors in the same visual family after retiring the close-up themes.
+    saved = previous === 'scifi' ? 'war' : previous === 'eyes' ? 'anime' : previous;
+    if (saved !== previous) localStorage.setItem(storageKey, saved);
+  } catch { /* Switching still works without storage. */ }
   choose(themes.find(theme => theme.id === saved) || themes[0], false);
 })();

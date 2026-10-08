@@ -19,10 +19,8 @@ base_url = f'http://127.0.0.1:{server.server_port}'
 themes = [
     ('war', 'War Sentinel', 'scifi-sentinel', 'scifi-visor'),
     ('anime', 'Anime Ravens', 'studio-ravens', 'studio-eyes'),
-    ('battle', 'Battlefield', 'scifi-gate', 'scifi-gate'),
-    ('scifi', 'Cyber Visor', 'scifi-visor', 'scifi-visor'),
-    ('fantasy', 'Fantasy Portal', 'studio-portal', 'studio-portal'),
-    ('eyes', 'Anime Eyes', 'studio-eyes', 'studio-eyes'),
+    ('battle', 'Battlefield', 'battlefield', 'battlefield'),
+    ('fantasy', 'Fantasy Portal', 'fantasy-portal', 'fantasy-portal'),
 ]
 try:
     with sync_playwright() as p:
@@ -46,7 +44,9 @@ try:
         selected('war')
         open_picker()
         expect(page.get_by_role('radio', name='War Sentinel')).to_be_focused()
-        assert page.get_by_role('radio').count() == 6
+        assert page.get_by_role('radio').count() == 4
+        assert page.get_by_role('radio', name='Cyber Visor').count() == 0
+        assert page.get_by_role('radio', name='Anime Eyes').count() == 0
         for theme_id, name, hero, detail in themes:
             page.get_by_role('radio', name=name).check()
             selected(theme_id)
@@ -54,6 +54,8 @@ try:
             expect(page.locator('.eyes-scene img')).to_have_attribute('src', f'art/{detail}.webp')
             assert page.locator('.portrait-image,.eyes-scene img').evaluate_all('images=>images.every(i=>i.complete && i.naturalWidth>1000)')
         page.keyboard.press('ArrowLeft')
+        selected('battle')
+        page.keyboard.press('ArrowRight')
         selected('fantasy')
         page.keyboard.press('Escape')
         expect(page.locator('#background-panel')).to_be_hidden()
@@ -63,14 +65,14 @@ try:
         for path, selector in [('apps.html','.portal-landscape'), ('about.html','.studio-backdrop img')]:
             page.goto(f'{base_url}/{path}', wait_until='networkidle')
             selected('fantasy')
-            expect(page.locator(selector)).to_have_attribute('src', 'art/studio-portal.webp')
+            expect(page.locator(selector)).to_have_attribute('src', 'art/fantasy-portal.webp')
         for path in root.glob('*.html'):
             page.goto(f'{base_url}/{path.name}', wait_until='domcontentloaded')
             selected('fantasy')
             assert page.locator('#background-toggle').count() == 1, path
             if path.name not in ['index.html','apps.html','about.html']:
-                assert 'studio-portal.webp' in page.locator('.background-wallpaper').evaluate('e=>getComputedStyle(e).backgroundImage'), path
-        print('All six wallpapers, keyboard selection, reload and all-page persistence passed.', flush=True)
+                assert 'fantasy-portal.webp' in page.locator('.background-wallpaper').evaluate('e=>getComputedStyle(e).backgroundImage'), path
+        print('Four wallpapers, retired choices removed, keyboard selection, reload and all-page persistence passed.', flush=True)
 
         page.goto(base_url, wait_until='networkidle')
         for width, height in [(1440,900),(1100,844),(1024,844),(1000,844),(768,844),(390,844),(320,667),(844,390)]:
@@ -79,8 +81,8 @@ try:
             assert page.locator('#background-panel').evaluate('e=>{const b=e.getBoundingClientRect();return b.left>=0 && b.right<=innerWidth && b.top>=60 && b.bottom<=innerHeight}'), (width,height)
             if width <= 1000:
                 expect(page.locator('#navigation')).not_to_have_class('nav-links open')
-            page.get_by_role('radio', name='Anime Eyes').check()
-            selected('eyes')
+            page.get_by_role('radio', name='Anime Ravens').check()
+            selected('anime')
             assert page.locator('html').evaluate('e=>e.scrollWidth <= innerWidth'), width
             page.keyboard.press('Escape')
             expect(page.locator('.menu-btn' if width <= 1000 else '#background-toggle')).to_be_focused()
@@ -112,24 +114,24 @@ try:
         page = browser.new_page(viewport={'width':1440, 'height':900})
         page.on('pageerror', lambda error: errors.append(str(error)))
         pending = []
-        page.route('**/art/studio-portal.webp', lambda route: pending.append(route))
+        page.route('**/art/fantasy-portal.webp', lambda route: pending.append(route))
         page.goto(base_url, wait_until='networkidle')
         open_picker()
         page.get_by_role('radio', name='Fantasy Portal').check()
         expect(page.locator('#background-status')).to_contain_text('Loading Fantasy Portal')
-        page.get_by_role('radio', name='Anime Eyes').check()
-        selected('eyes')
+        page.get_by_role('radio', name='Anime Ravens').check()
+        selected('anime')
         assert pending
-        with page.expect_response('**/art/studio-portal.webp'):
+        with page.expect_response('**/art/fantasy-portal.webp'):
             pending.pop().continue_()
         page.wait_for_load_state('networkidle')
-        selected('eyes')
-        page.route('**/art/scifi-gate.webp', lambda route: route.abort())
+        selected('anime')
+        page.route('**/art/battlefield.webp', lambda route: route.abort())
         page.get_by_role('radio', name='Battlefield').click()
         expect(page.locator('#background-status')).to_contain_text('Couldn’t load Battlefield')
-        selected('eyes')
-        expect(page.locator('.portrait-image')).to_have_attribute('src', 'art/studio-eyes.webp')
-        assert page.evaluate("localStorage.getItem('odn-background-theme')") == 'eyes'
+        selected('anime')
+        expect(page.locator('.portrait-image')).to_have_attribute('src', 'art/studio-ravens.webp')
+        assert page.evaluate("localStorage.getItem('odn-background-theme')") == 'anime'
         print('Slow-download race and failed-download recovery passed.', flush=True)
 
         page.close()
@@ -147,8 +149,18 @@ try:
         page.add_init_script("localStorage.setItem('odn-background-theme','unknown-theme')")
         page.goto(base_url, wait_until='networkidle')
         selected('war')
+        page.close()
+        for retired, replacement in [('scifi', 'war'), ('eyes', 'anime')]:
+            page = browser.new_page()
+            page.on('pageerror', lambda error: errors.append(str(error)))
+            page.goto(base_url, wait_until='networkidle')
+            page.evaluate('(id)=>localStorage.setItem("odn-background-theme",id)', retired)
+            page.reload(wait_until='networkidle')
+            selected(replacement)
+            assert page.evaluate('localStorage.getItem("odn-background-theme")') == replacement
+            page.close()
         assert not errors, errors
-        print('Blocked storage and invalid preference fallback passed; no browser errors.', flush=True)
+        print('Blocked storage, invalid preference fallback and retired-theme migration passed; no browser errors.', flush=True)
         browser.close()
 finally:
     server.shutdown()
