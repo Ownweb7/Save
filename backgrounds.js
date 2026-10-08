@@ -35,7 +35,7 @@
   header.append(panel);
   const status = panel.querySelector('#background-status');
   const choices = [...panel.querySelectorAll('input')];
-  const images = [...document.querySelectorAll('.portrait-image,.portal-landscape,.studio-backdrop img')];
+  const images = [...document.querySelectorAll('.portrait-image,.portal-landscape,.studio-backdrop img,.collection-backdrop img')];
   const eyeImage = document.querySelector('.eyes-scene img');
   let wallpaper;
   if (!images.length) {

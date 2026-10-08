@@ -17,8 +17,8 @@ Plain HTML, CSS and vanilla JavaScript, with no runtime dependencies. A dependen
 - A cinematic homepage with original sci-fi artwork. Native scrolling moves from a full-screen sentinel into a visor close-up with working links to the app collection and studio. On mobile, the panoramic visor artwork sits above two full-width destination links. Portrait parallax, drifting embers, and a gold pointer halo respond to motion preferences.
 - Antique gold, charcoal surfaces, and locally hosted serif typography carry through the studio, support, and policy pages.
 - The header's **Background** submenu offers two thumbnail previews: War Sentinel and Anime Ravens. On mobile, open the navigation menu first. A choice updates the cinematic scenes and page backdrops, and is saved locally on the visitor's device across pages and visits. Returning visitors with retired Fantasy Portal, Battlefield, or Cyber Visor selections move to War Sentinel; Anime Eyes moves to Anime Ravens. The close-up artwork remains part of the two character themes' scrolling transitions.
-- The eye navigation opens separate Apps and Studio pages. The animated portal scene opens the Apps page; all five app links lead to dedicated pages, including without JavaScript. The Apps page includes compact, searchable cards with Google Play destinations.
-- Compact, filterable app cards with descriptions, feature chips, Google Play links and privacy policies. Each app has a shareable page with a split gallery and information layout, Overview/Functions/Details tabs, original uploaded images, privacy policy, support link, and previous/next app navigation. Galleries offer category filters, arrows, keyboard and touch navigation, and a full-screen image viewer. Selecting a function displays its image.
+- The eye navigation opens separate Apps and Studio pages. The Apps page opens directly onto a compact portfolio with three featured apps and two everyday utilities, circular app artwork, gold ornaments, and the selected cinematic background. Every medallion and app title opens its dedicated page, including without JavaScript.
+- Search and category filters narrow the portfolio by name or feature, hiding empty groups. Each entry includes a short description and Google Play link. Each app has a shareable page with a split gallery and information layout, Overview/Functions/Details tabs, original uploaded images, privacy policy, support link, and previous/next app navigation. Galleries offer category filters, arrows, keyboard and touch navigation, and a full-screen image viewer. Selecting a function displays its image.
 - Search by app name or feature, category filters, and a recoverable empty state.
 - Optional ambient audio synthesized locally with Web Audio. Sound starts only after an explicit click and pauses while the page is hidden. No audio downloads or autoplay.
 - Scroll and pointer effects respect reduced motion and the session-persistent motion control. All sections retain native wheel, touch and keyboard scrolling.
@@ -32,7 +32,7 @@ Plain HTML, CSS and vanilla JavaScript, with no runtime dependencies. A dependen
 | File | Purpose |
 | --- | --- |
 | `index.html` | Cinematic portrait and responsive destination scene |
-| `apps.html` | Animated portal entrance and searchable app collection |
+| `apps.html` | Searchable circular app portfolio in two groups |
 | `save-plus.html`, `bond-time.html`, `will-impulse.html`, `glowcalc.html`, `lockclock-aurum.html` | Individual app pages |
 | `about.html` | Illustrated studio portfolio, company story, approach, and contact banner |
 | `contact.html` | Contact information and email composer |
@@ -40,6 +40,7 @@ Plain HTML, CSS and vanilla JavaScript, with no runtime dependencies. A dependen
 | `*-privacy.html` | Individual app policies |
 | `terms-and-conditions.html` | Terms and conditions |
 | `apps.js` | App catalog used by search and page/policy navigation |
+| `collection.css` | Compact app portfolio, circular artwork, ornaments, and responsive layouts |
 | `app-pages.json` | App introductions, feature explanations, and image captions/categories |
 | `app-pages.css`, `app-pages.js` | App page layouts, accessible tabs, galleries, and full-screen viewer |
 | `scripts/build-app-pages.mjs` | Generates app page content from the catalog and uploaded images |
@@ -48,7 +49,7 @@ Plain HTML, CSS and vanilla JavaScript, with no runtime dependencies. A dependen
 | `styles.css` | Base layouts and shared component styles |
 | `studio.css` | Product preview and shared presentation |
 | `cinema.css` | Cinematic scenes, gold theme, responsive artwork, and app/studio page layouts |
-| `destinations.css` | Mobile entrance, Apps portal, and Studio portfolio layouts |
+| `destinations.css` | Mobile homepage entrance and Studio portfolio layouts |
 | `cinema.js` | Scroll chapters, eye navigation, pointer effects and optional ambient audio |
 | `backgrounds.js`, `backgrounds.css` | Accessible wallpaper picker, image loading, responsive submenu, and local preference |
 | `art/` | Two main wallpapers and two scroll-transition close-ups, optimized as WebP |
@@ -81,7 +82,7 @@ Fonts are served locally as WOFF2 files with system fallbacks; their licenses ar
 
 ## Browser checks
 
-The regression checks cover cinematic navigation and responsive hit targets in portrait and landscape, opt-in sound, portal page navigation, all five app pages and their store/detail destinations, catalog-aligned feature chips, app search, keyboard navigation, legacy bookmark redirects, contact validation and email composition, clipboard support, FAQs, policy navigation, portrait parallax and canvas, motion preferences, no-JavaScript content, and responsive layouts on every page.
+The regression checks cover cinematic navigation and responsive hit targets in portrait and landscape, opt-in sound, portfolio navigation, all five app pages and their store/detail destinations, catalog-aligned names and taglines, app search and empty-group recovery, keyboard navigation, legacy bookmark redirects, contact validation and email composition, clipboard support, FAQs, policy navigation, portrait parallax and canvas, motion preferences, no-JavaScript content, and responsive layouts on every page.
 
 With Python Playwright and Chromium available, run:
 

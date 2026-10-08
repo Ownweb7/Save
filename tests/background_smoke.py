@@ -62,7 +62,7 @@ try:
         expect(page.locator('#background-toggle')).to_be_focused()
         page.reload(wait_until='networkidle')
         selected('anime')
-        for path, selector in [('apps.html','.portal-landscape'), ('about.html','.studio-backdrop img')]:
+        for path, selector in [('apps.html','.collection-backdrop img'), ('about.html','.studio-backdrop img')]:
             page.goto(f'{base_url}/{path}', wait_until='networkidle')
             selected('anime')
             expect(page.locator(selector)).to_have_attribute('src', 'art/studio-ravens.webp')

@@ -69,6 +69,8 @@
 
   const filters = document.querySelectorAll('[data-filter]');
   const search = document.querySelector('#app-search');
+  const portfolioTools = document.querySelector('.portfolio-tools');
+  if (portfolioTools) portfolioTools.hidden = false;
   let selectedCategory = 'All';
   function filterApps() {
     const query = (search?.value || '').trim().toLowerCase();
@@ -80,7 +82,11 @@
       card.hidden = (selectedCategory !== 'All' && card.dataset.category !== selectedCategory) || !text.includes(query);
       if (!card.hidden) count++;
     });
-    document.querySelector('.collection-note').hidden = selectedCategory !== 'All' || Boolean(query);
+    const note = document.querySelector('.collection-note');
+    if (note) note.hidden = selectedCategory !== 'All' || Boolean(query);
+    document.querySelectorAll('[data-app-group]').forEach(group => {
+      group.hidden = !group.querySelector('.app-card:not([hidden])');
+    });
     document.querySelector('#collection-count').textContent = `Showing ${count} of 5 apps`;
     document.querySelector('#search-empty').hidden = count > 0;
     document.querySelector('#clear-search').hidden = !search.value;

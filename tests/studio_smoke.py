@@ -103,22 +103,16 @@ try:
         assert page.locator('.cinematic-intro').evaluate('e=>e.offsetHeight') == 900
         catalog = page.evaluate('window.ODN_APPS')
         page.goto(f'{base_url}/apps.html',wait_until='domcontentloaded')
-        assert page.locator('.portal-copy h1').inner_text() == 'Imagination.\nMade useful.'
-        assert page.locator('.creative-world').bounding_box()['y'] == 0
-        # The moved portal fills its frame and every app opens its own URL.
-        assert page.locator('.portal-landscape').evaluate("""e=>{
-            const image=e.getBoundingClientRect(), scene=e.parentElement.getBoundingClientRect();
-            return image.top<=scene.top && image.bottom>=scene.bottom && image.left<=scene.left && image.right>=scene.right;
-        }""")
-        for selector in ['.portal-landscape','.portal-radiance','.portal-particles i']:
-            assert page.locator(selector).first.evaluate('e=>getComputedStyle(e).animationName') == 'none',selector
+        assert 'Our apps' in page.locator('h1').inner_text()
+        assert page.locator('.creative-world').count() == 0
+        assert page.locator('#app-save').bounding_box()['y'] < 400
+        # The collection opens directly and each medallion reaches its app page.
+        assert page.locator('.portfolio-app').evaluate_all('cards=>cards.every(e=>e.getAnimations().every(a=>a.playState!=="running"))')
         for app in catalog:
-            page.locator(f'[data-world-app="{app["id"]}"]').click()
+            page.locator(f'#app-{app["id"]} .portfolio-medallion').click()
             page.wait_for_url(f'**/{app["page"]}')
             assert page.locator('h1').inner_text() == app['name']
             page.goto(f'{base_url}/apps.html', wait_until='domcontentloaded')
-        page.locator('.portal-collection-link').click()
-        page.wait_for_url('**/apps.html#apps')
         assert page.locator('#app-search').is_visible()
         # The Studio portfolio uses the same real destinations.
         for app in catalog:
@@ -126,11 +120,14 @@ try:
             page.locator(f'.studio-project[href="{app["page"]}"]').click()
             page.wait_for_url(f'**/{app["page"]}')
             assert page.locator('h1').inner_text() == app['name']
-        print('Responsive eye targets, portal destinations, pause persistence and reduced motion passed.',flush=True)
+        print('Responsive eye targets, portfolio destinations, pause persistence and reduced motion passed.',flush=True)
 
         page.goto(f'{base_url}/apps.html', wait_until='domcontentloaded')
         for app in catalog:
-            assert page.locator(f'#app-{app["id"]} .app-feature-list li').all_text_contents() == app['features']
+            card = page.locator(f'#app-{app["id"]}')
+            assert card.locator('h3').inner_text() == app['name']
+            assert card.locator('.portfolio-app-tag').inner_text() == app['tag']
+            assert card.get_attribute('data-category') == app['category']
         page.goto(f'{base_url}/save-plus.html', wait_until='domcontentloaded')
         # Uploaded image navigation stays available when visual motion is disabled.
         page.emulate_media(reduced_motion='no-preference')
@@ -169,12 +166,13 @@ try:
         assert no_js.get_by_role('heading',name='A little wonder. In your everyday.').is_visible()
         no_js.locator('.cinema-enter').click()
         no_js.wait_for_url('**/apps.html')
-        no_js.locator('[data-world-app="save"]').click()
+        no_js.locator('#app-save .portfolio-medallion').click()
         no_js.wait_for_url('**/save-plus.html')
         no_js.locator('.product-back').click()
         no_js.wait_for_url('**/apps.html')
         assert no_js.locator('.app-card').count() == 5
-        assert no_js.locator('.app-card .app-feature-list li').count() == 15
+        assert no_js.locator('.portfolio-tools').is_hidden()
+        assert no_js.locator('.app-card .project-description:visible').count() == 5
         no_js.locator('#app-glow .app-art').click()
         no_js.wait_for_url('**/glowcalc.html')
         assert no_js.locator('h1').inner_text() == 'GlowCalc'

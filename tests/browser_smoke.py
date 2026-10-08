@@ -35,10 +35,14 @@ try:
         page.locator('#app-search').fill('scientific')
         assert page.locator('.app-card:visible').count() == 1
         assert 'GlowCalc' in page.locator('.app-card:visible').inner_text()
+        assert page.locator('[data-app-group]:visible').count() == 1
+        assert page.locator('[data-app-group]:visible h2').inner_text() == 'Everyday utilities'
         page.locator('[data-filter="Money"]').click()
         assert page.locator('#search-empty').is_visible()
+        assert page.locator('[data-app-group]:visible').count() == 0
         page.locator('#reset-search').click()
         assert page.locator('.app-card:visible').count() == 5
+        assert page.locator('[data-app-group]:visible').count() == 2
         assert page.locator('#app-search').evaluate('e => document.activeElement === e')
         page.locator('[data-filter="Wellbeing"]').click()
         assert page.locator('.app-card:visible').count() == 2
@@ -120,6 +124,8 @@ try:
         for width in [1440, 768, 390, 320]:
             page.set_viewport_size({'width': width, 'height': 1000})
             page.goto(f'{base_url}/apps.html', wait_until='domcontentloaded')
+            assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), width
+            assert page.locator('.app-card:visible').count() == 5
             if width <= 760:
                 menu = page.get_by_role('button', name='Open navigation')
                 menu.click()
