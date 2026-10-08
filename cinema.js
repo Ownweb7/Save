@@ -26,7 +26,7 @@
   document.body.append(cursor);
 
   function placeEyeLinks() {
-    if (matchMedia('(max-width:900px)').matches) {
+    if (root.dataset.background === 'fantasy' || matchMedia('(max-width:900px)').matches) {
       eyeLinks.forEach(link => { link.style.removeProperty('left'); link.style.removeProperty('top'); });
       return;
     }
@@ -52,9 +52,15 @@
     const progress = motion ? clamp(-box.top / travel) : 0;
     const eyes = smooth(clamp((progress - .25) / .4));
     const openingOpacity = 1 - smooth(clamp(progress / .24));
-    stage.style.setProperty('--portrait-opacity', (1 - eyes).toFixed(3));
-    stage.style.setProperty('--portrait-scale', (1.02 + progress * .48).toFixed(3));
-    stage.style.setProperty('--eyes-opacity', eyes.toFixed(3));
+    const portal = root.dataset.background === 'fantasy';
+    // Travel into the existing arch instead of crossfading to another composition.
+    // The mobile opening is already cropped closer, so it needs less magnification.
+    const portalZoom = matchMedia('(max-width:900px)').matches ? 2.25 : 3.25;
+    const scale = portal ? 1.02 + smooth(clamp(progress / .9)) * (portalZoom - 1.02) : 1.02 + progress * .48;
+    stage.style.setProperty('--portrait-opacity', (portal ? 1 : 1 - eyes).toFixed(3));
+    stage.style.setProperty('--portrait-scale', scale.toFixed(3));
+    stage.style.setProperty('--eyes-opacity', (portal ? 0 : eyes).toFixed(3));
+    stage.style.setProperty('--portal-depth', (portal ? smooth(clamp(progress / .65)) : 0).toFixed(3));
     stage.style.setProperty('--eyes-scale', (1.15 - eyes * .15).toFixed(3));
     stage.style.setProperty('--opening-opacity', openingOpacity.toFixed(3));
     stage.style.setProperty('--opening-lift', `${-progress * 80}px`);
