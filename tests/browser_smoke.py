@@ -31,34 +31,19 @@ try:
         page.goto(f'{base_url}/apps.html', wait_until='domcontentloaded')
         catalog = page.evaluate('window.ODN_APPS')
 
-        # Search matches features, combines with categories and recovers from no results.
-        page.locator('#app-search').fill('scientific')
-        assert page.locator('.app-card:visible').count() == 1
-        assert 'GlowCalc' in page.locator('.app-card:visible').inner_text()
-        assert page.locator('[data-app-group]:visible').count() == 1
-        assert page.locator('[data-app-group]:visible h2').inner_text() == 'Everyday utilities'
-        page.locator('[data-filter="Money"]').click()
-        assert page.locator('#search-empty').is_visible()
-        assert page.locator('[data-app-group]:visible').count() == 0
-        page.locator('#reset-search').click()
-        assert page.locator('.app-card:visible').count() == 5
-        assert page.locator('[data-app-group]:visible').count() == 2
-        assert page.locator('#app-search').evaluate('e => document.activeElement === e')
-        page.locator('[data-filter="Wellbeing"]').click()
-        assert page.locator('.app-card:visible').count() == 2
-        page.locator('#app-search').fill('on-device')
-        assert page.locator('.app-card:visible').count() == 1
-        assert 'Will Impulse' in page.locator('.app-card:visible').inner_text()
-        page.locator('#clear-search').click()
-        assert page.locator('.app-card:visible').count() == 2
-        assert page.locator('#app-search').evaluate('e => document.activeElement === e')
-        page.locator('[data-filter="All"]').click()
+        # All five apps share one list; categories and the old grouped layout are gone.
+        assert page.locator('h1').inner_text() == 'Our apps'
+        assert page.locator('.studio-projects').count() == 1
+        assert page.locator('.studio-projects > li:visible').count() == 5
+        assert page.locator('[data-filter],[data-category],[data-app-group],#app-search').count() == 0
+        assert 'Featured apps' not in page.locator('main').inner_text()
+        assert 'Everyday utilities' not in page.locator('main').inner_text()
 
         # Cards navigate to persistent app pages, with matching content and destinations.
         for app in catalog:
             card = page.locator(f'#app-{app["id"]}')
-            assert card.locator('.store-link').get_attribute('href') == app['url']
-            card.locator('.app-art').click()
+            assert card.locator('h2').inner_text() == app['name']
+            card.locator('.studio-project').click()
             page.wait_for_url(f'**/{app["page"]}')
             assert page.locator('h1').inner_text() == app['name']
             assert page.locator('.product-description').inner_text() == app['desc']
@@ -68,7 +53,7 @@ try:
             assert page.locator('.site-footer').count() == 1
             page.locator('.product-back').click()
             page.wait_for_url('**/apps.html')
-        page.get_by_role('link', name='About Save+', exact=True).first.focus()
+        page.get_by_role('link', name='Explore Save+', exact=True).first.focus()
         page.keyboard.press('Enter')
         page.wait_for_url('**/save-plus.html')
         assert page.locator('h1').inner_text() == 'Save+'
@@ -79,7 +64,19 @@ try:
         assert page.locator('h1').inner_text() == 'Save+'
         page.locator('.product-policy').click()
         page.wait_for_url('**/save-plus-privacy.html')
-        print('App search, category recovery, five app pages and keyboard navigation passed.', flush=True)
+        print('One app list, five dedicated app pages and keyboard navigation passed.', flush=True)
+
+        # Studio retains the company information, with its showcase moved to Our Apps.
+        page.goto(f'{base_url}/about.html', wait_until='domcontentloaded')
+        assert page.locator('#selected-work,.studio-projects,.studio-collection-link').count() == 0
+        assert 'Selected work' not in page.locator('main').inner_text()
+        assert 'THE APP COLLECTION' not in page.locator('main').inner_text()
+        for app in catalog:
+            assert page.locator(f'main a[href="{app["page"]}"]').count() == 0
+        assert page.locator('#approach,#our-story,.studio-contact').count() == 3
+        page.locator('#navigation').get_by_role('link', name='Our apps', exact=True).click()
+        page.wait_for_url('**/apps.html')
+        assert page.locator('.studio-projects a').count() == 5
 
         # Contact composition produces a correctly encoded message without sending it.
         page.goto(f'{base_url}/contact.html', wait_until='domcontentloaded')
@@ -125,7 +122,7 @@ try:
             page.set_viewport_size({'width': width, 'height': 1000})
             page.goto(f'{base_url}/apps.html', wait_until='domcontentloaded')
             assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), width
-            assert page.locator('.app-card:visible').count() == 5
+            assert page.locator('.studio-projects > li:visible').count() == 5
             if width <= 760:
                 menu = page.get_by_role('button', name='Open navigation')
                 menu.click()

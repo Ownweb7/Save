@@ -67,47 +67,6 @@
     }
   });
 
-  const filters = document.querySelectorAll('[data-filter]');
-  const search = document.querySelector('#app-search');
-  const portfolioTools = document.querySelector('.portfolio-tools');
-  if (portfolioTools) portfolioTools.hidden = false;
-  let selectedCategory = 'All';
-  function filterApps() {
-    const query = (search?.value || '').trim().toLowerCase();
-    let count = 0;
-    document.querySelectorAll('.app-card').forEach(card => {
-      const id = card.querySelector('[data-app]').dataset.app;
-      const app = window.ODN_APPS.find(item => item.id === id);
-      const text = [app.name, app.tag, app.desc, app.category, ...app.features].join(' ').toLowerCase();
-      card.hidden = (selectedCategory !== 'All' && card.dataset.category !== selectedCategory) || !text.includes(query);
-      if (!card.hidden) count++;
-    });
-    const note = document.querySelector('.collection-note');
-    if (note) note.hidden = selectedCategory !== 'All' || Boolean(query);
-    document.querySelectorAll('[data-app-group]').forEach(group => {
-      group.hidden = !group.querySelector('.app-card:not([hidden])');
-    });
-    document.querySelector('#collection-count').textContent = `Showing ${count} of 5 apps`;
-    document.querySelector('#search-empty').hidden = count > 0;
-    document.querySelector('#clear-search').hidden = !search.value;
-  }
-  filters.forEach(button => button.addEventListener('click', () => {
-    selectedCategory = button.dataset.filter;
-    filters.forEach(filter => {
-      const active = filter === button;
-      filter.classList.toggle('active', active);
-      filter.setAttribute('aria-pressed', String(active));
-    });
-    filterApps();
-  }));
-  search?.addEventListener('input', filterApps);
-  document.querySelector('#clear-search')?.addEventListener('click', () => { search.value = ''; filterApps(); search.focus(); });
-  document.querySelector('#reset-search')?.addEventListener('click', () => {
-    search.value = '';
-    document.querySelector('[data-filter="All"]').click();
-    search.focus();
-  });
-
   document.querySelector('#policy-select')?.addEventListener('change', event => {
     const allowed = ['privacy-policies.html', ...window.ODN_APPS.map(app => app.policy)];
     if (allowed.includes(event.target.value)) window.location.href = event.target.value;

@@ -255,7 +255,7 @@
     });
   });
   const projectGrid=document.querySelector('.app-grid');
-  const rollingCards=[...document.querySelectorAll('.app-card:not(.portfolio-app)')];
+  const rollingCards=[...document.querySelectorAll('.app-card')];
   rollingCards.forEach(card=>{
     card.classList.add('roll-card');
     card.addEventListener('pointermove',event=>{
@@ -284,7 +284,7 @@
       label.append(front,back); node.replaceWith(label);
     });
   });
-  const projectImages=[...document.querySelectorAll('.app-art:not(.portfolio-medallion) img')];
+  const projectImages=[...document.querySelectorAll('.app-art img')];
   let scrollScheduled=false;
   function updateScroll() {
     scrollScheduled=false; scrollPosition=scrollY;
@@ -388,7 +388,7 @@
     if(!finePointer.matches) { updateStage(true); updateWorld(true); resetCardGlows(); pointer.active=false; }
   });
   root.addEventListener('pointerleave',()=>{ pointer.active=false; });
-  document.querySelectorAll('.app-art:not(.portfolio-medallion)').forEach(card=>{
+  document.querySelectorAll('.app-art').forEach(card=>{
     card.addEventListener('pointermove',event=>{
       if(!enabled||!finePointer.matches) return;
       const rect=card.getBoundingClientRect();
@@ -420,7 +420,7 @@
     const observer=new IntersectionObserver(entries=>{
       entries.forEach(entry=>{if(entry.isIntersecting){animateIn(entry.target);observer.unobserve(entry.target);}});
     },{threshold:.08});
-    document.querySelectorAll('.collection-note,.principles article,.contact-form,.about-meta,.portfolio-app').forEach(element=>observer.observe(element));
+    document.querySelectorAll('.collection-note,.principles article,.contact-form,.about-meta,.app-work .studio-project').forEach(element=>observer.observe(element));
   }
   sizeScene(); updateMotion();
   document.querySelectorAll('.title-line,.hero-overline,.hero-bottom,.hero-baseline').forEach((element,index)=>animateIn(element,index*110));

@@ -57,7 +57,7 @@ try:
         assert page.locator('.site-header').evaluate("e=>getComputedStyle(e).backgroundColor") == 'rgba(0, 0, 0, 0)'
         page.locator('.eye-portal-left').click()
         page.wait_for_url('**/apps.html')
-        assert page.locator('.app-card').count() == 5
+        assert page.locator('.studio-projects a').count() == 5
         open_eyes()
         page.locator('.eye-portal-right').click()
         page.wait_for_url('**/about.html')
@@ -66,9 +66,9 @@ try:
         assert '2022' in page.locator('.studio-story').inner_text()
         assert 'Hisar' in page.locator('.studio-story').inner_text()
         assert page.locator('.site-footer').count() == 1
-        assert page.locator('.studio-projects a').count() == 5
+        assert page.locator('.studio-projects,#selected-work,.studio-collection-link').count() == 0
         assert page.locator('.studio-value-grid article').count() == 3
-        page.locator('.studio-collection-link').click()
+        page.locator('#navigation').get_by_role('link',name='Our apps',exact=True).click()
         page.wait_for_url('**/apps.html')
         open_eyes()
         page.evaluate("document.activeElement.blur(); window.nativeScrollDone=false; addEventListener('scrollend',()=>window.nativeScrollDone=true,{once:true})")
@@ -107,27 +107,21 @@ try:
         assert page.locator('.creative-world').count() == 0
         assert page.locator('#app-save').bounding_box()['y'] < 400
         # The collection opens directly and each medallion reaches its app page.
-        assert page.locator('.portfolio-app').evaluate_all('cards=>cards.every(e=>e.getAnimations().every(a=>a.playState!=="running"))')
+        assert page.locator('.studio-project').evaluate_all('cards=>cards.every(e=>e.getAnimations().every(a=>a.playState!=="running"))')
         for app in catalog:
-            page.locator(f'#app-{app["id"]} .portfolio-medallion').click()
+            page.locator(f'#app-{app["id"]} .studio-project').click()
             page.wait_for_url(f'**/{app["page"]}')
             assert page.locator('h1').inner_text() == app['name']
             page.goto(f'{base_url}/apps.html', wait_until='domcontentloaded')
-        assert page.locator('#app-search').is_visible()
-        # The Studio portfolio uses the same real destinations.
-        for app in catalog:
-            page.goto(f'{base_url}/about.html',wait_until='domcontentloaded')
-            page.locator(f'.studio-project[href="{app["page"]}"]').click()
-            page.wait_for_url(f'**/{app["page"]}')
-            assert page.locator('h1').inner_text() == app['name']
+        assert page.locator('#app-search,[data-filter]').count() == 0
         print('Responsive eye targets, portfolio destinations, pause persistence and reduced motion passed.',flush=True)
 
         page.goto(f'{base_url}/apps.html', wait_until='domcontentloaded')
         for app in catalog:
             card = page.locator(f'#app-{app["id"]}')
-            assert card.locator('h3').inner_text() == app['name']
-            assert card.locator('.portfolio-app-tag').inner_text() == app['tag']
-            assert card.get_attribute('data-category') == app['category']
+            assert card.locator('h2').inner_text() == app['name']
+            assert card.locator('.studio-project p').inner_text()
+            assert card.locator('.studio-project').get_attribute('href') == app['page']
         page.goto(f'{base_url}/save-plus.html', wait_until='domcontentloaded')
         # Uploaded image navigation stays available when visual motion is disabled.
         page.emulate_media(reduced_motion='no-preference')
@@ -166,14 +160,14 @@ try:
         assert no_js.get_by_role('heading',name='A little wonder. In your everyday.').is_visible()
         no_js.locator('.cinema-enter').click()
         no_js.wait_for_url('**/apps.html')
-        no_js.locator('#app-save .portfolio-medallion').click()
+        no_js.locator('#app-save .studio-project').click()
         no_js.wait_for_url('**/save-plus.html')
         no_js.locator('.product-back').click()
         no_js.wait_for_url('**/apps.html')
-        assert no_js.locator('.app-card').count() == 5
-        assert no_js.locator('.portfolio-tools').is_hidden()
-        assert no_js.locator('.app-card .project-description:visible').count() == 5
-        no_js.locator('#app-glow .app-art').click()
+        assert no_js.locator('.studio-project').count() == 5
+        assert no_js.locator('#app-search,[data-filter]').count() == 0
+        assert no_js.locator('.studio-project p:visible').count() == 5
+        no_js.locator('#app-glow .studio-project').click()
         no_js.wait_for_url('**/glowcalc.html')
         assert no_js.locator('h1').inner_text() == 'GlowCalc'
         assert not errors,errors

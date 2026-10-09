@@ -12,9 +12,8 @@
 <link rel="stylesheet" href="cinema.css">
 <link rel="stylesheet" href="destinations.css">
 <link rel="stylesheet" href="backgrounds.css">
-<link rel="stylesheet" href="collection.css">
 </head>
-<body id="top" class="apps-page collection-page">
+<body id="top" class="apps-page app-work-page">
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header">
 <div class="wrap nav">
@@ -41,67 +40,36 @@
 </button>
 </div>
 </header>
-<main id="main" class="app-portfolio">
-<div class="collection-backdrop" aria-hidden="true"><img src="art/scifi-sentinel.webp" alt="" width="1672" height="941" fetchpriority="high"></div>
-<div class="portfolio-wrap" id="apps">
-  <header class="portfolio-heading"><h1>Our apps <span aria-hidden="true">|</span> <em>Made for everyday.</em></h1></header>
-  <div class="portfolio-tools" hidden>
-    <div class="filters" role="group" aria-label="Filter apps by category"><button class="filter active" type="button" data-filter="All" aria-pressed="true">All apps <span>5</span></button><button class="filter" type="button" data-filter="Money" aria-pressed="false">Money</button><button class="filter" type="button" data-filter="Wellbeing" aria-pressed="false">Wellbeing</button><button class="filter" type="button" data-filter="Utilities" aria-pressed="false">Utilities</button></div>
-    <div class="portfolio-search"><label class="sr-only" for="app-search">Search apps or features</label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/></svg><input id="app-search" type="search" placeholder="Find an app…" autocomplete="off"><button id="clear-search" type="button" hidden>Clear</button></div>
-    <span class="sr-only" id="collection-count" role="status">Showing all 5 apps</span>
-  </div>
-  <div class="search-empty" id="search-empty" hidden><h2>No apps found.</h2><p>Try another word, or see the whole collection.</p><button type="button" class="btn btn-gold" id="reset-search">Show all apps</button></div>
-  <section class="portfolio-group" aria-labelledby="featured-title" data-app-group>
-    <div class="portfolio-section-heading"><span aria-hidden="true">◇</span><h2 id="featured-title">Featured apps</h2><span class="portfolio-section-note">SAVE. CONNECT. PAUSE.</span></div>
-    <div class="portfolio-grid"><article class="app-card portfolio-app" id="app-save" data-category="Money">
-  <p class="portfolio-app-meta">01 / Money</p>
-  <a class="app-art portfolio-medallion" data-app="save" href="save-plus.html" aria-label="Explore Save+"><span class="portfolio-orbit" aria-hidden="true"></span><img src="icons/Website%20Icon.png" alt="Save+ app icon" width="112" height="112"><span class="medallion-open" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></span></a>
-  <h3><a href="save-plus.html">Save+</a></h3>
-  <p class="portfolio-app-tag">Make room for your next big thing.</p>
-  <p class="project-description">Saving goals, monthly plans and progress. Make every small step count.</p>
-  <div class="portfolio-app-links"><a href="save-plus.html" aria-label="About Save+">Explore app <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a><a class="store-link" href="https://play.google.com/store/apps/details?id=com.shadow.save" target="_blank" rel="noopener">Google Play <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a></div>
-  <svg class="portfolio-ornament" viewBox="0 0 120 20" fill="none" stroke="currentColor" stroke-width=".75" aria-hidden="true"><path d="M0 10h40m40 0h40M40 10l10-4 10 4-10 4-10-4Zm20 0 10-4 10 4-10 4-10-4ZM60 3l7 7-7 7-7-7 7-7Z"/><path d="m47 3 5 3m16 0 5-3m-26 14 5-3m16 0 5 3"/></svg>
-</article><article class="app-card portfolio-app" id="app-bond" data-category="Wellbeing">
-  <p class="portfolio-app-meta">02 / Wellbeing</p>
-  <a class="app-art portfolio-medallion" data-app="bond" href="bond-time.html" aria-label="Explore Bond Time"><span class="portfolio-orbit" aria-hidden="true"></span><img src="icons/Bond%20Time.png" alt="Bond Time app icon" width="112" height="112"><span class="medallion-open" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></span></a>
-  <h3><a href="bond-time.html">Bond Time</a></h3>
-  <p class="portfolio-app-tag">Less screen time. More together time.</p>
-  <p class="project-description">Put distractions on pause. Make more room for time together.</p>
-  <div class="portfolio-app-links"><a href="bond-time.html" aria-label="About Bond Time">Explore app <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a><a class="store-link" href="https://play.google.com/store/apps/details?id=com.bond.time" target="_blank" rel="noopener">Google Play <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a></div>
-  <svg class="portfolio-ornament" viewBox="0 0 120 20" fill="none" stroke="currentColor" stroke-width=".75" aria-hidden="true"><path d="M0 10h40m40 0h40M40 10l10-4 10 4-10 4-10-4Zm20 0 10-4 10 4-10 4-10-4ZM60 3l7 7-7 7-7-7 7-7Z"/><path d="m47 3 5 3m16 0 5-3m-26 14 5-3m16 0 5 3"/></svg>
-</article><article class="app-card portfolio-app" id="app-will" data-category="Wellbeing">
-  <p class="portfolio-app-meta">03 / Wellbeing</p>
-  <a class="app-art portfolio-medallion" data-app="will" href="will-impulse.html" aria-label="Explore Will Impulse"><span class="portfolio-orbit" aria-hidden="true"></span><img src="icons/Will%20impulse.png" alt="Will Impulse app icon" width="112" height="112"><span class="medallion-open" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></span></a>
-  <h3><a href="will-impulse.html">Will Impulse</a></h3>
-  <p class="portfolio-app-tag">A little pause. A better decision.</p>
-  <p class="project-description">A pause before impulse orders. Build more intentional habits.</p>
-  <div class="portfolio-app-links"><a href="will-impulse.html" aria-label="About Will Impulse">Explore app <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a><a class="store-link" href="https://play.google.com/store/search?q=Will%20Impulse&amp;c=apps" target="_blank" rel="noopener">Google Play <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a></div>
-  <svg class="portfolio-ornament" viewBox="0 0 120 20" fill="none" stroke="currentColor" stroke-width=".75" aria-hidden="true"><path d="M0 10h40m40 0h40M40 10l10-4 10 4-10 4-10-4Zm20 0 10-4 10 4-10 4-10-4ZM60 3l7 7-7 7-7-7 7-7Z"/><path d="m47 3 5 3m16 0 5-3m-26 14 5-3m16 0 5 3"/></svg>
-</article></div>
-  </section>
-  <section class="portfolio-group portfolio-utilities" aria-labelledby="utilities-title" data-app-group>
-    <div class="portfolio-divider" aria-hidden="true"><span></span></div>
-    <div class="portfolio-section-heading"><span aria-hidden="true">◇</span><h2 id="utilities-title">Everyday utilities</h2><span class="portfolio-section-note">SMALL TOOLS. WELL MADE.</span></div>
-    <div class="portfolio-grid"><article class="app-card portfolio-app" id="app-glow" data-category="Utilities">
-  <p class="portfolio-app-meta">04 / Utilities</p>
-  <a class="app-art portfolio-medallion" data-app="glow" href="glowcalc.html" aria-label="Explore GlowCalc"><span class="portfolio-orbit" aria-hidden="true"></span><img src="icons/Glowcalc%20Icon.png" alt="GlowCalc app icon" width="112" height="112"><span class="medallion-open" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></span></a>
-  <h3><a href="glowcalc.html">GlowCalc</a></h3>
-  <p class="portfolio-app-tag">Everyday numbers. A little more glow.</p>
-  <p class="project-description">Everyday, scientific and tax calculations. A little more personality.</p>
-  <div class="portfolio-app-links"><a href="glowcalc.html" aria-label="About GlowCalc">Explore app <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a><a class="store-link" href="https://play.google.com/store/apps/details?id=com.glowcalc.app" target="_blank" rel="noopener">Google Play <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a></div>
-  <svg class="portfolio-ornament" viewBox="0 0 120 20" fill="none" stroke="currentColor" stroke-width=".75" aria-hidden="true"><path d="M0 10h40m40 0h40M40 10l10-4 10 4-10 4-10-4Zm20 0 10-4 10 4-10 4-10-4ZM60 3l7 7-7 7-7-7 7-7Z"/><path d="m47 3 5 3m16 0 5-3m-26 14 5-3m16 0 5 3"/></svg>
-</article><article class="app-card portfolio-app" id="app-clock" data-category="Utilities">
-  <p class="portfolio-app-meta">05 / Utilities</p>
-  <a class="app-art portfolio-medallion" data-app="clock" href="lockclock-aurum.html" aria-label="Explore LockClock Aurum"><span class="portfolio-orbit" aria-hidden="true"></span><img src="icons/LockClock%20AURUM.png" alt="LockClock Aurum app icon" width="112" height="112"><span class="medallion-open" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></span></a>
-  <h3><a href="lockclock-aurum.html">LockClock Aurum</a></h3>
-  <p class="portfolio-app-tag">Your time. Beautifully kept.</p>
-  <p class="project-description">Alarms, timers and clock faces. Keep your day beautifully in time.</p>
-  <div class="portfolio-app-links"><a href="lockclock-aurum.html" aria-label="About LockClock Aurum">Explore app <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a><a class="store-link" href="https://play.google.com/store/apps/details?id=com.lockclock.aurum" target="_blank" rel="noopener">Google Play <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a></div>
-  <svg class="portfolio-ornament" viewBox="0 0 120 20" fill="none" stroke="currentColor" stroke-width=".75" aria-hidden="true"><path d="M0 10h40m40 0h40M40 10l10-4 10 4-10 4-10-4Zm20 0 10-4 10 4-10 4-10-4ZM60 3l7 7-7 7-7-7 7-7Z"/><path d="m47 3 5 3m16 0 5-3m-26 14 5-3m16 0 5 3"/></svg>
-</article></div>
-  </section>
-  <p class="portfolio-colophon"><span>DESIGNED FOR ANDROID</span><i aria-hidden="true">✦</i><a href="about.html">Meet the studio <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a><i aria-hidden="true">✦</i><span>MADE IN HISAR, INDIA</span></p>
-</div>
+<main id="main" class="studio-portfolio app-work">
+<div class="studio-backdrop" aria-hidden="true"><img src="art/scifi-sentinel.webp" alt="" width="1672" height="941" fetchpriority="high"></div>
+<section class="studio-work wrap" id="apps" aria-labelledby="apps-page-title">
+<div class="app-work-heading"><span class="eyebrow">ODN &amp; SONS</span><h1 id="apps-page-title">Our apps</h1><p>Thoughtful apps. Made for your everyday.</p></div>
+<ul class="studio-projects" aria-label="Our apps"><li id="app-save"><a class="studio-project" href="save-plus.html" aria-label="Explore Save+" style="--project-accent:#bfdaa3">
+<span class="studio-project-meta">01</span>
+<span class="studio-project-medallion"><span class="medallion-orbit" aria-hidden="true"></span><img src="icons/Website%20Icon.png" alt="" width="112" height="112"><span class="project-open" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M6 18 18 6M6 6h12v12"/></svg></span></span>
+<h2>Save+</h2><span class="studio-project-platform">ANDROID APPLICATION</span><p>Small steps. Real progress. A little closer to your saving goals.</p>
+<span class="project-ornament" aria-hidden="true">◇</span></a></li>
+<li id="app-bond"><a class="studio-project" href="bond-time.html" aria-label="Explore Bond Time" style="--project-accent:#b9c9ed">
+<span class="studio-project-meta">02</span>
+<span class="studio-project-medallion"><span class="medallion-orbit" aria-hidden="true"></span><img src="icons/Bond%20Time.png" alt="" width="112" height="112"><span class="project-open" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M6 18 18 6M6 6h12v12"/></svg></span></span>
+<h2>Bond Time</h2><span class="studio-project-platform">ANDROID APPLICATION</span><p>Phone down. Life up. More time for the people beside you.</p>
+<span class="project-ornament" aria-hidden="true">◇</span></a></li>
+<li id="app-will"><a class="studio-project" href="will-impulse.html" aria-label="Explore Will Impulse" style="--project-accent:#e2bbb1">
+<span class="studio-project-meta">03</span>
+<span class="studio-project-medallion"><span class="medallion-orbit" aria-hidden="true"></span><img src="icons/Will%20impulse.png" alt="" width="112" height="112"><span class="project-open" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M6 18 18 6M6 6h12v12"/></svg></span></span>
+<h2>Will Impulse</h2><span class="studio-project-platform">ANDROID APPLICATION</span><p>A thoughtful pause before your next impulse food order.</p>
+<span class="project-ornament" aria-hidden="true">◇</span></a></li>
+<li id="app-glow"><a class="studio-project" href="glowcalc.html" aria-label="Explore GlowCalc" style="--project-accent:#cec0ef">
+<span class="studio-project-meta">04</span>
+<span class="studio-project-medallion"><span class="medallion-orbit" aria-hidden="true"></span><img src="icons/Glowcalc%20Icon.png" alt="" width="112" height="112"><span class="project-open" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M6 18 18 6M6 6h12v12"/></svg></span></span>
+<h2>GlowCalc</h2><span class="studio-project-platform">ANDROID APPLICATION</span><p>Everyday numbers, scientific tools, and a little neon glow.</p>
+<span class="project-ornament" aria-hidden="true">◇</span></a></li>
+<li id="app-clock"><a class="studio-project" href="lockclock-aurum.html" aria-label="Explore LockClock Aurum" style="--project-accent:#e1c68e">
+<span class="studio-project-meta">05</span>
+<span class="studio-project-medallion"><span class="medallion-orbit" aria-hidden="true"></span><img src="icons/LockClock%20AURUM.png" alt="" width="112" height="112"><span class="project-open" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M6 18 18 6M6 6h12v12"/></svg></span></span>
+<h2>LockClock Aurum</h2><span class="studio-project-platform">ANDROID APPLICATION</span><p>Alarms, timers, and a stopwatch. Your time, beautifully kept.</p>
+<span class="project-ornament" aria-hidden="true">◇</span></a></li></ul>
+</section>
 </main>
 <footer class="site-footer">
 <div class="wrap">
