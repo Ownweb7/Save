@@ -83,5 +83,22 @@ window.ODN_APPS = [
     ],
     "color": "#e1c68e",
     "page": "lockclock-aurum.html"
+  },
+  {
+    "id": "player",
+    "name": "ACM Player",
+    "tag": "Your videos and music. Played your way.",
+    "category": "Media",
+    "icon": "Website Icon.png",
+    "policy": "acm-player-privacy.html",
+    "url": "https://play.google.com/store/apps/details?id=com.allcreatormind.player",
+    "desc": "A private, offline video and music player. Full player controls, proper subtitles and big sound, with no internet permission, accounts, analytics or ads.",
+    "features": [
+      "Private by design",
+      "A complete player",
+      "Subtitles & big sound"
+    ],
+    "color": "#9ed4d9",
+    "page": "acm-player.html"
   }
 ];
