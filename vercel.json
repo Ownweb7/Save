@@ -4,5 +4,16 @@
   "buildCommand": "node scripts/build-app-pages.mjs",
   "outputDirectory": ".",
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/(.*)\\.(png|webp|jpg|jpeg|svg|ico)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
 }
