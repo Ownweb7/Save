@@ -40,7 +40,7 @@ window.ODN_APPS = [
     "category": "Wellbeing",
     "icon": "Will impulse.png",
     "policy": "will-impulse-privacy.html",
-    "url": "https://play.google.com/store/search?q=Will%20Impulse&c=apps",
+    "url": "https://play.google.com/store/apps/details?id=com.will.impulse",
     "desc": "Put a thoughtful pause between you and an impulse food order. Unlock selected apps with a quiz, a wait, or keys, so you order with intention.",
     "features": [
       "App locking",
