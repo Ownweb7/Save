@@ -89,7 +89,7 @@ window.ODN_APPS = [
     "name": "ACM Player",
     "tag": "Your videos and music. Played your way.",
     "category": "Media",
-    "icon": "Website Icon.png",
+    "icon": "ACM Player.png",
     "policy": "acm-player-privacy.html",
     "url": "https://play.google.com/store/apps/details?id=com.allcreatormind.player",
     "desc": "A private, offline video and music player. Full player controls, proper subtitles and big sound, with no internet permission, accounts, analytics or ads.",
