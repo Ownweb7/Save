@@ -16,6 +16,7 @@
 .case-title h1{font-size:clamp(39px,4.1vw,68px);letter-spacing:-1.5px;color:#e6c88f}
 .case-heading .product-tagline{font:400 clamp(24px,2.3vw,36px)/1.25 var(--serif);letter-spacing:-.3px;color:#d9c295;margin:17px 0 18px;max-width:560px}
 .case-byline{font-size:7px;letter-spacing:1.6px;color:#a29479;margin:0}
+.case-legal{display:flex;flex-wrap:wrap;align-items:center;gap:0 12px;margin:8px 0 0;font:12px/1.4 var(--sans);letter-spacing:.3px}.case-legal a{display:inline-flex;align-items:center;min-height:36px;color:#d1ad6d;text-decoration:underline;text-decoration-color:#d1ad6d66;text-underline-offset:4px;transition:color .2s}.case-legal a:hover,.case-legal a:focus-visible{color:#f0d39b;text-decoration-color:currentColor}.case-legal span{color:#7d6f57}
 .product-gallery{grid-column:1;grid-row:1 / span 2;min-width:0;position:sticky;top:24px}
 .gallery-filters{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
 .gallery-filters[hidden],.gallery-arrows[hidden],.gallery-expand[hidden],.gallery-dots[hidden],.detail-tabs[hidden],.gallery-slide[hidden],.detail-panel[hidden]{display:none}
