@@ -36,6 +36,16 @@
       "source": "/acm-player-privacy.html",
       "destination": "/offwave-player-privacy",
       "permanent": true
+    },
+    {
+      "source": "/acm-player-terms",
+      "destination": "/offwave-player-terms",
+      "permanent": true
+    },
+    {
+      "source": "/acm-player-terms.html",
+      "destination": "/offwave-player-terms",
+      "permanent": true
     }
   ]
 }
