@@ -91,6 +91,7 @@ window.ODN_APPS = [
     "category": "Media",
     "icon": "Offwave Player.png",
     "policy": "offwave-player-privacy.html",
+    "terms": "offwave-player-terms.html",
     "url": "https://play.google.com/store/apps/details?id=com.allcreatormind.player",
     "desc": "A private, offline video and music player. Full player controls, proper subtitles and big sound, with no internet permission, accounts, analytics or ads.",
     "features": [
