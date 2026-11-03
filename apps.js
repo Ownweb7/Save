@@ -86,11 +86,11 @@ window.ODN_APPS = [
   },
   {
     "id": "player",
-    "name": "ACM Player",
+    "name": "Offwave Player",
     "tag": "Your videos and music. Played your way.",
     "category": "Media",
-    "icon": "ACM Player.png",
-    "policy": "acm-player-privacy.html",
+    "icon": "Offwave Player.png",
+    "policy": "offwave-player-privacy.html",
     "url": "https://play.google.com/store/apps/details?id=com.allcreatormind.player",
     "desc": "A private, offline video and music player. Full player controls, proper subtitles and big sound, with no internet permission, accounts, analytics or ads.",
     "features": [
@@ -99,6 +99,6 @@ window.ODN_APPS = [
       "Subtitles & big sound"
     ],
     "color": "#9ed4d9",
-    "page": "acm-player.html"
+    "page": "offwave-player.html"
   }
 ];

@@ -15,5 +15,27 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/acm-player",
+      "destination": "/offwave-player",
+      "permanent": true
+    },
+    {
+      "source": "/acm-player.html",
+      "destination": "/offwave-player",
+      "permanent": true
+    },
+    {
+      "source": "/acm-player-privacy",
+      "destination": "/offwave-player-privacy",
+      "permanent": true
+    },
+    {
+      "source": "/acm-player-privacy.html",
+      "destination": "/offwave-player-privacy",
+      "permanent": true
+    }
   ]
 }
