@@ -26,10 +26,10 @@ window.ODN_APPS = [
     "policy": "bond-time-privacy.html",
     "terms": "bond-time-terms.html",
     "url": "https://play.google.com/store/apps/details?id=com.bond.time",
-    "desc": "Put your phone down and be present. Set a duration to block distractions while Phone, Messages and Camera stay available.",
+    "desc": "Put your phone down and be present. Block distractions for a set time, on a schedule or on every phone in the room, while Phone, Messages and Camera stay available.",
     "features": [
       "Focus sessions",
-      "Works offline",
+      "Family sessions",
       "No accounts or ads"
     ],
     "color": "#b9c9ed",

@@ -52,9 +52,9 @@
   "bond": {
     "intro": "Make room for real connection.",
     "featureNotes": [
-      "Choose a duration and put distracting apps on pause.",
-      "Make space for family time without an internet connection.",
-      "Get started without creating an account or seeing ads."
+      "Choose a length or a schedule, and distracting apps step aside until it ends.",
+      "Start a session on every phone in the room at once, over Bluetooth and Wi-Fi.",
+      "No sign-in, no ads and no tracking. Your history stays on your phone."
     ],
     "functions": [
       [
@@ -70,7 +70,84 @@
         "Use Bond Time without internet, accounts or ads."
       ]
     ],
-    "screens": {}
+    "screens": {
+      "04-streaks.webp": [
+        "Build the habit, together.",
+        "Streaks and weekly stats for every evening the phones go down.",
+        "Habits"
+      ],
+      "05-schedules.webp": [
+        "Dinner time, on autopilot.",
+        "Sessions that start on their own, on the days you pick.",
+        "Habits"
+      ],
+      "06-family-sessions.webp": [
+        "One tap. Every phone.",
+        "Start together on every phone in the room, over Bluetooth, with no internet needed.",
+        "Together"
+      ],
+      "07-make-it-yours.webp": [
+        "Your colours. Your dial.",
+        "Eleven dial colours, four timer styles, light and dark.",
+        "Your style"
+      ],
+      "08-always-a-way-out.webp": [
+        "Unlock on your terms.",
+        "A short wind-down always ends a session. You are never trapped.",
+        "Focus"
+      ],
+      "09-bond-time-plus.webp": [
+        "Unlock Premium.",
+        "End any session instantly with Plus. The short wait is always there too.",
+        "Plus & keys"
+      ],
+      "10-private-by-design.webp": [
+        "No accounts. No ads.",
+        "No tracking either. Your history stays on this phone.",
+        "Privacy"
+      ],
+      "phone-01-build-moments-800x1400.webp": [
+        "Build better moments.",
+        "Set a timer. Make room for time together.",
+        "Focus"
+      ],
+      "phone-02-essentials-800x1400.webp": [
+        "Keep essentials close.",
+        "Phone, Messages and Camera stay available.",
+        "Focus"
+      ],
+      "phone-03-schedules-800x1400.webp": [
+        "Make time a habit.",
+        "Choose a time, duration and repeat days.",
+        "Habits"
+      ],
+      "phone-04-stats-800x1400.webp": [
+        "See time well spent.",
+        "Explore your sessions and daily progress.",
+        "Habits"
+      ],
+      "phone-05-themes-800x1400.webp": [
+        "Find your atmosphere.",
+        "Forest, Galaxy, Moon & Stars, Lava & Volcano.",
+        "Your style"
+      ],
+      "phone-06-wake-800x1400.webp": [
+        "A calmer screen.",
+        "Wallpaper after 10 seconds. Tap to see your timer.",
+        "Your style"
+      ],
+      "phone-07-family-800x1400.webp": [
+        "Focus together.",
+        "Host or join a nearby family session.",
+        "Together"
+      ],
+      "phone-08-premium-800x1400.webp": [
+        "Unlock premium.",
+        "Plus subscription: end sessions instantly, without keys.",
+        "Plus & keys"
+      ]
+    },
+    "upgradeNote": "Bond Time is free to use. Keys, an in-app purchase, end a session instantly, and Bond Time Plus, a subscription, ends any session instantly without keys. The short wind-down that ends a session is always available."
   },
   "will": {
     "intro": "A moment to choose differently.",
