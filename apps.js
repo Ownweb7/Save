@@ -116,7 +116,7 @@ window.ODN_APPS = [
     "policy": "ratestory-privacy.html",
     "terms": "ratestory-terms.html",
     "url": "https://play.google.com/store/search?q=RateStory&c=apps",
-    "desc": "Exchange rates between world currencies, a converter, charts of past rates and plain-language notes on how a rate has moved. Track the currencies you hold and set optional rate alerts.",
+    "desc": "Live exchange rates for around 160 currencies, a converter, charts of past rates and plain-language notes on how a rate has moved. Track what you hold, check the markup in a quoted rate and set rate alerts.",
     "features": [
       "Rates & converter",
       "Charts with context",

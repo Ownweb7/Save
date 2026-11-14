@@ -377,6 +377,47 @@
       ]
     ],
     "upgradeNote": "RateStory is free, with occasional full-screen ads. An optional Premium subscription through Google Play removes the ads; every feature works with or without it.",
-    "screens": {}
+    "screens": {
+      "phone-01-currency-clearly.webp": [
+        "Live rates and converter",
+        "See the live rate between two currencies and convert any amount.",
+        "Rates"
+      ],
+      "phone-02-rate-stories.webp": [
+        "Rate stories",
+        "Plain-language notes explain how a rate has changed, such as how much more your dollar buys than a year ago.",
+        "Insights"
+      ],
+      "phone-03-year-in-context.webp": [
+        "Charts of past rates",
+        "Explore a rate over a week, a month or a year, with its open, low, high and change.",
+        "Insights"
+      ],
+      "phone-04-world-currencies.webp": [
+        "World of currencies",
+        "Compare around 160 currencies, search by code, currency or country, and star your favourites.",
+        "Rates"
+      ],
+      "phone-05-money-worth.webp": [
+        "Your money",
+        "Track what you hold in different currencies and see its total value in your home currency.",
+        "Tracking"
+      ],
+      "phone-06-rate-alerts.webp": [
+        "Rate alerts",
+        "Set alerts for a rate level, a move into its yearly high or low, or a big daily move.",
+        "Tracking"
+      ],
+      "phone-07-quote-check.webp": [
+        "Quote check",
+        "Enter the rate a bank or exchange offers to see its markup and what it would cost you.",
+        "Insights"
+      ],
+      "phone-08-unlock-premium.webp": [
+        "RateStory Premium",
+        "Remove full-screen ads with a monthly or yearly subscription; every feature works with or without it.",
+        "Premium"
+      ]
+    }
   }
 }
