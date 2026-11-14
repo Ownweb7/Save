@@ -1,3 +1,4 @@
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -62,8 +63,51 @@ ${screens.length ? `<dialog class="gallery-lightbox" aria-labelledby="lightbox-t
   const filename = path.join(root, app.page);
   let html = fs.readFileSync(filename, 'utf8');
   html = html.replace(/<main\b[\s\S]*?<\/main>/, markup);
-  if (!html.includes('href="app-pages.css"')) html = html.replace('</head>', '<link rel="stylesheet" href="app-pages.css">\n</head>');
-  if (!html.includes('src="app-pages.js"')) html = html.replace('</body>', '<script src="app-pages.js"></script>\n</body>');
+  if (!/href="app-pages\.css(\?v=[^"]*)?"/.test(html)) html = html.replace('</head>', '<link rel="stylesheet" href="app-pages.css">\n</head>');
+  if (!/src="app-pages\.js(\?v=[^"]*)?"/.test(html)) html = html.replace('</body>', '<script src="app-pages.js"></script>\n</body>');
   fs.writeFileSync(filename, html);
   console.log(`${app.page}: ${screens.length} app images`);
 }
+
+// ---- Fast loading: small icon copies and cache-busting version tags ----
+// icons/web/<name>.<hash>.webp are small copies of icons/<name>.png, named by the
+// first 8 hex digits of the PNG's SHA-1. When a PNG is replaced (a new upload), its
+// hash changes, no copy matches, and pages use the PNG until a new copy is made,
+// so an out-of-date icon is never shown.
+// Every local image, stylesheet and script URL in the pages then gets ?v=<hash of the
+// file>. Browsers cache these for a year (vercel.json) and fetch a file again as soon
+// as it changes, because its URL changes with it.
+const hash8 = file => crypto.createHash('sha1').update(fs.readFileSync(file)).digest('hex').slice(0, 8);
+const encodePath = p => p.split('/').map(encodeURIComponent).join('/');
+const iconCopy = {};
+for (const file of fs.readdirSync(path.join(root, 'icons'))) {
+  if (!file.endsWith('.png') || file === 'favicon.png') continue;
+  const copy = `icons/web/${file.slice(0, -4)}.${hash8(path.join(root, 'icons', file))}.webp`;
+  if (fs.existsSync(path.join(root, copy))) iconCopy[`icons/${file}`] = copy;
+  else console.warn(`icons/${file}: no small copy for this version yet; pages use the PNG`);
+}
+const isAsset = url => !/^([a-z][a-z0-9+.-]*:|\/\/|#)/i.test(url) && /\.(png|webp|jpe?g|gif|svg|ico|css|js)$/i.test(url.split('?')[0]);
+let tagged = 0, swapped = 0;
+const missing = new Set();
+for (const page of fs.readdirSync(root).filter(f => f.endsWith('.html'))) {
+  const file = path.join(root, page);
+  const before = fs.readFileSync(file, 'utf8');
+  const after = before.replace(/\b(src|href)="([^"]+)"/g, (whole, attr, url) => {
+    if (!isAsset(url)) return whole;
+    // backgrounds.js swaps the background art by its plain URL; a version tag here
+    // would make browsers download each picture twice, so art/ stays untagged.
+    if (/^art\//.test(url)) return `${attr}="${url.split('?')[0]}"`;
+    let target = decodeURIComponent(url.split('?')[0]);
+    // A page written by an earlier build may already point at a small copy; trace it
+    // back to its PNG so a replaced icon is picked up instead of the old copy.
+    const copyOf = target.match(/^icons\/web\/(.+)\.[0-9a-f]{8}\.webp$/);
+    if (copyOf) target = `icons/${copyOf[1]}.png`;
+    if (attr === 'src' && iconCopy[target]) { target = iconCopy[target]; swapped++; }
+    if (!fs.existsSync(path.join(root, target))) { missing.add(`${page}: ${target}`); return whole; }
+    tagged++;
+    return `${attr}="${encodePath(target)}?v=${hash8(path.join(root, target))}"`;
+  });
+  if (after !== before) fs.writeFileSync(file, after);
+}
+for (const m of missing) console.warn(`missing asset, left unversioned: ${m}`);
+console.log(`version tags: ${tagged} asset URLs (${swapped} using small icon copies)`);
