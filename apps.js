@@ -6,6 +6,7 @@ window.ODN_APPS = [
     "category": "Money",
     "icon": "Website Icon.png",
     "policy": "save-plus-privacy.html",
+    "terms": "save-plus-terms.html",
     "url": "https://play.google.com/store/apps/details?id=com.shadow.save",
     "desc": "Set your saving goals and watch your progress grow. A simple, private way to make every small step count.",
     "features": [
@@ -23,6 +24,7 @@ window.ODN_APPS = [
     "category": "Wellbeing",
     "icon": "Bond Time.png",
     "policy": "bond-time-privacy.html",
+    "terms": "bond-time-terms.html",
     "url": "https://play.google.com/store/apps/details?id=com.bond.time",
     "desc": "Put your phone down and be present. Set a duration to block distractions while Phone, Messages and Camera stay available.",
     "features": [
@@ -40,6 +42,7 @@ window.ODN_APPS = [
     "category": "Wellbeing",
     "icon": "Will impulse.png",
     "policy": "will-impulse-privacy.html",
+    "terms": "will-impulse-terms.html",
     "url": "https://play.google.com/store/apps/details?id=com.will.impulse",
     "desc": "Put a thoughtful pause between you and an impulse food order. Unlock selected apps with a quiz, a wait, or keys, so you order with intention.",
     "features": [
@@ -57,6 +60,7 @@ window.ODN_APPS = [
     "category": "Utilities",
     "icon": "Glowcalc Icon.png",
     "policy": "glowcalc-privacy.html",
+    "terms": "glowcalc-terms.html",
     "url": "https://play.google.com/store/apps/details?id=com.glowcalc.app",
     "desc": "Basic, scientific and tax calculations in one neon-lit calculator. Choose your colours and revisit up to two months of history, all offline.",
     "features": [
@@ -74,6 +78,7 @@ window.ODN_APPS = [
     "category": "Utilities",
     "icon": "LockClock AURUM.png",
     "policy": "lockclock-aurum-privacy.html",
+    "terms": "lockclock-aurum-terms.html",
     "url": "https://play.google.com/store/apps/details?id=com.lockclock.aurum",
     "desc": "Alarms, timers and a stopwatch with customisable clock faces, colours and sounds. No internet permission, accounts, analytics or ads.",
     "features": [
@@ -101,5 +106,23 @@ window.ODN_APPS = [
     ],
     "color": "#9ed4d9",
     "page": "offwave-player.html"
+  },
+  {
+    "id": "rate",
+    "name": "RateStory",
+    "tag": "Exchange rates, and the story behind them.",
+    "category": "Finance",
+    "icon": "RateStory.png",
+    "policy": "ratestory-privacy.html",
+    "terms": "ratestory-terms.html",
+    "url": "https://play.google.com/store/search?q=RateStory&c=apps",
+    "desc": "Exchange rates between world currencies, a converter, charts of past rates and plain-language notes on how a rate has moved. Track the currencies you hold and set optional rate alerts.",
+    "features": [
+      "Rates & converter",
+      "Charts with context",
+      "Rate alerts"
+    ],
+    "color": "#a9d3b8",
+    "page": "ratestory.html"
   }
 ];

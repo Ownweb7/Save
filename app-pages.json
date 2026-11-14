@@ -265,5 +265,41 @@
       ]
     ],
     "screens": {}
+  },
+  "rate": {
+    "intro": "Exchange rates, explained.",
+    "featureNotes": [
+      "See rates between world currencies and convert amounts in one place.",
+      "Follow past rates on charts, with plain-language notes on how a rate has moved.",
+      "Keep a list of the currencies you hold and set optional rate alerts."
+    ],
+    "functions": [
+      [
+        "Exchange rates",
+        "See rates between world currencies at a glance."
+      ],
+      [
+        "Converter",
+        "Convert an amount between currencies."
+      ],
+      [
+        "Charts of past rates",
+        "See how a rate has moved over time."
+      ],
+      [
+        "Rate notes",
+        "Plain-language notes describe how a rate has moved. They describe the past, not the future."
+      ],
+      [
+        "Your holdings",
+        "Keep a list of the currencies you hold."
+      ],
+      [
+        "Rate alerts",
+        "Optional alerts about the rates you follow."
+      ]
+    ],
+    "upgradeNote": "RateStory is free, with occasional full-screen ads. An optional Premium subscription through Google Play removes the ads; every feature works with or without it.",
+    "screens": {}
   }
 }
