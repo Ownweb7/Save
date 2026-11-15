@@ -303,7 +303,7 @@
   "player": {
     "intro": "Your media. None of the tracking.",
     "featureNotes": [
-      "Works fully offline. Your media, history and settings never leave the phone.",
+      "Playback and your library work offline. Your videos, music and history never leave your phone.",
       "Gestures, 0.25x to 4x speed, A-B repeat, bookmarks, chapters, sleep timer, kids lock and picture-in-picture.",
       "Ten subtitle formats with full SSA/ASS rendering, plus volume boost, equalizer and Bluetooth delay fixing."
     ],
@@ -341,7 +341,8 @@
         "English plus 20 more languages, full right-to-left layout for Arabic and Urdu, and TalkBack support."
       ]
     ],
-    "screens": {}
+    "screens": {},
+    "upgradeNote": "Offwave Player is free with ads from Google AdMob. Premium, a monthly or yearly subscription or a one-time lifetime purchase through Google Play, removes the ads and adds features such as an unlimited Private folder, the floating window, Sound pro and more colour themes."
   },
   "rate": {
     "intro": "Exchange rates, explained.",
