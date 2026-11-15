@@ -97,10 +97,10 @@ window.ODN_APPS = [
     "icon": "Offwave Player.png",
     "policy": "offwave-player-privacy.html",
     "terms": "offwave-player-terms.html",
-    "url": "https://play.google.com/store/apps/details?id=com.allcreatormind.player",
-    "desc": "A private, offline video and music player. Full player controls, proper subtitles and big sound, with no internet permission, accounts, analytics or ads.",
+    "url": "https://play.google.com/store/apps/details?id=com.allcreatormind.offwaveplayer",
+    "desc": "A video and music player for the media on your phone, with full player controls, proper subtitles and big sound. Free with ads; Premium removes them and adds extra features.",
     "features": [
-      "Private by design",
+      "Your media stays on your phone",
       "A complete player",
       "Subtitles & big sound"
     ],
