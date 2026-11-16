@@ -252,20 +252,20 @@
   "clock": {
     "intro": "Wake up. Unlock your day.",
     "featureNotes": [
-      "Set alarms, run timers and use a stopwatch in one app.",
+      "Alarms lock when they ring and stop once you complete a challenge. They ring on time even when the app is closed, alongside timers and a stopwatch.",
       "Choose a clock style, colours and sounds to suit your day.",
-      "Use your time tools offline, without accounts or analytics."
+      "Alarms, timers and the stopwatch work offline, with no account to create. Your alarms and settings stay on your phone."
     ],
-    "upgradeNote": "Math lock, analog and digital faces are included. Additional alarm locks, clock faces, colours and sounds are available with Premium; see the app's listing for current options.",
+    "upgradeNote": "LockClock Aurum is free, with an occasional full-screen ad from Google AdMob, never on a ringing alarm, the unlock challenge or the lock screen. The free version has 2 alarms with 5 alarm rings a month (after the 5th, alarms pause until the 1st and then resume by themselves), 1 timer at a time, 3 stopwatch laps a run, the Math lock, the Analog and Digital faces, four tunes and the Mono screen. Premium, a one-time Lifetime purchase or a Yearly subscription through Google Play, removes the ads and the limits and unlocks every face, tune, lock, colour and style.",
     "screens": {
       "01.webp": [
         "Your everyday alarms",
-        "Create alarms for any days of the week and use them offline.",
+        "Create alarms for any days of the week; they work offline. The free version has 2 alarms, and Premium removes the limit.",
         "Wake up"
       ],
       "02.webp": [
         "Ready when it's time",
-        "A full-screen alarm appears over the lock screen with snooze and stop controls.",
+        "A full-screen alarm appears over the lock screen, even when the app is closed, with snooze and stop controls. The free version includes 5 alarm rings a month.",
         "Wake up"
       ],
       "03.webp": [
@@ -275,7 +275,7 @@
       ],
       "04.webp": [
         "A more intentional wake-up",
-        "Explore math, pattern, gesture and typing locks. Additional lock methods require Premium.",
+        "Choose the Math lock, a pattern, slide gestures or a typed sentence. The Math lock is included; the other three require Premium.",
         "Wake up"
       ],
       "05.webp": [
@@ -289,13 +289,13 @@
         "Your style"
       ],
       "07.webp": [
-        "Several timers, together",
-        "Run multiple timers, use quick presets and see which timer is done in its notification.",
+        "Several timers, with Premium",
+        "Use quick presets and see which timer is done in its notification. Running several timers at once needs Premium; the free version runs one at a time.",
         "Time tools"
       ],
       "08.webp": [
         "The full set",
-        "Premium brings additional clock faces, tunes, unlock methods and appearance options.",
+        "Premium, a one-time Lifetime purchase or a Yearly subscription, removes the ads and the limits and unlocks every clock face, tune, unlock method, colour and style.",
         "Your style"
       ]
     }
