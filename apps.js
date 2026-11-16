@@ -80,11 +80,11 @@ window.ODN_APPS = [
     "policy": "lockclock-aurum-privacy.html",
     "terms": "lockclock-aurum-terms.html",
     "url": "https://play.google.com/store/apps/details?id=com.lockclock.aurum",
-    "desc": "Alarms, timers and a stopwatch with customisable clock faces, colours and sounds. No internet permission, accounts, analytics or ads.",
+    "desc": "Alarms that lock until you solve a challenge, plus timers and a stopwatch, with customisable clock faces, colours and sounds. Free with occasional ads and 5 alarm rings a month; Premium removes the ads and the limits.",
     "features": [
       "Alarms & timers",
       "Custom clock faces",
-      "No internet needed"
+      "Offline, no account"
     ],
     "color": "#e1c68e",
     "page": "lockclock-aurum.html"
