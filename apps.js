@@ -8,11 +8,11 @@ window.ODN_APPS = [
     "policy": "save-plus-privacy.html",
     "terms": "save-plus-terms.html",
     "url": "https://play.google.com/store/apps/details?id=com.shadow.save",
-    "desc": "Set your saving goals and watch your progress grow. A simple, private way to make every small step count.",
+    "desc": "Set your saving goals and watch your progress grow. A simple, private way to make every small step count. Free with a banner ad; Premium removes it.",
     "features": [
       "Saving goals",
       "Progress tracking",
-      "Private by design"
+      "Your data stays on your device"
     ],
     "color": "#bfdaa3",
     "page": "save-plus.html"
