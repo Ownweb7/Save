@@ -55,7 +55,7 @@
     "featureNotes": [
       "Choose a length or a schedule, and distracting apps step aside until it ends.",
       "Start a session on every phone in the room at once, over Bluetooth and Wi-Fi.",
-      "No sign-in, no ads and no tracking. Your history stays on your phone."
+      "No sign-in and no account. Your history and settings stay on your phone."
     ],
     "functions": [
       [
@@ -68,7 +68,7 @@
       ],
       [
         "Be present, offline",
-        "Use Bond Time without internet, accounts or ads."
+        "Use Bond Time without an account or sign-in."
       ]
     ],
     "screens": {
@@ -84,7 +84,7 @@
       ],
       "03-always-a-way-out.webp": [
         "Always a way out",
-        "A short wind-down ends any session, so no one is ever trapped.",
+        "Ending a session early is always free after a short wait, so no one is ever trapped; a key skips the wait.",
         "Focus"
       ],
       "04-calmer-screen.webp": [
@@ -131,24 +131,9 @@
         "Atmospheres",
         "Set the scene with Forest, Galaxy, Moon & Stars or Lava & Volcano.",
         "Your style"
-      ],
-      "13-bond-time-plus.webp": [
-        "Bond Time Plus",
-        "With a Plus subscription, end any session instantly; the free wind-down is always there too.",
-        "Plus & keys"
-      ],
-      "14-keys.webp": [
-        "Keys",
-        "Buy keys in packs of 1, 5, 10 or 50; one key ends an active session instantly.",
-        "Plus & keys"
-      ],
-      "15-private-by-design.webp": [
-        "Private by design",
-        "No accounts, no ads and no tracking. Your history stays on your phone.",
-        "Privacy"
       ]
     },
-    "upgradeNote": "Bond Time is free to use. Keys, an in-app purchase, end a session instantly, and Bond Time Plus, a subscription, ends any session instantly without keys. The short wind-down that ends a session is always available."
+    "upgradeNote": "Bond Time is free. Unless you buy Ad-free, a banner ad from Google AdMob appears at the bottom of the Stats, Schedules and Settings pages, never on the home screen, the session timer or the session cover, and never during a session. Ad-free, a one-time purchase through Google Play, removes the ads. Keys, a consumable in-app purchase, end a session instantly; ending a session early is always free after a short wait."
   },
   "will": {
     "intro": "A moment to choose differently.",
